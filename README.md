@@ -1,16 +1,20 @@
-## Hi there 👋
+# SaveMate - Shopping & Social Hub
 
-<!--
-**Savemate/Savemate** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+A shopping and social platform for South African consumers.
 
-Here are some ideas to get you started:
+## Features
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+- Product deals from South African retailers
+- Social feed for sharing deals
+- Shopping lists
+- User authentication
+
+## Setup
+
+1. Install dependencies: `npm install`
+2. Run development server: `npm run dev`
+3. Build for production: `npm run build`
+
+## Deployment
+
+This app is configured for Vercel deployment.
