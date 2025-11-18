@@ -1,20 +1,29 @@
-# SaveMate - Shopping & Social Hub
+# SaveMate 🛍️
 
-A shopping and social platform for South African consumers.
+A modern shopping and social platform for South African consumers to discover deals, share savings, and connect with other shoppers.
 
 ## Features
 
-- Product deals from South African retailers
-- Social feed for sharing deals
-- Shopping lists
-- User authentication
+- 🏪 **Real South African Store Integration** - Checkers, Pick n Pay, Woolworths, and more
+- 🔥 **Trending Deals** - Discover the hottest deals in your area
+- 🌟 **Shopping Universe** - Social feed for sharing deals and tips
+- 📱 **Barcode Scanner** - Compare prices across stores
+- 📝 **Shopping Lists** - Organize your shopping trips
+- 💬 **Community Chat** - Connect with other shoppers
+- ⚫ **Black Market** - Local services and job listings
+- ⚙️ **Settings** - Theme switching, privacy options, account management
+- 🔔 **Notifications** - Stay updated on deals and social activity
 
-## Setup
+## Tech Stack
 
-1. Install dependencies: `npm install`
-2. Run development server: `npm run dev`
-3. Build for production: `npm run build`
+- **Frontend**: Vanilla JavaScript with ES6 Modules
+- **Styling**: Custom CSS with CSS Variables
+- **Authentication**: Supabase Auth
+- **Deployment**: Vercel
+- **Icons**: Font Awesome 6
 
-## Deployment
+## Getting Started
 
-This app is configured for Vercel deployment.
+1. **Install dependencies**:
+   ```bash
+   npm install
