@@ -8,6 +8,5 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true
-  },
-  publicDir: '.' // This allows serving static files from root
+  }
 })
