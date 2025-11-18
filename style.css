@@ -15,6 +15,17 @@
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
+[data-theme="dark"] {
+  --background-color: #0f172a;
+  --surface-color: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+  --border-color: #334155;
+  --settings-bg: #1e293b;
+  --settings-border: #334155;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -26,6 +37,7 @@ body {
   background-color: var(--surface-color);
   color: var(--text-primary);
   line-height: 1.6;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 #app {
@@ -63,6 +75,7 @@ body {
 .header-actions {
   display: flex;
   gap: 1rem;
+  position: relative;
 }
 
 .header-btn {
@@ -74,10 +87,27 @@ body {
   padding: 0.5rem;
   border-radius: 0.5rem;
   transition: background-color 0.2s;
+  position: relative;
 }
 
 .header-btn:hover {
   background: rgba(255, 255, 255, 0.1);
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--danger-color);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
 }
 
 /* Main Content */
@@ -371,6 +401,8 @@ body {
   padding: 0.75rem 1rem;
   outline: none;
   font-size: 0.875rem;
+  background: var(--background-color);
+  color: var(--text-primary);
 }
 
 .attachment-btn, .post-submit-btn {
@@ -406,6 +438,7 @@ body {
 
 .post-user {
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 .post-time {
@@ -416,6 +449,7 @@ body {
 .post-content {
   margin-bottom: 1rem;
   line-height: 1.5;
+  color: var(--text-primary);
 }
 
 .post-image {
@@ -516,6 +550,8 @@ body {
   border-radius: 0.5rem;
   font-size: 1rem;
   transition: border-color 0.2s;
+  background: var(--background-color);
+  color: var(--text-primary);
 }
 
 .form-control:focus {
@@ -657,6 +693,7 @@ body {
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s;
+  color: var(--text-primary);
 }
 
 .avatar-upload-btn:hover {
@@ -671,6 +708,7 @@ body {
 .profile-info h2 {
   margin-bottom: 0.5rem;
   font-size: 1.5rem;
+  color: var(--text-primary);
 }
 
 .profile-info p {
@@ -723,6 +761,11 @@ body {
 
 .profile-posts {
   padding: 0 1.5rem 1.5rem;
+}
+
+.profile-posts h3 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
 }
 
 /* Messages */
@@ -801,149 +844,18 @@ body {
   background: var(--surface-color);
 }
 
-/* Black Market */
-.black-market-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.job-type-selector {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-}
-
-.job-type-btn {
-  padding: 0.5rem 1rem;
-  background: white;
-  border: 1px solid var(--border-color);
-  border-radius: 2rem;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-
-.job-type-btn.active {
-  background: var(--navy-blue);
-  color: white;
-  border-color: var(--navy-blue);
-}
-
-/* Welcome Banner */
-.welcome-banner {
-  background: linear-gradient(135deg, var(--navy-blue) 0%, var(--primary-color) 100%);
-  color: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.welcome-banner h2 {
-  margin-bottom: 0.5rem;
-  font-size: 1.5rem;
-}
-
-.welcome-banner p {
-  opacity: 0.9;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .deals-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .categories {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .page {
-    padding: 1rem;
-  }
-  
-  .app-header {
-    padding: 1rem;
-  }
-  
-  .profile-avatar-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-@media (max-width: 480px) {
-  .categories {
-    grid-template-columns: 1fr;
-  }
-  
-  .deal-actions {
-    flex-direction: column;
-  }
-  
-  .job-type-selector {
-    flex-wrap: wrap;
-  }
-}
-
-/* Add to existing :root */
-:root {
-  /* ... existing variables ... */
-  --settings-bg: #ffffff;
-  --settings-border: #e2e8f0;
-}
-
-[data-theme="dark"] {
-  --background-color: #0f172a;
-  --surface-color: #1e293b;
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-muted: #64748b;
-  --border-color: #334155;
-  --settings-bg: #1e293b;
-  --settings-border: #334155;
-}
-
-/* Dark theme styles */
-.dark-theme {
-  background: var(--background-color);
-  color: var(--text-primary);
-}
-
-.dark-theme .deal-card,
-.dark-theme .post-card,
-.dark-theme .conversation,
-.dark-theme .settings-item,
-.dark-theme .notification-item,
-.dark-theme .listing-card {
-  background: var(--surface-color);
-  border-color: var(--border-color);
-}
-
-.dark-theme .search-box,
-.dark-theme .post-input,
-.dark-theme .form-control {
-  background: var(--surface-color);
-  border-color: var(--border-color);
-  color: var(--text-primary);
-}
-
 /* Settings Styles */
 .settings-container {
-  background: var(--settings-bg);
+  background: white;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: var(--shadow);
+  margin-bottom: 2rem;
 }
 
 .settings-section {
   padding: 1.5rem;
-  border-bottom: 1px solid var(--settings-border);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .settings-section:last-child {
@@ -960,7 +872,7 @@ body {
 .settings-item {
   display: flex;
   align-items: center;
-  justify-content: between;
+  justify-content: space-between;
   padding: 1rem 0;
   cursor: pointer;
   transition: background-color 0.2s;
@@ -1102,7 +1014,7 @@ input:checked + .toggle-slider:before {
 
 /* Notifications */
 .notifications-list {
-  background: var(--settings-bg);
+  background: white;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: var(--shadow);
@@ -1112,7 +1024,7 @@ input:checked + .toggle-slider:before {
   display: flex;
   align-items: center;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--settings-border);
+  border-bottom: 1px solid var(--border-color);
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -1126,7 +1038,7 @@ input:checked + .toggle-slider:before {
 }
 
 .notification-item.unread {
-  background: var(--primary-color)08;
+  background: rgba(37, 99, 235, 0.05);
 }
 
 .notification-icon {
@@ -1163,22 +1075,40 @@ input:checked + .toggle-slider:before {
   background: var(--primary-color);
 }
 
-.notification-badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: var(--danger-color);
-  color: white;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  font-size: 0.75rem;
+/* Black Market */
+.black-market-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
+  margin-bottom: 1.5rem;
 }
 
-/* Black Market Listings */
+.job-type-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.job-type-btn {
+  padding: 0.5rem 1rem;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  color: var(--text-primary);
+}
+
+.job-type-btn.active {
+  background: var(--navy-blue);
+  color: white;
+  border-color: var(--navy-blue);
+}
+
 .listing-card {
   background: white;
   border-radius: 0.75rem;
@@ -1200,7 +1130,6 @@ input:checked + .toggle-slider:before {
   border-radius: 1rem;
   font-size: 0.75rem;
   font-weight: 500;
-  background: var(--surface-color);
 }
 
 .listing-type.job_offering {
@@ -1291,6 +1220,8 @@ input:checked + .toggle-slider:before {
   transition: transform 0.2s;
   white-space: nowrap;
   min-width: fit-content;
+  background: white;
+  border: 1px solid var(--border-color);
 }
 
 .store-chip:hover {
@@ -1308,15 +1239,81 @@ input:checked + .toggle-slider:before {
   color: white;
 }
 
-/* Header button with badge */
-.header-btn {
-  position: relative;
+/* Welcome Banner */
+.welcome-banner {
+  background: linear-gradient(135deg, var(--navy-blue) 0%, var(--primary-color) 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-/* Responsive fixes */
+.welcome-banner h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.welcome-banner p {
+  opacity: 0.9;
+}
+
+/* Empty States */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .deals-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .categories {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .page {
+    padding: 1rem;
+  }
+  
+  .app-header {
+    padding: 1rem;
+  }
+  
+  .profile-avatar-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .header-actions {
+    gap: 0.5rem;
+  }
+}
+
 @media (max-width: 480px) {
-  .settings-item {
-    padding: 0.75rem 0;
+  .categories {
+    grid-template-columns: 1fr;
+  }
+  
+  .deal-actions {
+    flex-direction: column;
+  }
+  
+  .job-type-selector {
+    flex-wrap: wrap;
   }
   
   .listing-footer {
