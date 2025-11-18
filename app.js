@@ -12,42 +12,64 @@ const southAfricanStores = [
         name: "Checkers",
         category: "Supermarket",
         color_hex: "#E31B23",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Checkers_Logo.svg/1200px-Checkers_Logo.svg.png"
+        logo: "🛒",
+        description: "Checkers Sixty60 - Delivery in 60 minutes"
     },
     {
         id: '2',
         name: "Pick n Pay",
         category: "Supermarket", 
         color_hex: "#0055A4",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Pick_n_Pay_logo.svg/1200px-Pick_n_Pay_logo.svg.png"
+        logo: "🏪",
+        description: "Quality you can taste everyday"
     },
     {
         id: '3',
         name: "Woolworths",
         category: "Supermarket",
         color_hex: "#000000",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Woolworths_Logo.svg/1200px-Woolworths_Logo.svg.png"
+        logo: "🛍️",
+        description: "The quality you can trust"
     },
     {
         id: '4',
         name: "Shoprite",
         category: "Supermarket",
         color_hex: "#FF0000", 
-        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Shoprite_Logo.svg/1200px-Shoprite_Logo.svg.png"
+        logo: "🛒",
+        description: "Lower prices you can trust"
     },
     {
         id: '5',
         name: "Spar",
         category: "Supermarket",
         color_hex: "#008000",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/SPAR_International_logo.svg/1200px-SPAR_International_logo.svg.png"
+        logo: "🏬",
+        description: "Serving our communities"
     },
     {
         id: '6',
         name: "Makro",
         category: "Wholesale",
         color_hex: "#FF6B00",
-        logo: "https://www.makro.co.za/sites/makro_co_za/files/2021-06/makro-logo.svg"
+        logo: "📦",
+        description: "Wholesale prices for everyone"
+    },
+    {
+        id: '7',
+        name: "Game",
+        category: "Department Store",
+        color_hex: "#0033A0",
+        logo: "🎮",
+        description: "For the love of shopping"
+    },
+    {
+        id: '8',
+        name: "Clicks",
+        category: "Pharmacy",
+        color_hex: "#E40046",
+        logo: "💊",
+        description: "Health and beauty specialists"
     }
 ]
 
@@ -60,7 +82,7 @@ const realProducts = [
         original_price: 129.99,
         category: "Groceries",
         store_id: '1',
-        image: "https://www.checkers.co.za/medias/10214747EA-20190726-Media-checkers300Wx300H?context=bWFzdGVyfGltYWdlc3w0MjU4NnxpbWFnZS9qcGVnfGltYWdlcy9oM2UvaDg0Lzg5NzIyNzI0MjA1MTAuanBnfDg0YzQ5Y2Q0YzE2YzA5ZTY2NzU5YzQzYzUxYzQ2Y2YwYjU1YjU1YzY0YjU4YjQ1Y2Q2YzE3YzQ4Y2FhY2M",
+        image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&h=200&fit=crop",
         description: "Tastic Parboiled Long Grain Rice 5kg",
         badge: "SAVE R24"
     },
@@ -71,7 +93,7 @@ const realProducts = [
         original_price: 59.99,
         category: "Groceries",
         store_id: '2',
-        image: "https://www.pnp.co.za/medias/10224049EA-20190726-Media-pnp-300Wx300H?context=bWFzdGVyfGltYWdlc3w0MjU4NnxpbWFnZS9qcGVnfGltYWdlcy9oM2UvaDg0Lzg5NzIyNzI0MjA1MTAuanBnfDg0YzQ5Y2Q0YzE2YzA5ZTY2NzU5YzQzYzUxYzQ2Y2YwYjU1YjU1YzY0YjU4YjQ1Y2Q2YzE3YzQ4Y2FhY2M",
+        image: "https://images.unsplash.com/photo-1558961360-f9e2c4d7f5f7?w=300&h=200&fit=crop",
         description: "Traditional South African rusks",
         badge: "POPULAR"
     },
@@ -82,7 +104,7 @@ const realProducts = [
         original_price: 42.00,
         category: "Beverages",
         store_id: '3',
-        image: "https://woolworthsonline.co.za/medias/10214747EA-20190726-Media-woolworths300Wx300H?context=bWFzdGVyfGltYWdlc3w0MjU4NnxpbWFnZS9qcGVnfGltYWdlcy9oM2UvaDg0Lzg5NzIyNzI0MjA1MTAuanBnfDg0YzQ5Y2Q0YzE2YzA5ZTY2NzU5YzQzYzUxYzQ2Y2YwYjU1YjU1YzY0YjU4YjQ1Y2Q2YzE3YzQ4Y2FhY2M",
+        image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300&h=200&fit=crop",
         description: "Five Roses Tea Bags 100s",
         badge: "SOUTH AFRICAN"
     },
@@ -93,18 +115,18 @@ const realProducts = [
         original_price: 22.99,
         category: "Groceries",
         store_id: '4',
-        image: "https://www.shoprite.co.za/medias/10214747EA-20190726-Media-shoprite300Wx300H?context=bWFzdGVyfGltYWdlc3w0MjU4NnxpbWFnZS9qcGVnfGltYWdlcy9oM2UvaDg0Lzg5NzIyNzI0MjA1MTAuanBnfDg0YzQ5Y2Q0YzE2YzA5ZTY2NzU5YzQzYzUxYzQ2Y2YwYjU1YjU1YzY0YjU4YjQ1Y2Q2YzE3YzQ4Y2FhY2M",
+        image: "https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?w=300&h=200&fit=crop",
         description: "Koo Baked Beans in Tomato Sauce",
         badge: "15% OFF"
     },
     {
         id: '5',
-        title: "Spar Lettuce",
+        title: "Fresh Lettuce",
         current_price: 12.99,
         original_price: 15.99,
         category: "Fresh Produce",
         store_id: '5',
-        image: "https://www.spar.co.za/medias/10214747EA-20190726-Media-spar300Wx300H?context=bWFzdGVyfGltYWdlc3w0MjU4NnxpbWFnZS9qcGVnfGltYWdlcy9oM2UvaDg0Lzg5NzIyNzI0MjA1MTAuanBnfDg0YzQ5Y2Q0YzE2YzA5ZTY2NzU5YzQzYzUxYzQ2Y2YwYjU1YjU1YzY0YjU4YjQ1Y2Q2YzE3YzQ4Y2FhY2M",
+        image: "https://images.unsplash.com/photo-1594282241892-7acad2be8e28?w=300&h=200&fit=crop",
         description: "Fresh Iceberg Lettuce",
         badge: "FRESH"
     },
@@ -115,9 +137,31 @@ const realProducts = [
         original_price: 8999.99,
         category: "Electronics",
         store_id: '6',
-        image: "https://www.makro.co.za/medias/10214747EA-20190726-Media-makro300Wx300H?context=bWFzdGVyfGltYWdlc3w0MjU4NnxpbWFnZS9qcGVnfGltYWdlcy9oM2UvaDg0Lzg5NzIyNzI0MjA1MTAuanBnfDg0YzQ5Y2Q0YzE2YzA5ZTY2NzU5YzQzYzUxYzQ2Y2YwYjU1YjU1YzY0YjU4YjQ1Y2Q2YzE3YzQ4Y2FhY2M",
+        image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=300&h=200&fit=crop",
         description: "Samsung 55\" 4K Smart TV",
         badge: "HOT DEAL"
+    },
+    {
+        id: '7',
+        title: "All Gold Tomato Sauce 500g",
+        current_price: 25.99,
+        original_price: 29.99,
+        category: "Groceries",
+        store_id: '1',
+        image: "https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?w=300&h=200&fit=crop",
+        description: "All Gold Tomato Sauce",
+        badge: "13% OFF"
+    },
+    {
+        id: '8',
+        title: "Coca-Cola 2L",
+        current_price: 24.99,
+        original_price: 28.99,
+        category: "Beverages",
+        store_id: '2',
+        image: "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=300&h=200&fit=crop",
+        description: "Coca-Cola Soft Drink 2L",
+        badge: "SAVE R4"
     }
 ]
 
@@ -128,7 +172,7 @@ const realPosts = [
         user: "DealHunterSA",
         avatar: "DH",
         content: "Just found Tastic Rice for R105.99 at Checkers! That's a R24 saving! 🎉 #MzansiDeals #SaveMate",
-        image: "https://www.checkers.co.za/medias/10214747EA-20190726-Media-checkers300Wx300H?context=bWFzdGVyfGltYWdlc3w0MjU4NnxpbWFnZS9qcGVnfGltYWdlcy9oM2UvaDg0Lzg5NzIyNzI0MjA1MTAuanBnfDg0YzQ5Y2Q0YzE2YzA5ZTY2NzU5YzQzYzUxYzQ2Y2YwYjU1YjU1YzY0YjU4YjQ1Y2Q2YzE3YzQ4Y2FhY2M",
+        image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&h=300&fit=crop",
         time: "2 hours ago",
         likes: 24,
         comments: 8,
@@ -141,13 +185,26 @@ const realPosts = [
         user: "BudgetShopperCT",
         avatar: "BS",
         content: "Woolworths has amazing specials on baby products this week. Pampers nappies at unbeatable prices! 👶 #FamilyBudget #CapeTown",
-        image: "https://woolworthsonline.co.za/medias/10214747EA-20190726-Media-woolworths300Wx300H?context=bWFzdGVyfGltYWdlc3w0MjU4NnxpbWFnZS9qcGVnfGltYWdlcy9oM2UvaDg0Lzg5NzIyNzI0MjA1MTAuanBnfDg0YzQ5Y2Q0YzE2YzA5ZTY2NzU5YzQzYzUxYzQ2Y2YwYjU1YjU1YzY0YjU4YjQ1Y2Q2YzE3YzQ4Y2FhY2M",
+        image: "https://images.unsplash.com/photo-1595535873420-5996f7770f15?w=400&h=300&fit=crop",
         time: "5 hours ago",
         likes: 42,
         comments: 12,
         shares: 5,
         liked: true,
         store: "Woolworths"
+    },
+    {
+        id: '3',
+        user: "JoburgSaver",
+        avatar: "JS",
+        content: "Makro has incredible deals on electronics this weekend. Just got a 55\" Samsung TV for R6999! 📺 #Electronics #Deals",
+        image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop",
+        time: "1 day ago",
+        likes: 31,
+        comments: 15,
+        shares: 7,
+        liked: false,
+        store: "Makro"
     }
 ]
 
@@ -168,8 +225,12 @@ class SaveMateApp {
     }
 
     async checkAuth() {
-        const { data: { user } } = await supabase.auth.getUser()
-        this.currentUser = user
+        try {
+            const { data: { user } } = await supabase.auth.getUser()
+            this.currentUser = user
+        } catch (error) {
+            console.error('Auth check failed:', error)
+        }
     }
 
     setupEventListeners() {
@@ -189,6 +250,7 @@ class SaveMateApp {
         
         if (!this.currentUser) {
             app.innerHTML = this.renderAuthPage()
+            this.setupAuthListeners()
             return
         }
 
@@ -245,6 +307,19 @@ class SaveMateApp {
         this.loadPageData()
     }
 
+    setupAuthListeners() {
+        // Remove existing listeners to prevent duplicates
+        const loginBtn = document.querySelector('#loginForm .btn-primary')
+        const signupBtn = document.querySelector('#signupForm .btn-primary')
+        
+        if (loginBtn) {
+            loginBtn.onclick = () => this.handleLogin()
+        }
+        if (signupBtn) {
+            signupBtn.onclick = () => this.handleSignup()
+        }
+    }
+
     renderCurrentPage() {
         switch(this.currentPage) {
             case 'home':
@@ -282,7 +357,9 @@ class SaveMateApp {
                             <label for="password">Password</label>
                             <input type="password" id="password" class="form-control" placeholder="Enter your password">
                         </div>
-                        <button class="btn btn-primary" onclick="app.handleLogin()">Log In</button>
+                        <button class="btn btn-primary" onclick="app.handleLogin()">
+                            <i class="fas fa-sign-in-alt"></i> Log In
+                        </button>
                         <div class="auth-switch">
                             Don't have an account? <a href="#" onclick="app.showSignup()">Sign Up</a>
                         </div>
@@ -298,9 +375,11 @@ class SaveMateApp {
                         </div>
                         <div class="form-group">
                             <label for="signupPassword">Password</label>
-                            <input type="password" id="signupPassword" class="form-control" placeholder="Create a password">
+                            <input type="password" id="signupPassword" class="form-control" placeholder="Create a password (min. 6 characters)">
                         </div>
-                        <button class="btn btn-primary" onclick="app.handleSignup()">Sign Up</button>
+                        <button class="btn btn-primary" onclick="app.handleSignup()">
+                            <i class="fas fa-user-plus"></i> Sign Up
+                        </button>
                         <div class="auth-switch">
                             Already have an account? <a href="#" onclick="app.showLogin()">Log In</a>
                         </div>
@@ -314,7 +393,7 @@ class SaveMateApp {
         return `
             <div class="page active">
                 <div class="welcome-banner">
-                    <h2>Hello, ${this.currentUser?.email || 'Shopper'}!</h2>
+                    <h2>Hello, ${this.currentUser?.email || 'Shopper'}! 👋</h2>
                     <p>Discover the best deals from South African retailers</p>
                 </div>
 
@@ -325,12 +404,12 @@ class SaveMateApp {
                     </div>
                 </div>
 
-                <h2 class="section-title">Trending Deals</h2>
+                <h2 class="section-title">🔥 Trending Deals</h2>
                 <div class="deals-grid" id="dealsContainer">
                     ${this.renderDealsSkeleton()}
                 </div>
 
-                <h2 class="section-title">Weekly Specials</h2>
+                <h2 class="section-title">💫 Weekly Specials</h2>
                 <div class="deals-grid" id="specialsContainer">
                     ${this.renderDealsSkeleton()}
                 </div>
@@ -341,7 +420,7 @@ class SaveMateApp {
     renderExplorePage() {
         return `
             <div class="page">
-                <h2 class="section-title">Explore Categories</h2>
+                <h2 class="section-title">📂 Explore Categories</h2>
                 <div class="categories">
                     <div class="category" onclick="app.filterDeals('Groceries')">
                         <i class="fas fa-utensils"></i>
@@ -369,12 +448,12 @@ class SaveMateApp {
                     </div>
                 </div>
 
-                <h2 class="section-title">Featured Stores</h2>
+                <h2 class="section-title">🏪 Featured Stores</h2>
                 <div class="deals-grid" id="storesContainer">
                     ${this.renderStoresSkeleton()}
                 </div>
 
-                <h2 class="section-title">All Products</h2>
+                <h2 class="section-title">🛍️ All Products</h2>
                 <div class="deals-grid" id="exploreDealsContainer">
                     ${this.renderDealsSkeleton(6)}
                 </div>
@@ -421,11 +500,11 @@ class SaveMateApp {
                     </div>
                     <p>Scan barcodes to compare prices across South African stores</p>
                     <button class="btn btn-primary" style="width: auto; margin-top: 20px;" onclick="app.startScanner()">
-                        Start Scanning
+                        <i class="fas fa-camera"></i> Start Scanning
                     </button>
                 </div>
 
-                <h2 class="section-title">Recently Scanned</h2>
+                <h2 class="section-title">📋 Recently Scanned</h2>
                 <div id="recentlyScanned">
                     <div style="text-align: center; padding: 40px; color: var(--text-muted);">
                         <i class="fas fa-barcode" style="font-size: 48px; margin-bottom: 16px;"></i>
@@ -439,7 +518,7 @@ class SaveMateApp {
     renderShoppingListPage() {
         return `
             <div class="page">
-                <h2 class="section-title">My Shopping Lists</h2>
+                <h2 class="section-title">📝 My Shopping Lists</h2>
                 
                 <div class="shopping-list-creator">
                     <div class="search-container">
@@ -485,11 +564,11 @@ class SaveMateApp {
                     
                     <div class="profile-info">
                         <h2>${this.currentUser?.email || 'User'}</h2>
-                        <p>SaveMate enthusiast finding the best deals in South Africa!</p>
+                        <p>SaveMate enthusiast finding the best deals in South Africa! 🇿🇦</p>
                         
                         <div class="profile-stats">
                             <div class="stat">
-                                <div class="stat-value">12</div>
+                                <div class="stat-value">${this.posts.filter(p => p.user === 'You').length}</div>
                                 <div class="stat-label">Posts</div>
                             </div>
                             <div class="stat">
@@ -521,7 +600,7 @@ class SaveMateApp {
     renderMessagesPage() {
         return `
             <div class="page">
-                <h2 class="section-title">Messages</h2>
+                <h2 class="section-title">💬 Messages</h2>
                 
                 <div class="conversation-list">
                     <div class="conversation" onclick="app.openConversation('DealHunterSA')">
@@ -538,6 +617,13 @@ class SaveMateApp {
                             <div style="color: var(--text-secondary); font-size: 14px;">Did you see the new Woolworths deal?</div>
                         </div>
                     </div>
+                    <div class="conversation" onclick="app.openConversation('JoburgSaver')">
+                        <div class="conversation-avatar">JS</div>
+                        <div>
+                            <div style="font-weight: 500;">JoburgSaver</div>
+                            <div style="color: var(--text-secondary); font-size: 14px;">Great find on that TV deal!</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `
@@ -547,7 +633,7 @@ class SaveMateApp {
         return `
             <div class="page">
                 <div class="black-market-header">
-                    <h2 class="section-title" style="margin: 0;">Black Market</h2>
+                    <h2 class="section-title" style="margin: 0;">⚫ Black Market</h2>
                     <button class="btn btn-secondary" style="width: auto; padding: 8px 16px;" onclick="app.createListing()">
                         <i class="fas fa-plus"></i> New Listing
                     </button>
@@ -565,63 +651,303 @@ class SaveMateApp {
                     <div style="text-align: center; padding: 40px; color: var(--text-muted);">
                         <i class="fas fa-store" style="font-size: 48px; margin-bottom: 16px;"></i>
                         <p>No listings yet. Be the first to create one!</p>
+                        <button class="btn btn-primary" style="width: auto; margin-top: 16px;" onclick="app.createListing()">
+                            <i class="fas fa-plus"></i> Create First Listing
+                        </button>
                     </div>
                 </div>
             </div>
         `
     }
 
-    // ... (rest of the methods including loadPageData, renderDeals, etc.)
+    loadPageData() {
+        switch(this.currentPage) {
+            case 'home':
+                this.loadHomeData()
+                break
+            case 'explore':
+                this.loadExploreData()
+                break
+            case 'universe':
+                this.loadUniverseData()
+                break
+            case 'shopping-list':
+                this.loadShoppingListData()
+                break
+        }
+    }
 
-    // Add all the functional methods for buttons and interactions
+    loadHomeData() {
+        setTimeout(() => {
+            const dealsContainer = document.getElementById('dealsContainer')
+            const specialsContainer = document.getElementById('specialsContainer')
+            
+            if (dealsContainer) {
+                dealsContainer.innerHTML = realProducts.slice(0, 4).map(product => 
+                    this.renderDeal(product)
+                ).join('')
+            }
+            
+            if (specialsContainer) {
+                specialsContainer.innerHTML = realProducts.slice(4, 8).map(product => 
+                    this.renderDeal(product)
+                ).join('')
+            }
+        }, 500)
+    }
+
+    loadExploreData() {
+        setTimeout(() => {
+            const storesContainer = document.getElementById('storesContainer')
+            const exploreDealsContainer = document.getElementById('exploreDealsContainer')
+            
+            if (storesContainer) {
+                storesContainer.innerHTML = southAfricanStores.map(store => `
+                    <div class="deal-card" onclick="app.showStoreDeals('${store.id}')">
+                        <div class="deal-image" style="background: ${store.color_hex}; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                            ${store.logo}
+                        </div>
+                        <div class="deal-content">
+                            <div class="deal-title">${store.name}</div>
+                            <div class="deal-store">
+                                <span>${store.category}</span>
+                            </div>
+                            <div class="deal-actions">
+                                <button class="deal-btn" style="width: 100%; background: var(--navy-blue); color: white;">
+                                    <i class="fas fa-store"></i> Browse Store
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')
+            }
+            
+            if (exploreDealsContainer) {
+                exploreDealsContainer.innerHTML = realProducts.map(product => 
+                    this.renderDeal(product)
+                ).join('')
+            }
+        }, 500)
+    }
+
+    loadUniverseData() {
+        // Posts are already loaded
+    }
+
+    loadShoppingListData() {
+        // Shopping lists are managed in state
+    }
+
+    renderDeal(product) {
+        const store = southAfricanStores.find(s => s.id === product.store_id)
+        const isSaved = this.savedDeals.has(product.id)
+        
+        return `
+            <div class="deal-card">
+                <div class="deal-image">
+                    <img src="${product.image}" alt="${product.title}" onerror="this.style.display='none'; this.parentNode.style.background='var(--surface-color)'; this.parentNode.innerHTML='<div style=\\'font-size: 2rem; color: var(--text-muted)\\'>${store?.logo || '🛒'}</div>'">
+                    ${product.badge ? `<div class="deal-badge">${product.badge}</div>` : ''}
+                </div>
+                <div class="deal-content">
+                    <div class="deal-title">${product.title}</div>
+                    <div class="deal-store">
+                        <div style="width: 20px; height: 20px; border-radius: 4px; background: ${store?.color_hex || '#13294b'}; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold;">
+                            ${store?.name?.charAt(0) || 'S'}
+                        </div>
+                        <span>${store?.name || 'Store'}</span>
+                    </div>
+                    <div class="deal-price">
+                        R${product.current_price}
+                        ${product.original_price ? `<span class="deal-original-price">R${product.original_price}</span>` : ''}
+                    </div>
+                    <div class="deal-actions">
+                        <button class="deal-btn" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary);" 
+                                onclick="app.toggleSaveDeal('${product.id}')">
+                            <i class="far ${isSaved ? 'fa-bookmark' : 'fa-bookmark'}"></i> 
+                            ${isSaved ? 'Saved' : 'Save'}
+                        </button>
+                        <button class="deal-btn" style="background: var(--navy-blue); color: white;" 
+                                onclick="app.buyProduct('${product.id}')">
+                            <i class="fas fa-shopping-cart"></i> Buy
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `
+    }
+
+    renderDealsSkeleton(count = 3) {
+        return Array(count).fill(0).map(() => `
+            <div class="deal-card">
+                <div class="deal-image" style="background: var(--surface-color);"></div>
+                <div class="deal-content">
+                    <div class="deal-title" style="height: 20px; background: var(--surface-color); margin-bottom: 10px;"></div>
+                    <div style="height: 16px; background: var(--surface-color); margin-bottom: 10px;"></div>
+                    <div style="height: 24px; background: var(--surface-color); margin-bottom: 15px;"></div>
+                    <div class="deal-actions">
+                        <div style="height: 36px; background: var(--surface-color); flex: 1;"></div>
+                        <div style="width: 10px;"></div>
+                        <div style="height: 36px; background: var(--surface-color); flex: 1;"></div>
+                    </div>
+                </div>
+            </div>
+        `).join('')
+    }
+
+    renderStoresSkeleton() {
+        return Array(6).fill(0).map(() => `
+            <div class="deal-card">
+                <div class="deal-image" style="background: var(--surface-color);"></div>
+                <div class="deal-content">
+                    <div class="deal-title" style="height: 20px; background: var(--surface-color); margin-bottom: 10px;"></div>
+                    <div style="height: 16px; background: var(--surface-color); margin-bottom: 10px;"></div>
+                    <div class="deal-actions">
+                        <div style="height: 36px; background: var(--surface-color); width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        `).join('')
+    }
+
+    renderPosts() {
+        return this.posts.map(post => `
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="post-avatar">${post.avatar}</div>
+                    <div>
+                        <div class="post-user">${post.user}</div>
+                        <div class="post-time">${post.time} • ${post.store}</div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    ${post.content}
+                </div>
+                ${post.image ? `<div class="post-image" style="background-image: url('${post.image}')"></div>` : ''}
+                <div class="post-actions">
+                    <div class="post-action ${post.liked ? 'active' : ''}" onclick="app.likePost('${post.id}')">
+                        <i class="${post.liked ? 'fas' : 'far'} fa-heart"></i>
+                        <span>${post.likes}</span>
+                    </div>
+                    <div class="post-action" onclick="app.showComments('${post.id}')">
+                        <i class="far fa-comment"></i>
+                        <span>${post.comments}</span>
+                    </div>
+                    <div class="post-action" onclick="app.sharePost('${post.id}')">
+                        <i class="fas fa-share-alt"></i>
+                        <span>${post.shares}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('')
+    }
+
+    renderUserPosts() {
+        const userPosts = this.posts.filter(post => post.user === 'You')
+        return userPosts.length > 0 ? 
+            userPosts.map(post => this.renderPosts([post])).join('') :
+            '<p style="text-align: center; color: var(--text-muted); padding: 40px;">No posts yet. Share your first deal in the Universe! 🌟</p>'
+    }
+
+    renderShoppingList(list) {
+        return `
+            <div class="list-category">
+                <h3>${list.name} 
+                    <span style="font-size: 12px; color: var(--text-muted);">
+                        (${list.items.length} items)
+                    </span>
+                    <button onclick="app.deleteList('${list.id}')" style="background: none; border: none; color: var(--danger-color); cursor: pointer; float: right;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </h3>
+                ${list.items.length > 0 ? 
+                    list.items.map(item => this.renderListItem(item)).join('') :
+                    '<p style="text-align: center; color: var(--text-muted); padding: 20px;">This list is empty. Add some items!</p>'
+                }
+            </div>
+        `
+    }
+
+    renderListItem(item) {
+        return `
+            <div class="list-item">
+                <div style="width: 60px; height: 60px; background: var(--surface-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                    <i class="fas fa-shopping-cart" style="color: var(--text-muted);"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 500;">${item.title}</div>
+                    <div style="color: var(--text-secondary); font-size: 14px;">${item.store} - R${item.price} x ${item.quantity}</div>
+                </div>
+                <button onclick="app.removeFromList('${item.id}')" 
+                        style="background: none; border: none; color: var(--danger-color); cursor: pointer; padding: 8px;">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `
+    }
+
+    // Authentication Methods
     async handleLogin() {
-        const email = document.getElementById('email').value
-        const password = document.getElementById('password').value
+        const email = document.getElementById('email')?.value
+        const password = document.getElementById('password')?.value
 
         if (!email || !password) {
             this.showToast('Please enter both email and password')
             return
         }
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password
-        })
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            })
 
-        if (error) {
-            this.showToast('Login failed: ' + error.message)
-        } else {
-            this.currentUser = data.user
-            this.renderApp()
-            this.showToast('Welcome back to SaveMate!')
+            if (error) {
+                this.showToast('Login failed: ' + error.message)
+            } else {
+                this.currentUser = data.user
+                this.renderApp()
+                this.showToast('Welcome back to SaveMate! 🎉')
+            }
+        } catch (error) {
+            this.showToast('Login error. Please try again.')
         }
     }
 
     async handleSignup() {
-        const name = document.getElementById('signupName').value
-        const email = document.getElementById('signupEmail').value
-        const password = document.getElementById('signupPassword').value
+        const name = document.getElementById('signupName')?.value
+        const email = document.getElementById('signupEmail')?.value
+        const password = document.getElementById('signupPassword')?.value
 
         if (!name || !email || !password) {
             this.showToast('Please fill in all fields')
             return
         }
 
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                data: {
-                    full_name: name
-                }
-            }
-        })
+        if (password.length < 6) {
+            this.showToast('Password must be at least 6 characters')
+            return
+        }
 
-        if (error) {
-            this.showToast('Signup failed: ' + error.message)
-        } else {
-            this.showToast('Account created! Check your email for verification.')
-            this.showLogin()
+        try {
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: name,
+                        avatar: name.substring(0, 2).toUpperCase()
+                    }
+                }
+            })
+
+            if (error) {
+                this.showToast('Signup failed: ' + error.message)
+            } else {
+                this.showToast('Account created! Check your email for verification. 📧')
+                this.showLogin()
+            }
+        } catch (error) {
+            this.showToast('Signup error. Please try again.')
         }
     }
 
@@ -636,19 +962,237 @@ class SaveMateApp {
     }
 
     async logout() {
-        await supabase.auth.signOut()
-        this.currentUser = null
-        this.renderApp()
-        this.showToast('Logged out successfully')
+        try {
+            await supabase.auth.signOut()
+            this.currentUser = null
+            this.renderApp()
+            this.showToast('Logged out successfully')
+        } catch (error) {
+            this.showToast('Logout error')
+        }
     }
 
+    // Navigation Methods
     switchPage(page) {
         this.currentPage = page
         this.renderApp()
     }
 
+    // Functional Methods
+    toggleSaveDeal(productId) {
+        if (this.savedDeals.has(productId)) {
+            this.savedDeals.delete(productId)
+            this.showToast('Deal removed from saved items')
+        } else {
+            this.savedDeals.add(productId)
+            this.showToast('Deal saved to your list 💾')
+        }
+        this.renderApp()
+    }
+
+    buyProduct(productId) {
+        const product = realProducts.find(p => p.id === productId)
+        const store = southAfricanStores.find(s => s.id === product.store_id)
+        this.showToast(`🛒 Redirecting to ${store?.name || 'store'} to purchase ${product.title}...`)
+        
+        // Simulate redirect after 2 seconds
+        setTimeout(() => {
+            this.showToast(`✅ ${product.title} added to cart at ${store?.name || 'store'}`)
+        }, 2000)
+    }
+
+    searchDeals(query) {
+        if (!query) {
+            this.loadHomeData()
+            return
+        }
+        
+        const filtered = realProducts.filter(product => 
+            product.title.toLowerCase().includes(query.toLowerCase()) ||
+            product.description.toLowerCase().includes(query.toLowerCase()) ||
+            product.category.toLowerCase().includes(query.toLowerCase())
+        )
+        
+        const dealsContainer = document.getElementById('dealsContainer')
+        const specialsContainer = document.getElementById('specialsContainer')
+        
+        if (dealsContainer) {
+            dealsContainer.innerHTML = filtered.map(product => this.renderDeal(product)).join('')
+        }
+        
+        if (specialsContainer) {
+            specialsContainer.innerHTML = ''
+        }
+        
+        if (filtered.length === 0) {
+            if (dealsContainer) {
+                dealsContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 40px; grid-column: 1 / -1;">No deals found for "' + query + '"</p>'
+            }
+        }
+    }
+
+    filterDeals(category) {
+        const filtered = realProducts.filter(product => product.category === category)
+        const exploreContainer = document.getElementById('exploreDealsContainer')
+        if (exploreContainer) {
+            exploreContainer.innerHTML = filtered.map(product => this.renderDeal(product)).join('')
+        }
+        this.showToast(`📂 Showing ${category} deals`)
+    }
+
+    showStoreDeals(storeId) {
+        const store = southAfricanStores.find(s => s.id === storeId)
+        const storeProducts = realProducts.filter(p => p.store_id === storeId)
+        
+        if (storeProducts.length > 0) {
+            const exploreContainer = document.getElementById('exploreDealsContainer')
+            if (exploreContainer) {
+                exploreContainer.innerHTML = storeProducts.map(product => this.renderDeal(product)).join('')
+            }
+            this.showToast(`🏪 Showing products from ${store?.name}`)
+        } else {
+            this.showToast(`No products found for ${store?.name}`)
+        }
+    }
+
+    createPost() {
+        const postInput = document.getElementById('postInput')
+        const content = postInput?.value.trim()
+        
+        if (!content) {
+            this.showToast('Please enter some text for your post')
+            return
+        }
+        
+        const newPost = {
+            id: Date.now().toString(),
+            user: "You",
+            avatar: this.getUserInitials(),
+            content: content,
+            time: "Just now",
+            likes: 0,
+            comments: 0,
+            shares: 0,
+            liked: false,
+            store: "General"
+        }
+        
+        this.posts.unshift(newPost)
+        if (postInput) postInput.value = ''
+        this.renderApp()
+        this.showToast('Post published! 📢')
+    }
+
+    likePost(postId) {
+        const post = this.posts.find(p => p.id === postId)
+        if (post) {
+            post.liked = !post.liked
+            post.likes += post.liked ? 1 : -1
+            this.renderApp()
+            this.showToast(post.liked ? '❤️ Post liked!' : '💔 Post unliked')
+        }
+    }
+
+    startScanner() {
+        this.showToast('📷 Scanner activated! Point your camera at a barcode.')
+        // In a real app, this would open the camera
+        setTimeout(() => {
+            this.showToast('🔍 Barcode detected! Searching for prices...')
+        }, 2000)
+    }
+
+    searchProducts(query) {
+        if (!query) {
+            const resultsContainer = document.getElementById('searchResults')
+            if (resultsContainer) resultsContainer.innerHTML = ''
+            return
+        }
+        
+        const filtered = realProducts.filter(product => 
+            product.title.toLowerCase().includes(query.toLowerCase())
+        )
+        
+        const resultsContainer = document.getElementById('searchResults')
+        if (resultsContainer) {
+            resultsContainer.innerHTML = filtered.map(product => `
+                <div class="search-result-item" onclick="app.addToShoppingList('${product.id}')">
+                    <div style="width: 40px; height: 40px; background: var(--surface-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 500;">${product.title}</div>
+                        <div style="color: var(--text-secondary); font-size: 12px;">${southAfricanStores.find(s => s.id === product.store_id)?.name} - R${product.current_price}</div>
+                    </div>
+                </div>
+            `).join('')
+        }
+    }
+
+    createNewList() {
+        const listName = prompt('Enter a name for your new shopping list:')
+        if (listName) {
+            const newList = {
+                id: Date.now().toString(),
+                name: listName,
+                items: []
+            }
+            this.shoppingLists.push(newList)
+            this.renderApp()
+            this.showToast(`🛍️ New shopping list "${listName}" created!`)
+        }
+    }
+
+    addToShoppingList(productId) {
+        const product = realProducts.find(p => p.id === productId)
+        const store = southAfricanStores.find(s => s.id === product.store_id)
+        
+        if (this.shoppingLists.length === 0) {
+            this.createNewList()
+            // Add product after list is created
+            setTimeout(() => this.addToShoppingList(productId), 100)
+            return
+        }
+        
+        const list = this.shoppingLists[0] // Add to first list
+        const existingItem = list.items.find(item => item.id === productId)
+        
+        if (existingItem) {
+            existingItem.quantity += 1
+        } else {
+            list.items.push({
+                id: productId,
+                title: product.title,
+                store: store.name,
+                price: product.current_price,
+                quantity: 1
+            })
+        }
+        
+        this.renderApp()
+        this.showToast(`✅ ${product.title} added to your shopping list!`)
+    }
+
+    removeFromList(itemId) {
+        this.shoppingLists.forEach(list => {
+            list.items = list.items.filter(item => item.id !== itemId)
+        })
+        this.renderApp()
+        this.showToast('🗑️ Item removed from shopping list')
+    }
+
+    deleteList(listId) {
+        this.shoppingLists = this.shoppingLists.filter(list => list.id !== listId)
+        this.renderApp()
+        this.showToast('🗑️ Shopping list deleted')
+    }
+
+    // Utility Methods
     showToast(message) {
-        // Create toast element
+        // Remove existing toasts
+        const existingToasts = document.querySelectorAll('.toast')
+        existingToasts.forEach(toast => toast.remove())
+        
+        // Create new toast
         const toast = document.createElement('div')
         toast.className = 'toast show'
         toast.textContent = message
@@ -660,442 +1204,46 @@ class SaveMateApp {
     }
 
     getUserInitials() {
+        const userData = this.currentUser?.user_metadata
+        if (userData?.avatar) return userData.avatar
+        if (userData?.full_name) return userData.full_name.substring(0, 2).toUpperCase()
         return this.currentUser?.email?.substring(0, 2).toUpperCase() || 'U'
     }
 
-    // Add all other functional methods...
+    // Placeholder Methods for Future Features
+    editProfile() {
+        this.showToast('👤 Edit profile feature coming soon!')
+    }
+
+    uploadAvatar() {
+        this.showToast('📸 Avatar upload feature coming soon!')
+    }
+
+    openConversation(user) {
+        this.showToast(`💬 Opening conversation with ${user}`)
+    }
+
+    showNotifications() {
+        this.showToast('🔔 You have 3 new notifications')
+    }
+
+    attachMedia() {
+        this.showToast('🖼️ Media attachment feature coming soon!')
+    }
+
+    showComments(postId) {
+        this.showToast('💬 Comments feature coming soon!')
+    }
+
+    sharePost(postId) {
+        this.showToast('📤 Share post feature coming soon!')
+    }
+
+    createListing() {
+        this.showToast('🛒 Create listing feature coming soon!')
+    }
 }
 
 // Initialize app
 const app = new SaveMateApp()
-window.app = app// Add these methods to your SaveMateApp class:
-
-loadPageData() {
-    switch(this.currentPage) {
-        case 'home':
-            this.loadHomeData()
-            break
-        case 'explore':
-            this.loadExploreData()
-            break
-        case 'universe':
-            this.loadUniverseData()
-            break
-        case 'shopping-list':
-            this.loadShoppingListData()
-            break
-    }
-}
-
-loadHomeData() {
-    // Load trending deals
-    const dealsContainer = document.getElementById('dealsContainer')
-    const specialsContainer = document.getElementById('specialsContainer')
-    
-    if (dealsContainer) {
-        dealsContainer.innerHTML = realProducts.slice(0, 3).map(product => 
-            this.renderDeal(product)
-        ).join('')
-    }
-    
-    if (specialsContainer) {
-        specialsContainer.innerHTML = realProducts.slice(3, 6).map(product => 
-            this.renderDeal(product)
-        ).join('')
-    }
-}
-
-loadExploreData() {
-    // Load stores
-    const storesContainer = document.getElementById('storesContainer')
-    const exploreDealsContainer = document.getElementById('exploreDealsContainer')
-    
-    if (storesContainer) {
-        storesContainer.innerHTML = southAfricanStores.map(store => `
-            <div class="deal-card" onclick="app.showStoreDeals('${store.id}')">
-                <div class="deal-image" style="background: ${store.color_hex}; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center;">
-                    ${store.name.toUpperCase()}
-                </div>
-                <div class="deal-content">
-                    <div class="deal-title">${store.name}</div>
-                    <div class="deal-store">
-                        <span>${store.category}</span>
-                    </div>
-                    <div class="deal-actions">
-                        <button class="deal-btn" style="width: 100%; background: var(--navy-blue); color: white;">
-                            <i class="fas fa-store"></i> Browse Store
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `).join('')
-    }
-    
-    if (exploreDealsContainer) {
-        exploreDealsContainer.innerHTML = realProducts.map(product => 
-            this.renderDeal(product)
-        ).join('')
-    }
-}
-
-loadUniverseData() {
-    // Posts are already rendered in the template
-}
-
-loadShoppingListData() {
-    // Shopping lists are managed in state
-}
-
-renderDeal(product) {
-    const store = southAfricanStores.find(s => s.id === product.store_id)
-    const isSaved = this.savedDeals.has(product.id)
-    
-    return `
-        <div class="deal-card">
-            <div class="deal-image">
-                <img src="${product.image}" alt="${product.title}" onerror="this.style.display='none'; this.parentNode.innerHTML='${product.title}'">
-                ${product.badge ? `<div class="deal-badge">${product.badge}</div>` : ''}
-            </div>
-            <div class="deal-content">
-                <div class="deal-title">${product.title}</div>
-                <div class="deal-store">
-                    <div style="width: 20px; height: 20px; border-radius: 4px; background: ${store?.color_hex || '#13294b'}; color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold;">
-                        ${store?.name?.charAt(0) || 'S'}
-                    </div>
-                    <span>${store?.name || 'Store'}</span>
-                </div>
-                <div class="deal-price">
-                    R${product.current_price}
-                    ${product.original_price ? `<span class="deal-original-price">R${product.original_price}</span>` : ''}
-                </div>
-                <div class="deal-actions">
-                    <button class="deal-btn" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary);" 
-                            onclick="app.toggleSaveDeal('${product.id}')">
-                        <i class="far ${isSaved ? 'fa-bookmark' : 'fa-bookmark'}"></i> 
-                        ${isSaved ? 'Saved' : 'Save'}
-                    </button>
-                    <button class="deal-btn" style="background: var(--navy-blue); color: white;" 
-                            onclick="app.buyProduct('${product.id}')">
-                        <i class="fas fa-shopping-cart"></i> Buy
-                    </button>
-                </div>
-            </div>
-        </div>
-    `
-}
-
-renderDealsSkeleton(count = 3) {
-    return Array(count).fill(0).map(() => `
-        <div class="deal-card">
-            <div class="deal-image" style="background: var(--secondary-bg);"></div>
-            <div class="deal-content">
-                <div class="deal-title" style="height: 20px; background: var(--secondary-bg); margin-bottom: 10px;"></div>
-                <div style="height: 16px; background: var(--secondary-bg); margin-bottom: 10px;"></div>
-                <div style="height: 24px; background: var(--secondary-bg); margin-bottom: 15px;"></div>
-                <div class="deal-actions">
-                    <div style="height: 36px; background: var(--secondary-bg); flex: 1;"></div>
-                    <div style="width: 10px;"></div>
-                    <div style="height: 36px; background: var(--secondary-bg); flex: 1;"></div>
-                </div>
-            </div>
-        </div>
-    `).join('')
-}
-
-renderStoresSkeleton() {
-    return Array(6).fill(0).map(() => `
-        <div class="deal-card">
-            <div class="deal-image" style="background: var(--secondary-bg);"></div>
-            <div class="deal-content">
-                <div class="deal-title" style="height: 20px; background: var(--secondary-bg); margin-bottom: 10px;"></div>
-                <div style="height: 16px; background: var(--secondary-bg); margin-bottom: 10px;"></div>
-                <div class="deal-actions">
-                    <div style="height: 36px; background: var(--secondary-bg); width: 100%;"></div>
-                </div>
-            </div>
-        </div>
-    `).join('')
-}
-
-renderPosts() {
-    return this.posts.map(post => `
-        <div class="post-card">
-            <div class="post-header">
-                <div class="post-avatar">${post.avatar}</div>
-                <div>
-                    <div class="post-user">${post.user}</div>
-                    <div class="post-time">${post.time} • ${post.store}</div>
-                </div>
-            </div>
-            <div class="post-content">
-                ${post.content}
-            </div>
-            ${post.image ? `<div class="post-image" style="background-image: url('${post.image}')"></div>` : ''}
-            <div class="post-actions">
-                <div class="post-action ${post.liked ? 'active' : ''}" onclick="app.likePost('${post.id}')">
-                    <i class="${post.liked ? 'fas' : 'far'} fa-heart"></i>
-                    <span>${post.likes}</span>
-                </div>
-                <div class="post-action" onclick="app.showComments('${post.id}')">
-                    <i class="far fa-comment"></i>
-                    <span>${post.comments}</span>
-                </div>
-                <div class="post-action" onclick="app.sharePost('${post.id}')">
-                    <i class="fas fa-share-alt"></i>
-                    <span>${post.shares}</span>
-                </div>
-            </div>
-        </div>
-    `).join('')
-}
-
-renderUserPosts() {
-    const userPosts = this.posts.filter(post => post.user === 'You')
-    return userPosts.length > 0 ? 
-        userPosts.map(post => this.renderPosts([post])).join('') :
-        '<p style="text-align: center; color: var(--text-muted); padding: 40px;">No posts yet. Share your first deal!</p>'
-}
-
-renderShoppingList(list) {
-    return `
-        <div class="list-category">
-            <h3>${list.name} 
-                <span style="font-size: 12px; color: var(--text-muted);">
-                    (${list.items.length} items)
-                </span>
-                <button onclick="app.deleteList('${list.id}')" style="background: none; border: none; color: var(--danger); cursor: pointer; float: right;">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </h3>
-            ${list.items.length > 0 ? 
-                list.items.map(item => this.renderListItem(item)).join('') :
-                '<p style="text-align: center; color: var(--text-muted); padding: 20px;">This list is empty. Add some items!</p>'
-            }
-        </div>
-    `
-}
-
-renderListItem(item) {
-    return `
-        <div class="list-item">
-            <div style="width: 60px; height: 60px; background: var(--secondary-bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
-                <i class="fas fa-barcode" style="color: var(--text-muted);"></i>
-            </div>
-            <div style="flex: 1;">
-                <div style="font-weight: 500;">${item.title}</div>
-                <div style="color: var(--text-secondary); font-size: 14px;">${item.store} - R${item.price} x ${item.quantity}</div>
-            </div>
-            <button onclick="app.removeFromList('${item.id}')" 
-                    style="background: none; border: none; color: var(--danger); cursor: pointer;">
-                <i class="fas fa-trash"></i>
-            </button>
-        </div>
-    `
-}
-
-// Functional methods
-toggleSaveDeal(productId) {
-    if (this.savedDeals.has(productId)) {
-        this.savedDeals.delete(productId)
-        this.showToast('Deal removed from saved items')
-    } else {
-        this.savedDeals.add(productId)
-        this.showToast('Deal saved to your list')
-    }
-    this.renderApp()
-}
-
-buyProduct(productId) {
-    const product = realProducts.find(p => p.id === productId)
-    this.showToast(`Redirecting to ${product?.store_id ? southAfricanStores.find(s => s.id === product.store_id)?.name : 'store'}...`)
-}
-
-searchDeals(query) {
-    if (!query) {
-        this.loadHomeData()
-        return
-    }
-    
-    const filtered = realProducts.filter(product => 
-        product.title.toLowerCase().includes(query.toLowerCase()) ||
-        product.description.toLowerCase().includes(query.toLowerCase())
-    )
-    
-    const dealsContainer = document.getElementById('dealsContainer')
-    if (dealsContainer) {
-        dealsContainer.innerHTML = filtered.map(product => this.renderDeal(product)).join('')
-    }
-}
-
-filterDeals(category) {
-    const filtered = realProducts.filter(product => product.category === category)
-    const exploreContainer = document.getElementById('exploreDealsContainer')
-    if (exploreContainer) {
-        exploreContainer.innerHTML = filtered.map(product => this.renderDeal(product)).join('')
-    }
-    this.showToast(`Showing ${category} deals`)
-}
-
-showStoreDeals(storeId) {
-    const store = southAfricanStores.find(s => s.id === storeId)
-    const storeProducts = realProducts.filter(p => p.store_id === storeId)
-    this.showToast(`Showing products from ${store?.name}`)
-    // In a real app, you would filter and display store-specific products
-}
-
-createPost() {
-    const postInput = document.getElementById('postInput')
-    const content = postInput.value.trim()
-    
-    if (!content) {
-        this.showToast('Please enter some text for your post')
-        return
-    }
-    
-    const newPost = {
-        id: Date.now().toString(),
-        user: "You",
-        avatar: this.getUserInitials(),
-        content: content,
-        time: "Just now",
-        likes: 0,
-        comments: 0,
-        shares: 0,
-        liked: false,
-        store: "General"
-    }
-    
-    this.posts.unshift(newPost)
-    postInput.value = ''
-    this.renderApp()
-    this.showToast('Post published!')
-}
-
-likePost(postId) {
-    const post = this.posts.find(p => p.id === postId)
-    if (post) {
-        post.liked = !post.liked
-        post.likes += post.liked ? 1 : -1
-        this.renderApp()
-        this.showToast(post.liked ? 'Post liked!' : 'Post unliked')
-    }
-}
-
-startScanner() {
-    this.showToast('Scanner activated! Point your camera at a barcode.')
-    // In a real app, this would open the camera
-}
-
-searchProducts(query) {
-    if (!query) {
-        document.getElementById('searchResults').innerHTML = ''
-        return
-    }
-    
-    const filtered = realProducts.filter(product => 
-        product.title.toLowerCase().includes(query.toLowerCase())
-    )
-    
-    const resultsContainer = document.getElementById('searchResults')
-    resultsContainer.innerHTML = filtered.map(product => `
-        <div class="search-result-item" onclick="app.addToShoppingList('${product.id}')">
-            <div style="width: 40px; height: 40px; background: var(--secondary-bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
-                <i class="fas fa-barcode"></i>
-            </div>
-            <div>
-                <div style="font-weight: 500;">${product.title}</div>
-                <div style="color: var(--text-secondary); font-size: 12px;">${southAfricanStores.find(s => s.id === product.store_id)?.name} - R${product.current_price}</div>
-            </div>
-        </div>
-    `).join('')
-}
-
-createNewList() {
-    const listName = prompt('Enter a name for your new shopping list:')
-    if (listName) {
-        const newList = {
-            id: Date.now().toString(),
-            name: listName,
-            items: []
-        }
-        this.shoppingLists.push(newList)
-        this.renderApp()
-        this.showToast(`New shopping list "${listName}" created!`)
-    }
-}
-
-addToShoppingList(productId) {
-    const product = realProducts.find(p => p.id === productId)
-    const store = southAfricanStores.find(s => s.id === product.store_id)
-    
-    if (this.shoppingLists.length === 0) {
-        this.createNewList()
-        // Add product after list is created
-        setTimeout(() => this.addToShoppingList(productId), 100)
-        return
-    }
-    
-    const list = this.shoppingLists[0] // Add to first list
-    const existingItem = list.items.find(item => item.id === productId)
-    
-    if (existingItem) {
-        existingItem.quantity += 1
-    } else {
-        list.items.push({
-            id: productId,
-            title: product.title,
-            store: store.name,
-            price: product.current_price,
-            quantity: 1
-        })
-    }
-    
-    this.renderApp()
-    this.showToast(`${product.title} added to your shopping list!`)
-}
-
-removeFromList(itemId) {
-    this.shoppingLists.forEach(list => {
-        list.items = list.items.filter(item => item.id !== itemId)
-    })
-    this.renderApp()
-    this.showToast('Item removed from shopping list')
-}
-
-deleteList(listId) {
-    this.shoppingLists = this.shoppingLists.filter(list => list.id !== listId)
-    this.renderApp()
-    this.showToast('Shopping list deleted')
-}
-
-editProfile() {
-    this.showToast('Edit profile feature coming soon!')
-}
-
-uploadAvatar() {
-    this.showToast('Avatar upload feature coming soon!')
-}
-
-openConversation(user) {
-    this.showToast(`Opening conversation with ${user}`)
-}
-
-showNotifications() {
-    this.showToast('You have 3 new notifications')
-}
-
-attachMedia() {
-    this.showToast('Media attachment feature coming soon!')
-}
-
-showComments(postId) {
-    this.showToast('Comments feature coming soon!')
-}
-
-sharePost(postId) {
-    this.showToast('Share post feature coming soon!')
-}
-
-createListing() {
-    this.showToast('Create listing feature coming soon!')
-}
+window.app = app
