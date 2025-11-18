@@ -208,6 +208,40 @@ const realPosts = [
     }
 ]
 
+// Black Market Listings
+const blackMarketListings = [
+    {
+        id: '1',
+        title: "Part-time Cashier Needed",
+        type: "job_offering",
+        description: "Looking for a reliable cashier for weekend shifts at local supermarket. R120/hour.",
+        user: "StoreManagerSA",
+        time: "3 hours ago",
+        location: "Johannesburg",
+        price: "R120/hour"
+    },
+    {
+        id: '2',
+        title: "Graphic Designer Available",
+        type: "job_seeking",
+        description: "Experienced graphic designer seeking freelance work. Specializing in brand identity and social media graphics.",
+        user: "CreativeDesignZA",
+        time: "1 day ago",
+        location: "Cape Town",
+        price: "R250/hour"
+    },
+    {
+        id: '3',
+        title: "Brand New iPhone 14 Pro",
+        type: "products",
+        description: "Sealed iPhone 14 Pro 128GB. Received as gift but already have one. Best offer.",
+        user: "TechTrader",
+        time: "2 days ago",
+        location: "Durban",
+        price: "R18,000"
+    }
+]
+
 class SaveMateApp {
     constructor() {
         this.currentUser = null
@@ -215,12 +249,19 @@ class SaveMateApp {
         this.savedDeals = new Set()
         this.shoppingLists = []
         this.posts = [...realPosts]
+        this.theme = localStorage.getItem('savemate-theme') || 'light'
+        this.notifications = [
+            { id: '1', type: 'deal', message: 'New Checkers specials available!', time: '5 min ago', read: false },
+            { id: '2', type: 'social', message: 'DealHunterSA liked your post', time: '1 hour ago', read: false },
+            { id: '3', type: 'system', message: 'Welcome to SaveMate! Start exploring deals.', time: '2 hours ago', read: true }
+        ]
         this.init()
     }
 
     async init() {
         await this.checkAuth()
         this.setupEventListeners()
+        this.applyTheme()
         this.renderApp()
     }
 
@@ -245,6 +286,22 @@ class SaveMateApp {
         })
     }
 
+    applyTheme() {
+        document.documentElement.setAttribute('data-theme', this.theme)
+        if (this.theme === 'dark') {
+            document.body.classList.add('dark-theme')
+        } else {
+            document.body.classList.remove('dark-theme')
+        }
+    }
+
+    toggleTheme() {
+        this.theme = this.theme === 'light' ? 'dark' : 'light'
+        localStorage.setItem('savemate-theme', this.theme)
+        this.applyTheme()
+        this.showToast(`Switched to ${this.theme} theme`)
+    }
+
     renderApp() {
         const app = document.getElementById('app')
         
@@ -261,14 +318,18 @@ class SaveMateApp {
                     <span>SaveMate</span>
                 </div>
                 <div class="header-actions">
-                    <button class="header-btn" onclick="app.switchPage('profile')">
-                        <i class="fas fa-user"></i>
+                    <button class="header-btn" onclick="app.switchPage('settings')">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button class="header-btn" onclick="app.switchPage('notifications')">
+                        <i class="fas fa-bell"></i>
+                        ${this.getUnreadNotificationCount() > 0 ? `<span class="notification-badge">${this.getUnreadNotificationCount()}</span>` : ''}
                     </button>
                     <button class="header-btn" onclick="app.switchPage('messages')">
                         <i class="fas fa-comments"></i>
                     </button>
-                    <button class="header-btn" onclick="app.showNotifications()">
-                        <i class="fas fa-bell"></i>
+                    <button class="header-btn" onclick="app.switchPage('profile')">
+                        <i class="fas fa-user"></i>
                     </button>
                     <button class="header-btn" onclick="app.logout()">
                         <i class="fas fa-sign-out-alt"></i>
@@ -307,6 +368,10 @@ class SaveMateApp {
         this.loadPageData()
     }
 
+    getUnreadNotificationCount() {
+        return this.notifications.filter(n => !n.read).length
+    }
+
     setupAuthListeners() {
         // Remove existing listeners to prevent duplicates
         const loginBtn = document.querySelector('#loginForm .btn-primary')
@@ -336,6 +401,10 @@ class SaveMateApp {
                 return this.renderProfilePage()
             case 'messages':
                 return this.renderMessagesPage()
+            case 'notifications':
+                return this.renderNotificationsPage()
+            case 'settings':
+                return this.renderSettingsPage()
             case 'black-market':
                 return this.renderBlackMarketPage()
             default:
@@ -412,6 +481,16 @@ class SaveMateApp {
                 <h2 class="section-title">💫 Weekly Specials</h2>
                 <div class="deals-grid" id="specialsContainer">
                     ${this.renderDealsSkeleton()}
+                </div>
+
+                <h2 class="section-title">🏪 Popular Stores</h2>
+                <div class="stores-scroll">
+                    ${southAfricanStores.slice(0, 6).map(store => `
+                        <div class="store-chip" onclick="app.showStoreDeals('${store.id}')" style="background: ${store.color_hex}20; border: 1px solid ${store.color_hex}40;">
+                            <div class="store-chip-logo" style="background: ${store.color_hex};">${store.logo}</div>
+                            <span>${store.name}</span>
+                        </div>
+                    `).join('')}
                 </div>
             </div>
         `
@@ -509,6 +588,9 @@ class SaveMateApp {
                     <div style="text-align: center; padding: 40px; color: var(--text-muted);">
                         <i class="fas fa-barcode" style="font-size: 48px; margin-bottom: 16px;"></i>
                         <p>No recently scanned items</p>
+                        <button class="btn btn-secondary" style="width: auto; margin-top: 10px;" onclick="app.startScanner()">
+                            Scan Your First Item
+                        </button>
                     </div>
                 </div>
             </div>
@@ -540,7 +622,11 @@ class SaveMateApp {
                     <div id="shoppingListContainer">
                         ${this.shoppingLists.length > 0 ? 
                             this.shoppingLists.map(list => this.renderShoppingList(list)).join('') :
-                            '<p style="text-align: center; color: var(--text-muted); padding: 40px;">No shopping lists yet. Create your first list!</p>'
+                            '<div style="text-align: center; padding: 40px; color: var(--text-muted);">' +
+                            '<i class="fas fa-list" style="font-size: 48px; margin-bottom: 16px;"></i>' +
+                            '<p>No shopping lists yet. Create your first list!</p>' +
+                            '<button class="btn btn-primary" style="width: auto; margin-top: 16px;" onclick="app.createNewList()">' +
+                            '<i class="fas fa-plus"></i> Create First List</button></div>'
                         }
                     </div>
                 </div>
@@ -572,12 +658,12 @@ class SaveMateApp {
                                 <div class="stat-label">Posts</div>
                             </div>
                             <div class="stat">
-                                <div class="stat-value">245</div>
-                                <div class="stat-label">Followers</div>
+                                <div class="stat-value">${this.savedDeals.size}</div>
+                                <div class="stat-label">Saved</div>
                             </div>
                             <div class="stat">
-                                <div class="stat-value">178</div>
-                                <div class="stat-label">Following</div>
+                                <div class="stat-value">${this.shoppingLists.reduce((total, list) => total + list.items.length, 0)}</div>
+                                <div class="stat-label">List Items</div>
                             </div>
                         </div>
                         
@@ -587,7 +673,7 @@ class SaveMateApp {
                     </div>
 
                     <div class="profile-posts">
-                        <h3>My Posts</h3>
+                        <h3>My Activity</h3>
                         <div id="userPostsContainer">
                             ${this.renderUserPosts()}
                         </div>
@@ -629,6 +715,186 @@ class SaveMateApp {
         `
     }
 
+    renderNotificationsPage() {
+        return `
+            <div class="page">
+                <h2 class="section-title">🔔 Notifications</h2>
+                
+                <div class="notifications-list">
+                    ${this.notifications.map(notification => `
+                        <div class="notification-item ${notification.read ? '' : 'unread'}" onclick="app.markNotificationRead('${notification.id}')">
+                            <div class="notification-icon">
+                                <i class="fas fa-${notification.type === 'deal' ? 'tag' : notification.type === 'social' ? 'heart' : 'info-circle'}"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-message">${notification.message}</div>
+                                <div class="notification-time">${notification.time}</div>
+                            </div>
+                            ${!notification.read ? '<div class="notification-dot"></div>' : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `
+    }
+
+    renderSettingsPage() {
+        return `
+            <div class="page">
+                <h2 class="section-title">⚙️ Settings</h2>
+                
+                <div class="settings-container">
+                    <!-- Theme Settings -->
+                    <div class="settings-section">
+                        <h3>🎨 Appearance</h3>
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Theme</div>
+                                <div class="settings-description">Choose between light and dark mode</div>
+                            </div>
+                            <div class="settings-action">
+                                <label class="theme-switch">
+                                    <input type="checkbox" ${this.theme === 'dark' ? 'checked' : ''} onchange="app.toggleTheme()">
+                                    <span class="theme-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Settings -->
+                    <div class="settings-section">
+                        <h3>👤 Account</h3>
+                        <div class="settings-item" onclick="app.changeUsername()">
+                            <div class="settings-info">
+                                <div class="settings-label">Username</div>
+                                <div class="settings-description">Change your display name</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <div class="settings-item" onclick="app.changePassword()">
+                            <div class="settings-info">
+                                <div class="settings-label">Password</div>
+                                <div class="settings-description">Update your password</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <div class="settings-item" onclick="app.changeEmail()">
+                            <div class="settings-info">
+                                <div class="settings-label">Email</div>
+                                <div class="settings-description">Change your email address</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Settings -->
+                    <div class="settings-section">
+                        <h3>🔒 Privacy</h3>
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Private Account</div>
+                                <div class="settings-description">Make your profile private</div>
+                            </div>
+                            <div class="settings-action">
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-item" onclick="app.showPrivacyPolicy()">
+                            <div class="settings-info">
+                                <div class="settings-label">Privacy Policy</div>
+                                <div class="settings-description">How we protect your data</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <div class="settings-item" onclick="app.showDataSettings()">
+                            <div class="settings-info">
+                                <div class="settings-label">Data Usage</div>
+                                <div class="settings-description">Control your data preferences</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About Section -->
+                    <div class="settings-section">
+                        <h3>ℹ️ About</h3>
+                        <div class="settings-item" onclick="app.showAbout()">
+                            <div class="settings-info">
+                                <div class="settings-label">About SaveMate</div>
+                                <div class="settings-description">Learn about our mission</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <div class="settings-item" onclick="app.showCompanyInfo()">
+                            <div class="settings-info">
+                                <div class="settings-label">Hunadi Digital</div>
+                                <div class="settings-description">Our parent company</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <div class="settings-item" onclick="app.showTerms()">
+                            <div class="settings-info">
+                                <div class="settings-label">Terms & Conditions</div>
+                                <div class="settings-description">App usage terms</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Support -->
+                    <div class="settings-section">
+                        <h3>🛟 Support</h3>
+                        <div class="settings-item" onclick="app.contactSupport()">
+                            <div class="settings-info">
+                                <div class="settings-label">Contact Support</div>
+                                <div class="settings-description">Get help with the app</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        <div class="settings-item" onclick="app.reportProblem()">
+                            <div class="settings-info">
+                                <div class="settings-label">Report a Problem</div>
+                                <div class="settings-description">Found a bug? Let us know</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- App Info -->
+                    <div class="settings-section">
+                        <div class="app-info">
+                            <div class="app-version">SaveMate v1.0.0</div>
+                            <div class="app-copyright">© 2024 Hunadi Digital. All rights reserved.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+    }
+
     renderBlackMarketPage() {
         return `
             <div class="page">
@@ -640,24 +906,47 @@ class SaveMateApp {
                 </div>
 
                 <div class="job-type-selector">
-                    <button class="job-type-btn active">All Listings</button>
-                    <button class="job-type-btn">Job Seeking</button>
-                    <button class="job-type-btn">Job Offering</button>
-                    <button class="job-type-btn">Services</button>
-                    <button class="job-type-btn">Products</button>
+                    <button class="job-type-btn active" onclick="app.filterListings('all')">All Listings</button>
+                    <button class="job-type-btn" onclick="app.filterListings('job_seeking')">Job Seeking</button>
+                    <button class="job-type-btn" onclick="app.filterListings('job_offering')">Job Offering</button>
+                    <button class="job-type-btn" onclick="app.filterListings('services')">Services</button>
+                    <button class="job-type-btn" onclick="app.filterListings('products')">Products</button>
                 </div>
 
                 <div id="blackMarketListings">
-                    <div style="text-align: center; padding: 40px; color: var(--text-muted);">
-                        <i class="fas fa-store" style="font-size: 48px; margin-bottom: 16px;"></i>
-                        <p>No listings yet. Be the first to create one!</p>
-                        <button class="btn btn-primary" style="width: auto; margin-top: 16px;" onclick="app.createListing()">
-                            <i class="fas fa-plus"></i> Create First Listing
-                        </button>
-                    </div>
+                    ${blackMarketListings.map(listing => `
+                        <div class="listing-card">
+                            <div class="listing-header">
+                                <div class="listing-type ${listing.type}">${this.getListingTypeLabel(listing.type)}</div>
+                                <div class="listing-price">${listing.price}</div>
+                            </div>
+                            <h3 class="listing-title">${listing.title}</h3>
+                            <p class="listing-description">${listing.description}</p>
+                            <div class="listing-footer">
+                                <div class="listing-user">
+                                    <div class="listing-avatar">${listing.user.charAt(0)}</div>
+                                    <span>${listing.user}</span>
+                                </div>
+                                <div class="listing-meta">
+                                    <span class="listing-location">📍 ${listing.location}</span>
+                                    <span class="listing-time">${listing.time}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
             </div>
         `
+    }
+
+    getListingTypeLabel(type) {
+        const labels = {
+            'job_offering': '💼 Job Offer',
+            'job_seeking': '🔍 Seeking Job',
+            'services': '🛠️ Service',
+            'products': '📦 Product'
+        }
+        return labels[type] || type
     }
 
     loadPageData() {
@@ -845,7 +1134,11 @@ class SaveMateApp {
         const userPosts = this.posts.filter(post => post.user === 'You')
         return userPosts.length > 0 ? 
             userPosts.map(post => this.renderPosts([post])).join('') :
-            '<p style="text-align: center; color: var(--text-muted); padding: 40px;">No posts yet. Share your first deal in the Universe! 🌟</p>'
+            '<div style="text-align: center; padding: 40px; color: var(--text-muted);">' +
+            '<i class="fas fa-feather" style="font-size: 48px; margin-bottom: 16px;"></i>' +
+            '<p>No posts yet. Share your first deal in the Universe! 🌟</p>' +
+            '<button class="btn btn-primary" style="width: auto; margin-top: 16px;" onclick="app.switchPage(\'universe\')">' +
+            'Share First Post</button></div>'
     }
 
     renderShoppingList(list) {
@@ -1186,6 +1479,66 @@ class SaveMateApp {
         this.showToast('🗑️ Shopping list deleted')
     }
 
+    // Settings Methods
+    changeUsername() {
+        const newUsername = prompt('Enter new username:')
+        if (newUsername) {
+            this.showToast(`Username updated to ${newUsername}`)
+        }
+    }
+
+    changePassword() {
+        this.showToast('Password change feature coming soon!')
+    }
+
+    changeEmail() {
+        this.showToast('Email change feature coming soon!')
+    }
+
+    showPrivacyPolicy() {
+        this.showToast('Privacy Policy: We protect your data with encryption and never share without permission.')
+    }
+
+    showDataSettings() {
+        this.showToast('Data settings: You can download your data or delete your account anytime.')
+    }
+
+    showAbout() {
+        this.showToast('SaveMate: Helping South Africans save money and connect through smart shopping!')
+    }
+
+    showCompanyInfo() {
+        this.showToast('Hunadi Digital: Building innovative solutions for African communities since 2024.')
+    }
+
+    showTerms() {
+        this.showToast('Terms: Use SaveMate responsibly. No spam, fraud, or illegal activities.')
+    }
+
+    contactSupport() {
+        this.showToast('Contact: support@savemate.co.za | Call: 0861 SAVEMATE')
+    }
+
+    reportProblem() {
+        this.showToast('Report issues to: bugs@savemate.co.za')
+    }
+
+    markNotificationRead(notificationId) {
+        const notification = this.notifications.find(n => n.id === notificationId)
+        if (notification) {
+            notification.read = true
+            this.renderApp()
+        }
+    }
+
+    filterListings(type) {
+        this.showToast(`Filtering ${type} listings...`)
+    }
+
+    createListing() {
+        this.showToast('Create listing feature coming soon!')
+    }
+
     // Utility Methods
     showToast(message) {
         // Remove existing toasts
@@ -1223,10 +1576,6 @@ class SaveMateApp {
         this.showToast(`💬 Opening conversation with ${user}`)
     }
 
-    showNotifications() {
-        this.showToast('🔔 You have 3 new notifications')
-    }
-
     attachMedia() {
         this.showToast('🖼️ Media attachment feature coming soon!')
     }
@@ -1237,10 +1586,6 @@ class SaveMateApp {
 
     sharePost(postId) {
         this.showToast('📤 Share post feature coming soon!')
-    }
-
-    createListing() {
-        this.showToast('🛒 Create listing feature coming soon!')
     }
 }
 
