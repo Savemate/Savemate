@@ -242,19 +242,39 @@ const blackMarketListings = [
     }
 ]
 
+// Notifications data
+const notificationsData = [
+    { id: '1', type: 'deal', message: 'New Checkers specials available!', time: '5 min ago', read: false },
+    { id: '2', type: 'social', message: 'DealHunterSA liked your post', time: '1 hour ago', read: false },
+    { id: '3', type: 'system', message: 'Welcome to SaveMate! Start exploring deals.', time: '2 hours ago', read: true },
+    { id: '4', type: 'deal', message: 'Woolworths has 25% off baby products', time: '3 hours ago', read: true }
+]
+
 class SaveMateApp {
     constructor() {
         this.currentUser = null
         this.currentPage = 'home'
-        this.savedDeals = new Set()
-        this.shoppingLists = []
-        this.posts = [...realPosts]
-        this.theme = localStorage.getItem('savemate-theme') || 'light'
-        this.notifications = [
-            { id: '1', type: 'deal', message: 'New Checkers specials available!', time: '5 min ago', read: false },
-            { id: '2', type: 'social', message: 'DealHunterSA liked your post', time: '1 hour ago', read: false },
-            { id: '3', type: 'system', message: 'Welcome to SaveMate! Start exploring deals.', time: '2 hours ago', read: true }
+        this.savedDeals = new Set(['1', '3'])
+        this.shoppingLists = [
+            {
+                id: '1',
+                name: "Weekly Groceries",
+                items: [
+                    { id: '1', title: "Tastic Rice 5kg", store: "Checkers", price: 105.99, quantity: 1 },
+                    { id: '4', title: "Koo Baked Beans 410g", store: "Shoprite", price: 18.99, quantity: 2 }
+                ]
+            },
+            {
+                id: '2', 
+                name: "Electronics Wishlist",
+                items: [
+                    { id: '6', title: "Samsung TV 55\"", store: "Makro", price: 6999.99, quantity: 1 }
+                ]
+            }
         ]
+        this.posts = [...realPosts]
+        this.notifications = [...notificationsData]
+        this.theme = localStorage.getItem('savemate-theme') || 'light'
         this.init()
     }
 
@@ -289,9 +309,11 @@ class SaveMateApp {
     applyTheme() {
         document.documentElement.setAttribute('data-theme', this.theme)
         if (this.theme === 'dark') {
-            document.body.classList.add('dark-theme')
+            document.body.style.backgroundColor = '#0f172a'
+            document.body.style.color = '#f1f5f9'
         } else {
-            document.body.classList.remove('dark-theme')
+            document.body.style.backgroundColor = '#f8fafc'
+            document.body.style.color = '#1e293b'
         }
     }
 
@@ -299,7 +321,7 @@ class SaveMateApp {
         this.theme = this.theme === 'light' ? 'dark' : 'light'
         localStorage.setItem('savemate-theme', this.theme)
         this.applyTheme()
-        this.showToast(`Switched to ${this.theme} theme`)
+        this.showToast(`Switched to ${this.theme} theme 🌙`)
     }
 
     renderApp() {
@@ -373,7 +395,6 @@ class SaveMateApp {
     }
 
     setupAuthListeners() {
-        // Remove existing listeners to prevent duplicates
         const loginBtn = document.querySelector('#loginForm .btn-primary')
         const signupBtn = document.querySelector('#signupForm .btn-primary')
         
@@ -585,10 +606,10 @@ class SaveMateApp {
 
                 <h2 class="section-title">📋 Recently Scanned</h2>
                 <div id="recentlyScanned">
-                    <div style="text-align: center; padding: 40px; color: var(--text-muted);">
-                        <i class="fas fa-barcode" style="font-size: 48px; margin-bottom: 16px;"></i>
+                    <div class="empty-state">
+                        <i class="fas fa-barcode"></i>
                         <p>No recently scanned items</p>
-                        <button class="btn btn-secondary" style="width: auto; margin-top: 10px;" onclick="app.startScanner()">
+                        <button class="btn btn-secondary" style="width: auto;" onclick="app.startScanner()">
                             Scan Your First Item
                         </button>
                     </div>
@@ -622,10 +643,10 @@ class SaveMateApp {
                     <div id="shoppingListContainer">
                         ${this.shoppingLists.length > 0 ? 
                             this.shoppingLists.map(list => this.renderShoppingList(list)).join('') :
-                            '<div style="text-align: center; padding: 40px; color: var(--text-muted);">' +
-                            '<i class="fas fa-list" style="font-size: 48px; margin-bottom: 16px;"></i>' +
+                            '<div class="empty-state">' +
+                            '<i class="fas fa-list"></i>' +
                             '<p>No shopping lists yet. Create your first list!</p>' +
-                            '<button class="btn btn-primary" style="width: auto; margin-top: 16px;" onclick="app.createNewList()">' +
+                            '<button class="btn btn-primary" style="width: auto;" onclick="app.createNewList()">' +
                             '<i class="fas fa-plus"></i> Create First List</button></div>'
                         }
                     </div>
@@ -749,8 +770,8 @@ class SaveMateApp {
                         <h3>🎨 Appearance</h3>
                         <div class="settings-item">
                             <div class="settings-info">
-                                <div class="settings-label">Theme</div>
-                                <div class="settings-description">Choose between light and dark mode</div>
+                                <div class="settings-label">Dark Mode</div>
+                                <div class="settings-description">Switch between light and dark theme</div>
                             </div>
                             <div class="settings-action">
                                 <label class="theme-switch">
@@ -950,73 +971,71 @@ class SaveMateApp {
     }
 
     loadPageData() {
-        switch(this.currentPage) {
-            case 'home':
-                this.loadHomeData()
-                break
-            case 'explore':
-                this.loadExploreData()
-                break
-            case 'universe':
-                this.loadUniverseData()
-                break
-            case 'shopping-list':
-                this.loadShoppingListData()
-                break
-        }
+        setTimeout(() => {
+            switch(this.currentPage) {
+                case 'home':
+                    this.loadHomeData()
+                    break
+                case 'explore':
+                    this.loadExploreData()
+                    break
+                case 'universe':
+                    this.loadUniverseData()
+                    break
+                case 'shopping-list':
+                    this.loadShoppingListData()
+                    break
+            }
+        }, 300)
     }
 
     loadHomeData() {
-        setTimeout(() => {
-            const dealsContainer = document.getElementById('dealsContainer')
-            const specialsContainer = document.getElementById('specialsContainer')
-            
-            if (dealsContainer) {
-                dealsContainer.innerHTML = realProducts.slice(0, 4).map(product => 
-                    this.renderDeal(product)
-                ).join('')
-            }
-            
-            if (specialsContainer) {
-                specialsContainer.innerHTML = realProducts.slice(4, 8).map(product => 
-                    this.renderDeal(product)
-                ).join('')
-            }
-        }, 500)
+        const dealsContainer = document.getElementById('dealsContainer')
+        const specialsContainer = document.getElementById('specialsContainer')
+        
+        if (dealsContainer) {
+            dealsContainer.innerHTML = realProducts.slice(0, 4).map(product => 
+                this.renderDeal(product)
+            ).join('')
+        }
+        
+        if (specialsContainer) {
+            specialsContainer.innerHTML = realProducts.slice(4, 8).map(product => 
+                this.renderDeal(product)
+            ).join('')
+        }
     }
 
     loadExploreData() {
-        setTimeout(() => {
-            const storesContainer = document.getElementById('storesContainer')
-            const exploreDealsContainer = document.getElementById('exploreDealsContainer')
-            
-            if (storesContainer) {
-                storesContainer.innerHTML = southAfricanStores.map(store => `
-                    <div class="deal-card" onclick="app.showStoreDeals('${store.id}')">
-                        <div class="deal-image" style="background: ${store.color_hex}; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                            ${store.logo}
+        const storesContainer = document.getElementById('storesContainer')
+        const exploreDealsContainer = document.getElementById('exploreDealsContainer')
+        
+        if (storesContainer) {
+            storesContainer.innerHTML = southAfricanStores.map(store => `
+                <div class="deal-card" onclick="app.showStoreDeals('${store.id}')">
+                    <div class="deal-image" style="background: ${store.color_hex}; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                        ${store.logo}
+                    </div>
+                    <div class="deal-content">
+                        <div class="deal-title">${store.name}</div>
+                        <div class="deal-store">
+                            <span>${store.category}</span>
                         </div>
-                        <div class="deal-content">
-                            <div class="deal-title">${store.name}</div>
-                            <div class="deal-store">
-                                <span>${store.category}</span>
-                            </div>
-                            <div class="deal-actions">
-                                <button class="deal-btn" style="width: 100%; background: var(--navy-blue); color: white;">
-                                    <i class="fas fa-store"></i> Browse Store
-                                </button>
-                            </div>
+                        <div class="deal-actions">
+                            <button class="deal-btn" style="width: 100%; background: var(--navy-blue); color: white;">
+                                <i class="fas fa-store"></i> Browse Store
+                            </button>
                         </div>
                     </div>
-                `).join('')
-            }
-            
-            if (exploreDealsContainer) {
-                exploreDealsContainer.innerHTML = realProducts.map(product => 
-                    this.renderDeal(product)
-                ).join('')
-            }
-        }, 500)
+                </div>
+            `).join('')
+        }
+        
+        if (exploreDealsContainer) {
+            exploreDealsContainer.innerHTML = realProducts.map(product => 
+                this.renderDeal(product)
+            ).join('')
+        }
     }
 
     loadUniverseData() {
@@ -1133,11 +1152,39 @@ class SaveMateApp {
     renderUserPosts() {
         const userPosts = this.posts.filter(post => post.user === 'You')
         return userPosts.length > 0 ? 
-            userPosts.map(post => this.renderPosts([post])).join('') :
-            '<div style="text-align: center; padding: 40px; color: var(--text-muted);">' +
-            '<i class="fas fa-feather" style="font-size: 48px; margin-bottom: 16px;"></i>' +
+            userPosts.map(post => `
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar">${post.avatar}</div>
+                        <div>
+                            <div class="post-user">${post.user}</div>
+                            <div class="post-time">${post.time} • ${post.store}</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        ${post.content}
+                    </div>
+                    ${post.image ? `<div class="post-image" style="background-image: url('${post.image}')"></div>` : ''}
+                    <div class="post-actions">
+                        <div class="post-action ${post.liked ? 'active' : ''}" onclick="app.likePost('${post.id}')">
+                            <i class="${post.liked ? 'fas' : 'far'} fa-heart"></i>
+                            <span>${post.likes}</span>
+                        </div>
+                        <div class="post-action" onclick="app.showComments('${post.id}')">
+                            <i class="far fa-comment"></i>
+                            <span>${post.comments}</span>
+                        </div>
+                        <div class="post-action" onclick="app.sharePost('${post.id}')">
+                            <i class="fas fa-share-alt"></i>
+                            <span>${post.shares}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('') :
+            '<div class="empty-state">' +
+            '<i class="fas fa-feather"></i>' +
             '<p>No posts yet. Share your first deal in the Universe! 🌟</p>' +
-            '<button class="btn btn-primary" style="width: auto; margin-top: 16px;" onclick="app.switchPage(\'universe\')">' +
+            '<button class="btn btn-primary" style="width: auto;" onclick="app.switchPage(\'universe\')">' +
             'Share First Post</button></div>'
     }
 
@@ -1288,7 +1335,6 @@ class SaveMateApp {
         const store = southAfricanStores.find(s => s.id === product.store_id)
         this.showToast(`🛒 Redirecting to ${store?.name || 'store'} to purchase ${product.title}...`)
         
-        // Simulate redirect after 2 seconds
         setTimeout(() => {
             this.showToast(`✅ ${product.title} added to cart at ${store?.name || 'store'}`)
         }, 2000)
@@ -1388,7 +1434,6 @@ class SaveMateApp {
 
     startScanner() {
         this.showToast('📷 Scanner activated! Point your camera at a barcode.')
-        // In a real app, this would open the camera
         setTimeout(() => {
             this.showToast('🔍 Barcode detected! Searching for prices...')
         }, 2000)
@@ -1441,12 +1486,11 @@ class SaveMateApp {
         
         if (this.shoppingLists.length === 0) {
             this.createNewList()
-            // Add product after list is created
             setTimeout(() => this.addToShoppingList(productId), 100)
             return
         }
         
-        const list = this.shoppingLists[0] // Add to first list
+        const list = this.shoppingLists[0]
         const existingItem = list.items.find(item => item.id === productId)
         
         if (existingItem) {
@@ -1541,11 +1585,9 @@ class SaveMateApp {
 
     // Utility Methods
     showToast(message) {
-        // Remove existing toasts
         const existingToasts = document.querySelectorAll('.toast')
         existingToasts.forEach(toast => toast.remove())
         
-        // Create new toast
         const toast = document.createElement('div')
         toast.className = 'toast show'
         toast.textContent = message
@@ -1563,7 +1605,7 @@ class SaveMateApp {
         return this.currentUser?.email?.substring(0, 2).toUpperCase() || 'U'
     }
 
-    // Placeholder Methods for Future Features
+    // Placeholder Methods
     editProfile() {
         this.showToast('👤 Edit profile feature coming soon!')
     }
