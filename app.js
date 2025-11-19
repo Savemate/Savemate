@@ -496,12 +496,12 @@ class SaveMateApp {
 
                 <h2 class="section-title">🔥 Trending Deals</h2>
                 <div class="deals-grid" id="dealsContainer">
-                    ${this.renderDealsSkeleton()}
+                    ${this.renderDealsGrid(realProducts.slice(0, 4))}
                 </div>
 
                 <h2 class="section-title">💫 Weekly Specials</h2>
                 <div class="deals-grid" id="specialsContainer">
-                    ${this.renderDealsSkeleton()}
+                    ${this.renderDealsGrid(realProducts.slice(4, 8))}
                 </div>
 
                 <h2 class="section-title">🏪 Popular Stores</h2>
@@ -550,12 +550,12 @@ class SaveMateApp {
 
                 <h2 class="section-title">🏪 Featured Stores</h2>
                 <div class="deals-grid" id="storesContainer">
-                    ${this.renderStoresSkeleton()}
+                    ${this.renderStoresGrid()}
                 </div>
 
                 <h2 class="section-title">🛍️ All Products</h2>
                 <div class="deals-grid" id="exploreDealsContainer">
-                    ${this.renderDealsSkeleton(6)}
+                    ${this.renderDealsGrid(realProducts)}
                 </div>
             </div>
         `
@@ -970,80 +970,29 @@ class SaveMateApp {
         return labels[type] || type
     }
 
-    loadPageData() {
-        setTimeout(() => {
-            switch(this.currentPage) {
-                case 'home':
-                    this.loadHomeData()
-                    break
-                case 'explore':
-                    this.loadExploreData()
-                    break
-                case 'universe':
-                    this.loadUniverseData()
-                    break
-                case 'shopping-list':
-                    this.loadShoppingListData()
-                    break
-            }
-        }, 300)
+    renderDealsGrid(products) {
+        return products.map(product => this.renderDeal(product)).join('')
     }
 
-    loadHomeData() {
-        const dealsContainer = document.getElementById('dealsContainer')
-        const specialsContainer = document.getElementById('specialsContainer')
-        
-        if (dealsContainer) {
-            dealsContainer.innerHTML = realProducts.slice(0, 4).map(product => 
-                this.renderDeal(product)
-            ).join('')
-        }
-        
-        if (specialsContainer) {
-            specialsContainer.innerHTML = realProducts.slice(4, 8).map(product => 
-                this.renderDeal(product)
-            ).join('')
-        }
-    }
-
-    loadExploreData() {
-        const storesContainer = document.getElementById('storesContainer')
-        const exploreDealsContainer = document.getElementById('exploreDealsContainer')
-        
-        if (storesContainer) {
-            storesContainer.innerHTML = southAfricanStores.map(store => `
-                <div class="deal-card" onclick="app.showStoreDeals('${store.id}')">
-                    <div class="deal-image" style="background: ${store.color_hex}; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                        ${store.logo}
+    renderStoresGrid() {
+        return southAfricanStores.map(store => `
+            <div class="deal-card" onclick="app.showStoreDeals('${store.id}')">
+                <div class="deal-image" style="background: ${store.color_hex}; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                    ${store.logo}
+                </div>
+                <div class="deal-content">
+                    <div class="deal-title">${store.name}</div>
+                    <div class="deal-store">
+                        <span>${store.category}</span>
                     </div>
-                    <div class="deal-content">
-                        <div class="deal-title">${store.name}</div>
-                        <div class="deal-store">
-                            <span>${store.category}</span>
-                        </div>
-                        <div class="deal-actions">
-                            <button class="deal-btn" style="width: 100%; background: var(--navy-blue); color: white;">
-                                <i class="fas fa-store"></i> Browse Store
-                            </button>
-                        </div>
+                    <div class="deal-actions">
+                        <button class="deal-btn" style="width: 100%; background: var(--navy-blue); color: white;">
+                            <i class="fas fa-store"></i> Browse Store
+                        </button>
                     </div>
                 </div>
-            `).join('')
-        }
-        
-        if (exploreDealsContainer) {
-            exploreDealsContainer.innerHTML = realProducts.map(product => 
-                this.renderDeal(product)
-            ).join('')
-        }
-    }
-
-    loadUniverseData() {
-        // Posts are already loaded
-    }
-
-    loadShoppingListData() {
-        // Shopping lists are managed in state
+            </div>
+        `).join('')
     }
 
     renderDeal(product) {
@@ -1082,39 +1031,6 @@ class SaveMateApp {
                 </div>
             </div>
         `
-    }
-
-    renderDealsSkeleton(count = 3) {
-        return Array(count).fill(0).map(() => `
-            <div class="deal-card">
-                <div class="deal-image" style="background: var(--surface-color);"></div>
-                <div class="deal-content">
-                    <div class="deal-title" style="height: 20px; background: var(--surface-color); margin-bottom: 10px;"></div>
-                    <div style="height: 16px; background: var(--surface-color); margin-bottom: 10px;"></div>
-                    <div style="height: 24px; background: var(--surface-color); margin-bottom: 15px;"></div>
-                    <div class="deal-actions">
-                        <div style="height: 36px; background: var(--surface-color); flex: 1;"></div>
-                        <div style="width: 10px;"></div>
-                        <div style="height: 36px; background: var(--surface-color); flex: 1;"></div>
-                    </div>
-                </div>
-            </div>
-        `).join('')
-    }
-
-    renderStoresSkeleton() {
-        return Array(6).fill(0).map(() => `
-            <div class="deal-card">
-                <div class="deal-image" style="background: var(--surface-color);"></div>
-                <div class="deal-content">
-                    <div class="deal-title" style="height: 20px; background: var(--surface-color); margin-bottom: 10px;"></div>
-                    <div style="height: 16px; background: var(--surface-color); margin-bottom: 10px;"></div>
-                    <div class="deal-actions">
-                        <div style="height: 36px; background: var(--surface-color); width: 100%;"></div>
-                    </div>
-                </div>
-            </div>
-        `).join('')
     }
 
     renderPosts() {
@@ -1223,6 +1139,10 @@ class SaveMateApp {
                 </button>
             </div>
         `
+    }
+
+    loadPageData() {
+        // Data is already loaded in the templates
     }
 
     // Authentication Methods
@@ -1356,7 +1276,7 @@ class SaveMateApp {
         const specialsContainer = document.getElementById('specialsContainer')
         
         if (dealsContainer) {
-            dealsContainer.innerHTML = filtered.map(product => this.renderDeal(product)).join('')
+            dealsContainer.innerHTML = this.renderDealsGrid(filtered)
         }
         
         if (specialsContainer) {
@@ -1374,7 +1294,7 @@ class SaveMateApp {
         const filtered = realProducts.filter(product => product.category === category)
         const exploreContainer = document.getElementById('exploreDealsContainer')
         if (exploreContainer) {
-            exploreContainer.innerHTML = filtered.map(product => this.renderDeal(product)).join('')
+            exploreContainer.innerHTML = this.renderDealsGrid(filtered)
         }
         this.showToast(`📂 Showing ${category} deals`)
     }
@@ -1386,7 +1306,7 @@ class SaveMateApp {
         if (storeProducts.length > 0) {
             const exploreContainer = document.getElementById('exploreDealsContainer')
             if (exploreContainer) {
-                exploreContainer.innerHTML = storeProducts.map(product => this.renderDeal(product)).join('')
+                exploreContainer.innerHTML = this.renderDealsGrid(storeProducts)
             }
             this.showToast(`🏪 Showing products from ${store?.name}`)
         } else {
