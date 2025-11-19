@@ -225,6 +225,7 @@ body {
   font-weight: 600;
   margin-bottom: 0.5rem;
   line-height: 1.4;
+  color: var(--text-primary);
 }
 
 .deal-store {
@@ -302,6 +303,7 @@ body {
   flex: 1;
   font-size: 1rem;
   background: transparent;
+  color: var(--text-primary);
 }
 
 /* Section Titles */
@@ -348,6 +350,7 @@ body {
 .category span {
   font-weight: 500;
   font-size: 0.875rem;
+  color: var(--text-primary);
 }
 
 /* Universe Page */
@@ -1325,5 +1328,9 @@ input:checked + .toggle-slider:before {
   .listing-meta {
     flex-direction: column;
     gap: 0.25rem;
+  }
+  
+  .settings-item {
+    padding: 0.75rem 0;
   }
 }
