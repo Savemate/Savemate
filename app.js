@@ -1,55 +1,121 @@
-// SaveMate - Professional Mobile App
+// SaveMate - Complete Shopping & Social App
 class SaveMateApp {
     constructor() {
         this.currentUser = this.loadUser();
         this.currentPage = 'home';
+        this.savedDeals = new Set(this.loadSavedDeals());
+        this.shoppingLists = this.loadShoppingLists();
+        this.posts = this.loadPosts();
+        this.notifications = this.loadNotifications();
+        this.theme = this.loadTheme();
         this.init();
     }
 
-    init() {
-        console.log('🚀 SaveMate Initializing...');
-        this.renderApp();
-        
-        // Auto-login for demo
-        if (!this.currentUser) {
-            this.autoLogin();
-        } else {
-            this.showToast('Welcome back to SaveMate! 🎉');
-        }
-    }
-
-    autoLogin() {
-        // Auto-create demo user for seamless experience
-        this.currentUser = {
-            id: '1',
-            name: 'SaveMate User',
-            email: 'demo@savemate.co.za'
-        };
-        this.saveUser(this.currentUser);
-        console.log('✅ Auto-login completed');
-    }
-
+    // Data Management
     loadUser() {
-        try {
-            const user = localStorage.getItem('savemate-user');
-            return user ? JSON.parse(user) : null;
-        } catch (error) {
-            console.log('No user found, starting fresh');
-            return null;
-        }
+        const user = localStorage.getItem('savemate-user');
+        return user ? JSON.parse(user) : null;
     }
 
     saveUser(user) {
         localStorage.setItem('savemate-user', JSON.stringify(user));
     }
 
+    loadSavedDeals() {
+        return JSON.parse(localStorage.getItem('savemate-saved-deals')) || [];
+    }
+
+    saveSavedDeals() {
+        localStorage.setItem('savemate-saved-deals', JSON.stringify([...this.savedDeals]));
+    }
+
+    loadShoppingLists() {
+        return JSON.parse(localStorage.getItem('savemate-shopping-lists')) || [
+            {
+                id: '1',
+                name: "Weekly Groceries",
+                items: [
+                    { id: '1', title: "Tastic Rice 5kg", store: "Checkers", price: 105.99, quantity: 1 },
+                    { id: '4', title: "Koo Baked Beans 410g", store: "Shoprite", price: 18.99, quantity: 2 }
+                ]
+            }
+        ];
+    }
+
+    saveShoppingLists() {
+        localStorage.setItem('savemate-shopping-lists', JSON.stringify(this.shoppingLists));
+    }
+
+    loadPosts() {
+        return JSON.parse(localStorage.getItem('savemate-posts')) || [
+            {
+                id: '1',
+                user: "DealHunterSA",
+                avatar: "DH",
+                content: "Just found Tastic Rice for R105.99 at Checkers! That's a R24 saving! 🎉 #MzansiDeals",
+                image: "",
+                time: "2 hours ago",
+                likes: 24,
+                comments: 8,
+                shares: 3,
+                liked: false,
+                store: "Checkers"
+            },
+            {
+                id: '2',
+                user: "BudgetShopperCT",
+                avatar: "BS",
+                content: "Woolworths has amazing specials on baby products this week. Pampers nappies at unbeatable prices! 👶",
+                image: "",
+                time: "5 hours ago",
+                likes: 42,
+                comments: 12,
+                shares: 5,
+                liked: true,
+                store: "Woolworths"
+            }
+        ];
+    }
+
+    savePosts() {
+        localStorage.setItem('savemate-posts', JSON.stringify(this.posts));
+    }
+
+    loadNotifications() {
+        return JSON.parse(localStorage.getItem('savemate-notifications')) || [
+            { id: '1', type: 'deal', message: 'New Checkers specials available!', time: '5 min ago', read: false },
+            { id: '2', type: 'social', message: 'DealHunterSA liked your post', time: '1 hour ago', read: false },
+            { id: '3', type: 'system', message: 'Welcome to SaveMate!', time: '2 hours ago', read: true }
+        ];
+    }
+
+    saveNotifications() {
+        localStorage.setItem('savemate-notifications', JSON.stringify(this.notifications));
+    }
+
+    loadTheme() {
+        return localStorage.getItem('savemate-theme') || 'light';
+    }
+
+    saveTheme(theme) {
+        localStorage.setItem('savemate-theme', theme);
+        this.applyTheme(theme);
+    }
+
+    applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    // App Initialization
+    init() {
+        this.applyTheme(this.theme);
+        this.renderApp();
+        this.showToast('🚀 SaveMate loaded successfully!');
+    }
+
     renderApp() {
         const app = document.getElementById('app');
-        if (!app) {
-            console.error('❌ App container not found!');
-            return;
-        }
-
+        
         if (!this.currentUser) {
             app.innerHTML = this.renderAuthPage();
             this.bindAuthEvents();
@@ -57,411 +123,41 @@ class SaveMateApp {
         }
 
         app.innerHTML = this.renderMainApp();
-        this.bindAppEvents();
     }
 
+    // Authentication
     renderAuthPage() {
         return `
             <div class="auth-container">
                 <div class="auth-card">
-                    <div class="auth-header">
-                        <div class="app-logo">🛍️</div>
-                        <h1>SaveMate</h1>
-                        <p>Your South African Shopping Companion</p>
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div style="font-size: 3rem; color: #13294b; margin-bottom: 1rem;">🛍️</div>
+                        <h2>Welcome to SaveMate</h2>
+                        <p style="color: #64748b; margin-top: 0.5rem;">Your South African shopping companion</p>
                     </div>
                     
-                    <div class="auth-form">
-                        <div class="form-group">
-                            <input type="email" id="email" class="form-control" placeholder="Email Address" value="demo@user.com">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" id="password" class="form-control" placeholder="Password" value="password">
-                        </div>
-                        
-                        <button class="btn btn-primary" id="loginBtn">
-                            <i class="fas fa-sign-in-alt"></i> 
-                            Sign In to SaveMate
-                        </button>
-                        
-                        <div class="demo-note">
-                            <p>Demo: Use any email/password or click below</p>
-                        </div>
-                        
-                        <button class="btn btn-secondary" id="quickStartBtn">
-                            <i class="fas fa-rocket"></i>
-                            Quick Start Demo
-                        </button>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="Enter your email" value="demo@user.com">
                     </div>
-                </div>
-            </div>
-        `;
-    }
-
-    renderMainApp() {
-        return `
-            <div class="app-wrapper">
-                <!-- Header -->
-                <header class="app-header">
-                    <div class="header-left">
-                        <div class="logo" onclick="app.switchPage('home')">
-                            <i class="fas fa-shopping-bag"></i>
-                            <span>SaveMate</span>
-                        </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" value="password">
                     </div>
-                    <div class="header-actions">
-                        <button class="header-btn" onclick="app.showNotifications()">
-                            <i class="fas fa-bell"></i>
-                        </button>
-                        <button class="header-btn" onclick="app.switchPage('profile')">
-                            <i class="fas fa-user"></i>
-                        </button>
-                    </div>
-                </header>
-
-                <!-- Main Content -->
-                <main class="main-content">
-                    ${this.renderCurrentPage()}
-                </main>
-
-                <!-- Bottom Navigation -->
-                <nav class="bottom-nav">
-                    ${this.renderNavItem('home', 'fas fa-home', 'Home')}
-                    ${this.renderNavItem('explore', 'fas fa-compass', 'Explore')}
-                    ${this.renderNavItem('deals', 'fas fa-tag', 'Deals')}
-                    ${this.renderNavItem('list', 'fas fa-list', 'List')}
-                    ${this.renderNavItem('profile', 'fas fa-user', 'Me')}
-                </nav>
-
-                <!-- Toast Container -->
-                <div id="toastContainer"></div>
-            </div>
-        `;
-    }
-
-    renderNavItem(page, icon, label) {
-        return `
-            <div class="nav-item ${this.currentPage === page ? 'active' : ''}" 
-                 onclick="app.switchPage('${page}')">
-                <i class="${icon}"></i>
-                <span>${label}</span>
-            </div>
-        `;
-    }
-
-    renderCurrentPage() {
-        const pageRenderers = {
-            'home': () => this.renderHomePage(),
-            'explore': () => this.renderExplorePage(),
-            'deals': () => this.renderDealsPage(),
-            'list': () => this.renderListPage(),
-            'profile': () => this.renderProfilePage()
-        };
-
-        const renderer = pageRenderers[this.currentPage] || pageRenderers['home'];
-        return `
-            <div class="page active">
-                ${renderer()}
-            </div>
-        `;
-    }
-
-    renderHomePage() {
-        return `
-            <div class="home-container">
-                <!-- Welcome Banner -->
-                <div class="welcome-banner">
-                    <div class="welcome-content">
-                        <h2>Hello, ${this.currentUser.name}! 👋</h2>
-                        <p>Ready to discover amazing deals today?</p>
-                    </div>
-                    <div class="welcome-actions">
-                        <button class="btn-small" onclick="app.scanProduct()">
-                            <i class="fas fa-camera"></i> Scan
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="quick-actions">
-                    <div class="action-card" onclick="app.switchPage('deals')">
-                        <i class="fas fa-bolt"></i>
-                        <span>Hot Deals</span>
-                    </div>
-                    <div class="action-card" onclick="app.switchPage('list')">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>My List</span>
-                    </div>
-                    <div class="action-card" onclick="app.showStores()">
-                        <i class="fas fa-store"></i>
-                        <span>Stores</span>
-                    </div>
-                    <div class="action-card" onclick="app.scanProduct()">
-                        <i class="fas fa-qrcode"></i>
-                        <span>Scan</span>
-                    </div>
-                </div>
-
-                <!-- Featured Deals -->
-                <section class="section">
-                    <div class="section-header">
-                        <h3>🔥 Trending Now</h3>
-                        <a href="#" onclick="app.switchPage('deals')">See All</a>
-                    </div>
-                    
-                    <div class="deals-grid">
-                        ${this.renderDealCard('Tastic Rice 5kg', 'R105.99', 'Checkers', '🛒', '#E31B23')}
-                        ${this.renderDealCard('Ouma Rusks 500g', 'R52.99', 'Pick n Pay', '🍪', '#0055A4')}
-                        ${this.renderDealCard('Five Roses Tea', 'R35.50', 'Woolworths', '🍵', '#000000')}
-                        ${this.renderDealCard('Koo Baked Beans', 'R18.99', 'Shoprite', '🥫', '#FF0000')}
-                    </div>
-                </section>
-
-                <!-- Popular Stores -->
-                <section class="section">
-                    <div class="section-header">
-                        <h3>🏪 Popular Stores</h3>
-                    </div>
-                    
-                    <div class="stores-scroll">
-                        ${this.renderStoreChip('Checkers', '#E31B23', '🛒')}
-                        ${this.renderStoreChip('Pick n Pay', '#0055A4', '🏪')}
-                        ${this.renderStoreChip('Woolworths', '#000000', '🛍️')}
-                        ${this.renderStoreChip('Shoprite', '#FF0000', '🛒')}
-                        ${this.renderStoreChip('Spar', '#008000', '🏬')}
-                    </div>
-                </section>
-            </div>
-        `;
-    }
-
-    renderDealCard(title, price, store, emoji, color) {
-        return `
-            <div class="deal-card">
-                <div class="deal-badge">HOT</div>
-                <div class="deal-image" style="background: ${color}">
-                    ${emoji}
-                </div>
-                <div class="deal-content">
-                    <h4 class="deal-title">${title}</h4>
-                    <p class="deal-store">${store}</p>
-                    <div class="deal-price">${price}</div>
-                    <div class="deal-actions">
-                        <button class="deal-btn" onclick="app.saveDeal('${title}')">
-                            <i class="far fa-heart"></i>
-                        </button>
-                        <button class="deal-btn primary" onclick="app.addToList('${title}')">
-                            <i class="fas fa-plus"></i> Add
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    renderStoreChip(name, color, emoji) {
-        return `
-            <div class="store-chip" style="border-color: ${color}" onclick="app.showStore('${name}')">
-                <div class="store-emoji">${emoji}</div>
-                <span>${name}</span>
-            </div>
-        `;
-    }
-
-    renderExplorePage() {
-        return `
-            <div class="page-content">
-                <div class="page-header">
-                    <h2>Explore</h2>
-                    <p>Discover stores and categories</p>
-                </div>
-
-                <div class="categories-grid">
-                    <div class="category-card" onclick="app.showCategory('groceries')">
-                        <i class="fas fa-shopping-basket"></i>
-                        <span>Groceries</span>
-                    </div>
-                    <div class="category-card" onclick="app.showCategory('electronics')">
-                        <i class="fas fa-laptop"></i>
-                        <span>Electronics</span>
-                    </div>
-                    <div class="category-card" onclick="app.showCategory('fashion')">
-                        <i class="fas fa-tshirt"></i>
-                        <span>Fashion</span>
-                    </div>
-                    <div class="category-card" onclick="app.showCategory('home')">
-                        <i class="fas fa-home"></i>
-                        <span>Home & Garden</span>
-                    </div>
-                </div>
-
-                <div class="featured-stores">
-                    <h3>Featured Stores</h3>
-                    <div class="stores-grid">
-                        ${this.renderStoreCard('Checkers', '#E31B23', '🛒', '60-min delivery')}
-                        ${this.renderStoreCard('Pick n Pay', '#0055A4', '🏪', 'Weekly specials')}
-                        ${this.renderStoreCard('Woolworths', '#000000', '🛍️', 'Quality foods')}
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    renderStoreCard(name, color, emoji, description) {
-        return `
-            <div class="store-card" onclick="app.showStore('${name}')">
-                <div class="store-header" style="background: ${color}">
-                    <div class="store-emoji-large">${emoji}</div>
-                </div>
-                <div class="store-content">
-                    <h4>${name}</h4>
-                    <p>${description}</p>
-                    <button class="btn-store">Browse Store</button>
-                </div>
-            </div>
-        `;
-    }
-
-    renderDealsPage() {
-        return `
-            <div class="page-content">
-                <div class="page-header">
-                    <h2>Hot Deals</h2>
-                    <p>Don't miss these amazing offers</p>
-                </div>
-
-                <div class="deals-list">
-                    ${this.renderDealItem('Tastic Rice 5kg', 'R105.99', 'R129.99', 'Checkers', '25% OFF')}
-                    ${this.renderDealItem('Ouma Rusks 500g', 'R52.99', 'R59.99', 'Pick n Pay', '12% OFF')}
-                    ${this.renderDealItem('Five Roses Tea 100s', 'R35.50', 'R42.00', 'Woolworths', '15% OFF')}
-                    ${this.renderDealItem('Koo Baked Beans', 'R18.99', 'R22.99', 'Shoprite', '17% OFF')}
-                </div>
-            </div>
-        `;
-    }
-
-    renderDealItem(title, price, originalPrice, store, discount) {
-        return `
-            <div class="deal-item">
-                <div class="deal-info">
-                    <h4>${title}</h4>
-                    <p class="deal-store">${store}</p>
-                    <div class="deal-pricing">
-                        <span class="current-price">${price}</span>
-                        <span class="original-price">${originalPrice}</span>
-                        <span class="discount-badge">${discount}</span>
-                    </div>
-                </div>
-                <div class="deal-actions">
-                    <button class="btn-icon" onclick="app.saveDeal('${title}')">
-                        <i class="far fa-heart"></i>
+                    <button class="btn btn-primary" onclick="app.handleLogin()">
+                        <i class="fas fa-sign-in-alt"></i> Sign In to SaveMate
                     </button>
-                    <button class="btn-primary-small" onclick="app.addToList('${title}')">
-                        Add to List
-                    </button>
-                </div>
-            </div>
-        `;
-    }
-
-    renderListPage() {
-        return `
-            <div class="page-content">
-                <div class="page-header">
-                    <h2>My Shopping List</h2>
-                    <p>Your items and saved deals</p>
-                </div>
-
-                <div class="list-actions">
-                    <button class="btn-primary" onclick="app.createNewList()">
-                        <i class="fas fa-plus"></i> New List
-                    </button>
-                </div>
-
-                <div class="shopping-list">
-                    <div class="list-section">
-                        <h3>Weekly Groceries</h3>
-                        ${this.renderListItem('Tastic Rice 5kg', 'R105.99', 'Checkers')}
-                        ${this.renderListItem('Ouma Rusks 500g', 'R52.99', 'Pick n Pay')}
-                        ${this.renderListItem('Five Roses Tea', 'R35.50', 'Woolworths')}
+                    <div class="auth-switch">
+                        New to SaveMate? <a href="#" onclick="app.handleSignup()">Create an account</a>
                     </div>
                 </div>
             </div>
         `;
     }
 
-    renderListItem(name, price, store) {
-        return `
-            <div class="list-item">
-                <input type="checkbox" class="list-checkbox">
-                <div class="item-info">
-                    <span class="item-name">${name}</span>
-                    <span class="item-details">${store} • ${price}</span>
-                </div>
-                <button class="btn-icon" onclick="app.removeItem('${name}')">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `;
-    }
-
-    renderProfilePage() {
-        return `
-            <div class="page-content">
-                <div class="profile-header">
-                    <div class="profile-avatar">
-                        ${this.currentUser.name.charAt(0).toUpperCase()}
-                    </div>
-                    <h2>${this.currentUser.name}</h2>
-                    <p>SaveMate Pro Shopper 🛍️</p>
-                </div>
-
-                <div class="profile-stats">
-                    <div class="stat-item">
-                        <span class="stat-number">12</span>
-                        <span class="stat-label">Saved Deals</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">8</span>
-                        <span class="stat-label">Lists</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">24</span>
-                        <span class="stat-label">Scans</span>
-                    </div>
-                </div>
-
-                <div class="profile-actions">
-                    <button class="profile-btn" onclick="app.editProfile()">
-                        <i class="fas fa-user-edit"></i> Edit Profile
-                    </button>
-                    <button class="profile-btn" onclick="app.showSettings()">
-                        <i class="fas fa-cog"></i> Settings
-                    </button>
-                    <button class="profile-btn" onclick="app.showHelp()">
-                        <i class="fas fa-question-circle"></i> Help & Support
-                    </button>
-                    <button class="profile-btn logout" onclick="app.logout()">
-                        <i class="fas fa-sign-out-alt"></i> Sign Out
-                    </button>
-                </div>
-            </div>
-        `;
-    }
-
-    // Event Binding
     bindAuthEvents() {
+        // Add enter key support
         setTimeout(() => {
-            const loginBtn = document.getElementById('loginBtn');
-            const quickStartBtn = document.getElementById('quickStartBtn');
-            
-            if (loginBtn) {
-                loginBtn.onclick = () => this.handleLogin();
-            }
-            if (quickStartBtn) {
-                quickStartBtn.onclick = () => this.handleQuickStart();
-            }
-
-            // Add enter key support
             const inputs = document.querySelectorAll('input');
             inputs.forEach(input => {
                 input.addEventListener('keypress', (e) => {
@@ -473,22 +169,14 @@ class SaveMateApp {
         }, 100);
     }
 
-    bindAppEvents() {
-        // Any additional app event bindings
-        console.log('✅ App events bound');
-    }
-
-    // Event Handlers
     handleLogin() {
         const email = document.getElementById('email')?.value || 'demo@user.com';
         const password = document.getElementById('password')?.value || 'password';
 
-        console.log('🔐 Login attempt:', { email, password });
-
         // Always succeed for demo
         this.currentUser = {
             id: '1',
-            name: email.split('@')[0] || 'SaveMate User',
+            name: 'SaveMate User',
             email: email
         };
         
@@ -497,137 +185,583 @@ class SaveMateApp {
         this.renderApp();
     }
 
-    handleQuickStart() {
+    handleSignup() {
         this.currentUser = {
             id: '1',
-            name: 'SaveMate Pro',
-            email: 'pro@savemate.co.za'
+            name: 'New SaveMate User',
+            email: 'new@user.com'
         };
         
         this.saveUser(this.currentUser);
-        this.showToast('🚀 Quick Start Activated!');
+        this.showToast('🛍️ Welcome to SaveMate!');
         this.renderApp();
     }
 
-    switchPage(page) {
-        console.log('🔄 Switching to page:', page);
-        this.currentPage = page;
-        this.renderApp();
+    // Main App Render
+    renderMainApp() {
+        return `
+            <div class="app-header">
+                <div class="logo" onclick="app.switchPage('home')">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>SaveMate</span>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" onclick="app.switchPage('notifications')">
+                        <i class="fas fa-bell"></i>
+                        ${this.getUnreadNotifications() > 0 ? 
+                            `<span class="notification-badge">${this.getUnreadNotifications()}</span>` : ''}
+                    </button>
+                    <button class="header-btn" onclick="app.switchPage('profile')">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+            </div>
+
+            <main class="main-content">
+                ${this.renderCurrentPage()}
+            </main>
+
+            <div class="bottom-nav">
+                <div class="nav-item ${this.currentPage === 'home' ? 'active' : ''}" onclick="app.switchPage('home')">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </div>
+                <div class="nav-item ${this.currentPage === 'explore' ? 'active' : ''}" onclick="app.switchPage('explore')">
+                    <i class="fas fa-compass"></i>
+                    <span>Explore</span>
+                </div>
+                <div class="nav-item ${this.currentPage === 'universe' ? 'active' : ''}" onclick="app.switchPage('universe')">
+                    <i class="fas fa-users"></i>
+                    <span>Universe</span>
+                </div>
+                <div class="nav-item ${this.currentPage === 'scanner' ? 'active' : ''}" onclick="app.switchPage('scanner')">
+                    <i class="fas fa-camera"></i>
+                    <span>Scan</span>
+                </div>
+                <div class="nav-item ${this.currentPage === 'shopping-list' ? 'active' : ''}" onclick="app.switchPage('shopping-list')">
+                    <i class="fas fa-list"></i>
+                    <span>List</span>
+                </div>
+            </div>
+        `;
+    }
+
+    getUnreadNotifications() {
+        return this.notifications.filter(n => !n.read).length;
+    }
+
+    renderCurrentPage() {
+        const pages = {
+            'home': this.renderHomePage(),
+            'explore': this.renderExplorePage(),
+            'universe': this.renderUniversePage(),
+            'scanner': this.renderScannerPage(),
+            'shopping-list': this.renderShoppingListPage(),
+            'profile': this.renderProfilePage(),
+            'notifications': this.renderNotificationsPage()
+        };
+
+        return pages[this.currentPage] || this.renderHomePage();
+    }
+
+    // Page Renderers
+    renderHomePage() {
+        const stores = [
+            { id: '1', name: "Checkers", color: "#E31B23", logo: "🛒" },
+            { id: '2', name: "Pick n Pay", color: "#0055A4", logo: "🏪" },
+            { id: '3', name: "Woolworths", color: "#000000", logo: "🛍️" },
+            { id: '4', name: "Shoprite", color: "#FF0000", logo: "🛒" },
+            { id: '5', name: "Spar", color: "#008000", logo: "🏬" }
+        ];
+
+        const deals = [
+            {
+                id: '1',
+                title: "Tastic Rice 5kg",
+                current_price: 105.99,
+                original_price: 129.99,
+                store: "Checkers",
+                badge: "SAVE R24",
+                emoji: "🛒",
+                color: "#E31B23"
+            },
+            {
+                id: '2',
+                title: "Ouma Rusks Buttermilk 500g",
+                current_price: 52.99,
+                original_price: 59.99,
+                store: "Pick n Pay",
+                badge: "POPULAR",
+                emoji: "🍪",
+                color: "#0055A4"
+            },
+            {
+                id: '3',
+                title: "Five Roses Tea 100s",
+                current_price: 35.50,
+                original_price: 42.00,
+                store: "Woolworths",
+                badge: "15% OFF",
+                emoji: "🍵",
+                color: "#000000"
+            },
+            {
+                id: '4',
+                title: "Koo Baked Beans 410g",
+                current_price: 18.99,
+                original_price: 22.99,
+                store: "Shoprite",
+                badge: "17% OFF",
+                emoji: "🥫",
+                color: "#FF0000"
+            }
+        ];
+
+        return `
+            <div class="page active">
+                <div class="welcome-banner">
+                    <h2>Hello, ${this.currentUser.name}! 👋</h2>
+                    <p>Discover the best deals from South African retailers</p>
+                </div>
+
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search products, stores, or deals...">
+                    </div>
+                </div>
+
+                <h2 class="section-title">
+                    <i class="fas fa-fire" style="color: #f59e0b;"></i>
+                    Trending Deals
+                </h2>
+                <div class="deals-grid">
+                    ${deals.map(deal => `
+                        <div class="deal-card">
+                            <div class="deal-image" style="background: ${deal.color}; color: white; font-size: 3rem;">
+                                ${deal.emoji}
+                            </div>
+                            <div class="deal-content">
+                                <div class="deal-title">${deal.title}</div>
+                                <div class="deal-store">
+                                    <i class="fas fa-store"></i>
+                                    <span>${deal.store}</span>
+                                </div>
+                                <div class="deal-price">
+                                    R${deal.current_price}
+                                    <span class="deal-original-price">R${deal.original_price}</span>
+                                </div>
+                                <div class="deal-actions">
+                                    <button class="deal-btn" onclick="app.toggleSaveDeal('${deal.id}')">
+                                        <i class="fas ${this.savedDeals.has(deal.id) ? 'fa-heart' : 'fa-heart'}"></i>
+                                        ${this.savedDeals.has(deal.id) ? 'Saved' : 'Save'}
+                                    </button>
+                                    <button class="deal-btn primary" onclick="app.addToList('${deal.id}')">
+                                        <i class="fas fa-list"></i>
+                                        Add to List
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <h2 class="section-title">
+                    <i class="fas fa-store"></i>
+                    Popular Stores
+                </h2>
+                <div class="stores-scroll">
+                    ${stores.map(store => `
+                        <div class="store-chip" onclick="app.showStore('${store.id}')">
+                            <div class="store-chip-logo" style="background: ${store.color}">
+                                ${store.logo}
+                            </div>
+                            <span>${store.name}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    renderExplorePage() {
+        const categories = [
+            { name: 'Groceries', icon: 'fas fa-shopping-basket' },
+            { name: 'Electronics', icon: 'fas fa-laptop' },
+            { name: 'Fashion', icon: 'fas fa-tshirt' },
+            { name: 'Home & Garden', icon: 'fas fa-home' }
+        ];
+
+        return `
+            <div class="page active">
+                <h2 class="section-title">
+                    <i class="fas fa-compass"></i>
+                    Explore Categories
+                </h2>
+                <div class="categories">
+                    ${categories.map(cat => `
+                        <div class="category" onclick="app.showCategory('${cat.name}')">
+                            <i class="${cat.icon}"></i>
+                            <span>${cat.name}</span>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <h2 class="section-title">
+                    <i class="fas fa-store"></i>
+                    All Stores
+                </h2>
+                <div class="deals-grid">
+                    ${this.renderStoreCards()}
+                </div>
+            </div>
+        `;
+    }
+
+    renderStoreCards() {
+        const stores = [
+            { name: "Checkers", color: "#E31B23", logo: "🛒", desc: "60-min delivery" },
+            { name: "Pick n Pay", color: "#0055A4", logo: "🏪", desc: "Weekly specials" },
+            { name: "Woolworths", color: "#000000", logo: "🛍️", desc: "Quality foods" },
+            { name: "Shoprite", color: "#FF0000", logo: "🛒", desc: "Lower prices" }
+        ];
+
+        return stores.map(store => `
+            <div class="deal-card" onclick="app.showStore('${store.name}')">
+                <div class="deal-image" style="background: ${store.color}; color: white; font-size: 3rem;">
+                    ${store.logo}
+                </div>
+                <div class="deal-content">
+                    <div class="deal-title">${store.name}</div>
+                    <div class="deal-store">
+                        <span>${store.desc}</span>
+                    </div>
+                    <div class="deal-actions">
+                        <button class="deal-btn primary">
+                            <i class="fas fa-store"></i> Browse Store
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    renderUniversePage() {
+        return `
+            <div class="page active">
+                <div class="universe-header">
+                    <span>SHOPPING UNIVERSE</span>
+                </div>
+                
+                <div class="post-creator">
+                    <div class="post-input-container">
+                        <div class="post-avatar">${this.getUserInitials()}</div>
+                        <input type="text" class="post-input" id="postInput" placeholder="Share a deal or shopping tip...">
+                        <button class="header-btn" onclick="app.createPost()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="postsContainer">
+                    ${this.posts.map(post => this.renderPost(post)).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    renderPost(post) {
+        return `
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="post-avatar">${post.avatar}</div>
+                    <div>
+                        <div class="post-user">${post.user}</div>
+                        <div class="post-time">${post.time}</div>
+                    </div>
+                </div>
+                <div class="post-content">${post.content}</div>
+                ${post.image ? `<div class="post-image" style="background-image: url('${post.image}')"></div>` : ''}
+                <div class="post-actions">
+                    <div class="post-action ${post.liked ? 'active' : ''}" onclick="app.likePost('${post.id}')">
+                        <i class="fas fa-heart"></i>
+                        <span>${post.likes}</span>
+                    </div>
+                    <div class="post-action" onclick="app.commentOnPost('${post.id}')">
+                        <i class="fas fa-comment"></i>
+                        <span>${post.comments}</span>
+                    </div>
+                    <div class="post-action" onclick="app.sharePost('${post.id}')">
+                        <i class="fas fa-share"></i>
+                        <span>${post.shares}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    renderScannerPage() {
+        return `
+            <div class="page active">
+                <div class="scanner-container">
+                    <div class="scanner-placeholder">
+                        <i class="fas fa-camera" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                        <div style="font-size: 1.1rem; font-weight: 500;">Point camera at barcode</div>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                        Scan barcodes to compare prices across South African stores
+                    </p>
+                    <button class="btn btn-primary" onclick="app.startScanner()" style="width: auto; padding: 1rem 2rem;">
+                        <i class="fas fa-camera"></i> Start Scanning
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    renderShoppingListPage() {
+        return `
+            <div class="page active">
+                <h2 class="section-title">
+                    <i class="fas fa-list"></i>
+                    My Shopping Lists
+                </h2>
+
+                <div class="list-category">
+                    <h3>Weekly Groceries</h3>
+                    ${this.shoppingLists[0].items.map(item => `
+                        <div class="list-item">
+                            <input type="checkbox" style="margin-right: 1rem;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500;">${item.title}</div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                                    ${item.store} • R${item.price} • Qty: ${item.quantity}
+                                </div>
+                            </div>
+                            <button class="header-btn" onclick="app.removeFromList('${item.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <button class="btn btn-primary" onclick="app.createNewList()" style="margin-top: 2rem;">
+                    <i class="fas fa-plus"></i> Create New List
+                </button>
+            </div>
+        `;
+    }
+
+    renderProfilePage() {
+        const userPosts = this.posts.filter(post => post.user === 'You');
         
-        // Smooth scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return `
+            <div class="page active">
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <div class="cover-photo"></div>
+                        <div class="profile-avatar-container">
+                            <div class="profile-avatar">${this.getUserInitials()}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-info">
+                        <h2>${this.currentUser.name}</h2>
+                        <p>SaveMate enthusiast finding the best deals across South Africa! 🇿🇦</p>
+                        
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <div class="stat-value">${userPosts.length}</div>
+                                <div class="stat-label">Posts</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${this.savedDeals.size}</div>
+                                <div class="stat-label">Saved</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${this.getTotalListItems()}</div>
+                                <div class="stat-label">List Items</div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="app.editProfile()">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h3 class="section-title">My Activity</h3>
+                    ${userPosts.length > 0 ? 
+                        userPosts.map(post => this.renderPost(post)).join('') :
+                        '<div class="empty-state"><i class="fas fa-feather"></i><p>No posts yet</p></div>'
+                    }
+                </div>
+            </div>
+        `;
+    }
+
+    renderNotificationsPage() {
+        return `
+            <div class="page active">
+                <h2 class="section-title">
+                    <i class="fas fa-bell"></i>
+                    Notifications
+                </h2>
+                
+                <div>
+                    ${this.notifications.map(notif => `
+                        <div class="list-item">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500;">${notif.message}</div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                                    ${notif.time}
+                                </div>
+                            </div>
+                            ${!notif.read ? '<div style="width: 8px; height: 8px; background: var(--primary-color); border-radius: 50%;"></div>' : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    // Utility Methods
+    getUserInitials() {
+        return this.currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+    }
+
+    getTotalListItems() {
+        return this.shoppingLists.reduce((total, list) => total + list.items.length, 0);
     }
 
     // Feature Methods
-    saveDeal(dealName) {
-        this.showToast(`💖 Saved "${dealName}"`);
+    switchPage(page) {
+        this.currentPage = page;
+        this.renderApp();
     }
 
-    addToList(itemName) {
-        this.showToast(`🛒 Added "${itemName}" to list`);
+    toggleSaveDeal(dealId) {
+        if (this.savedDeals.has(dealId)) {
+            this.savedDeals.delete(dealId);
+            this.showToast('Removed from saved deals');
+        } else {
+            this.savedDeals.add(dealId);
+            this.showToast('Saved deal for later');
+        }
+        this.saveSavedDeals();
+        this.renderApp();
     }
 
-    scanProduct() {
-        this.showToast('📷 Scanner activated! Point camera at barcode');
+    addToList(dealId) {
+        this.showToast('Added to shopping list');
     }
 
-    showStore(storeName) {
-        this.showToast(`🏪 Opening ${storeName}`);
+    showStore(storeId) {
+        this.showToast(`Opening ${storeId}`);
     }
 
     showCategory(category) {
-        this.showToast(`📁 Browsing ${category}`);
+        this.showToast(`Browsing ${category}`);
+    }
+
+    createPost() {
+        const input = document.getElementById('postInput');
+        const content = input?.value.trim();
+        
+        if (!content) {
+            this.showToast('Please enter some content');
+            return;
+        }
+
+        const newPost = {
+            id: Date.now().toString(),
+            user: 'You',
+            avatar: this.getUserInitials(),
+            content: content,
+            time: 'Just now',
+            likes: 0,
+            comments: 0,
+            shares: 0,
+            liked: false
+        };
+
+        this.posts.unshift(newPost);
+        this.savePosts();
+        input.value = '';
+        this.showToast('Post shared successfully!');
+        this.renderApp();
+    }
+
+    likePost(postId) {
+        const post = this.posts.find(p => p.id === postId);
+        if (post) {
+            post.liked = !post.liked;
+            post.likes += post.liked ? 1 : -1;
+            this.savePosts();
+            this.renderApp();
+        }
+    }
+
+    commentOnPost(postId) {
+        this.showToast('Comment feature coming soon!');
+    }
+
+    sharePost(postId) {
+        this.showToast('Share feature coming soon!');
+    }
+
+    startScanner() {
+        this.showToast('Barcode scanner activated!');
     }
 
     createNewList() {
-        this.showToast('📝 New list created');
+        this.showToast('New list created');
     }
 
-    removeItem(itemName) {
-        this.showToast(`🗑️ Removed "${itemName}"`);
-    }
-
-    showNotifications() {
-        this.showToast('🔔 You have 3 new notifications');
+    removeFromList(itemId) {
+        this.showToast('Item removed from list');
     }
 
     editProfile() {
-        this.showToast('👤 Edit profile feature');
-    }
-
-    showSettings() {
-        this.showToast('⚙️ Settings panel');
-    }
-
-    showHelp() {
-        this.showToast('❓ Help & support');
+        this.showToast('Edit profile feature coming soon!');
     }
 
     logout() {
         if (confirm('Are you sure you want to sign out?')) {
             this.currentUser = null;
             this.saveUser(null);
-            this.showToast('👋 Signed out successfully');
+            this.showToast('Signed out successfully');
             this.renderApp();
         }
     }
 
     // Toast System
     showToast(message, duration = 3000) {
-        const container = document.getElementById('toastContainer') || this.createToastContainer();
-        
+        // Remove existing toast
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        // Create new toast
         const toast = document.createElement('div');
-        toast.className = 'toast-message';
-        toast.innerHTML = `
-            <div class="toast-content">
-                <span>${message}</span>
-            </div>
-        `;
-        
-        container.appendChild(toast);
-        
-        // Animate in
-        setTimeout(() => toast.classList.add('show'), 10);
-        
+        toast.className = 'toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
         // Remove after duration
         setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => {
-                if (toast.parentNode) {
-                    toast.parentNode.removeChild(toast);
-                }
-            }, 300);
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
         }, duration);
     }
-
-    createToastContainer() {
-        const container = document.createElement('div');
-        container.id = 'toastContainer';
-        document.body.appendChild(container);
-        return container;
-    }
 }
 
-// Professional initialization
-console.log('🛍️ SaveMate App Loading...');
-
-// Wait for DOM and initialize
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        window.app = new SaveMateApp();
-        console.log('✅ SaveMate App Ready!');
-    });
-} else {
-    window.app = new SaveMateApp();
-    console.log('✅ SaveMate App Ready!');
-}
-
-// Global error handler
-window.addEventListener('error', (e) => {
-    console.error('❌ App Error:', e.error);
+// Initialize the app
+let app;
+document.addEventListener('DOMContentLoaded', () => {
+    app = new SaveMateApp();
+    window.app = app;
 });
-
-// Export for modules
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = SaveMateApp;
-}
