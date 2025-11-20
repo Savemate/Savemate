@@ -54,26 +54,10 @@ const southAfricanStores = [
         color_hex: "#FF6B00",
         logo: "📦",
         description: "Wholesale prices for everyone"
-    },
-    {
-        id: '7',
-        name: "Game",
-        category: "Department Store",
-        color_hex: "#0033A0",
-        logo: "🎮",
-        description: "For the love of shopping"
-    },
-    {
-        id: '8',
-        name: "Clicks",
-        category: "Pharmacy",
-        color_hex: "#E40046",
-        logo: "💊",
-        description: "Health and beauty specialists"
     }
 ]
 
-// Real product data with actual South African products
+// Real product data
 const realProducts = [
     {
         id: '1',
@@ -140,32 +124,10 @@ const realProducts = [
         image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=300&h=200&fit=crop",
         description: "Samsung 55\" 4K Smart TV",
         badge: "HOT DEAL"
-    },
-    {
-        id: '7',
-        title: "All Gold Tomato Sauce 500g",
-        current_price: 25.99,
-        original_price: 29.99,
-        category: "Groceries",
-        store_id: '1',
-        image: "https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?w=300&h=200&fit=crop",
-        description: "All Gold Tomato Sauce",
-        badge: "13% OFF"
-    },
-    {
-        id: '8',
-        title: "Coca-Cola 2L",
-        current_price: 24.99,
-        original_price: 28.99,
-        category: "Beverages",
-        store_id: '2',
-        image: "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=300&h=200&fit=crop",
-        description: "Coca-Cola Soft Drink 2L",
-        badge: "SAVE R4"
     }
 ]
 
-// Real social posts
+// Social posts
 const realPosts = [
     {
         id: '1',
@@ -192,23 +154,10 @@ const realPosts = [
         shares: 5,
         liked: true,
         store: "Woolworths"
-    },
-    {
-        id: '3',
-        user: "JoburgSaver",
-        avatar: "JS",
-        content: "Makro has incredible deals on electronics this weekend. Just got a 55\" Samsung TV for R6999! 📺 #Electronics #Deals",
-        image: "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop",
-        time: "1 day ago",
-        likes: 31,
-        comments: 15,
-        shares: 7,
-        liked: false,
-        store: "Makro"
     }
 ]
 
-// Black Market Listings
+// Black Market listings
 const blackMarketListings = [
     {
         id: '1',
@@ -229,49 +178,22 @@ const blackMarketListings = [
         time: "1 day ago",
         location: "Cape Town",
         price: "R250/hour"
-    },
-    {
-        id: '3',
-        title: "Brand New iPhone 14 Pro",
-        type: "products",
-        description: "Sealed iPhone 14 Pro 128GB. Received as gift but already have one. Best offer.",
-        user: "TechTrader",
-        time: "2 days ago",
-        location: "Durban",
-        price: "R18,000"
     }
 ]
 
-// Notifications data
+// Notifications
 const notificationsData = [
     { id: '1', type: 'deal', message: 'New Checkers specials available!', time: '5 min ago', read: false },
     { id: '2', type: 'social', message: 'DealHunterSA liked your post', time: '1 hour ago', read: false },
-    { id: '3', type: 'system', message: 'Welcome to SaveMate! Start exploring deals.', time: '2 hours ago', read: true },
-    { id: '4', type: 'deal', message: 'Woolworths has 25% off baby products', time: '3 hours ago', read: true }
+    { id: '3', type: 'system', message: 'Welcome to SaveMate! Start exploring deals.', time: '2 hours ago', read: true }
 ]
 
 class SaveMateApp {
     constructor() {
         this.currentUser = null
         this.currentPage = 'home'
-        this.savedDeals = new Set(['1', '3'])
-        this.shoppingLists = [
-            {
-                id: '1',
-                name: "Weekly Groceries",
-                items: [
-                    { id: '1', title: "Tastic Rice 5kg", store: "Checkers", price: 105.99, quantity: 1 },
-                    { id: '4', title: "Koo Baked Beans 410g", store: "Shoprite", price: 18.99, quantity: 2 }
-                ]
-            },
-            {
-                id: '2', 
-                name: "Electronics Wishlist",
-                items: [
-                    { id: '6', title: "Samsung TV 55\"", store: "Makro", price: 6999.99, quantity: 1 }
-                ]
-            }
-        ]
+        this.savedDeals = new Set()
+        this.shoppingLists = []
         this.posts = [...realPosts]
         this.notifications = [...notificationsData]
         this.theme = localStorage.getItem('savemate-theme') || 'light'
@@ -308,20 +230,13 @@ class SaveMateApp {
 
     applyTheme() {
         document.documentElement.setAttribute('data-theme', this.theme)
-        if (this.theme === 'dark') {
-            document.body.style.backgroundColor = '#0f172a'
-            document.body.style.color = '#f1f5f9'
-        } else {
-            document.body.style.backgroundColor = '#f8fafc'
-            document.body.style.color = '#1e293b'
-        }
     }
 
     toggleTheme() {
         this.theme = this.theme === 'light' ? 'dark' : 'light'
         localStorage.setItem('savemate-theme', this.theme)
         this.applyTheme()
-        this.showToast(`Switched to ${this.theme} theme 🌙`)
+        this.showToast(`Switched to ${this.theme} theme`)
     }
 
     renderApp() {
@@ -395,15 +310,7 @@ class SaveMateApp {
     }
 
     setupAuthListeners() {
-        const loginBtn = document.querySelector('#loginForm .btn-primary')
-        const signupBtn = document.querySelector('#signupForm .btn-primary')
-        
-        if (loginBtn) {
-            loginBtn.onclick = () => this.handleLogin()
-        }
-        if (signupBtn) {
-            signupBtn.onclick = () => this.handleSignup()
-        }
+        // Setup will be handled by inline onclick events
     }
 
     renderCurrentPage() {
@@ -496,17 +403,17 @@ class SaveMateApp {
 
                 <h2 class="section-title">🔥 Trending Deals</h2>
                 <div class="deals-grid" id="dealsContainer">
-                    ${this.renderDealsGrid(realProducts.slice(0, 4))}
+                    ${this.renderDealsGrid(realProducts.slice(0, 3))}
                 </div>
 
                 <h2 class="section-title">💫 Weekly Specials</h2>
                 <div class="deals-grid" id="specialsContainer">
-                    ${this.renderDealsGrid(realProducts.slice(4, 8))}
+                    ${this.renderDealsGrid(realProducts.slice(3, 6))}
                 </div>
 
                 <h2 class="section-title">🏪 Popular Stores</h2>
                 <div class="stores-scroll">
-                    ${southAfricanStores.slice(0, 6).map(store => `
+                    ${southAfricanStores.map(store => `
                         <div class="store-chip" onclick="app.showStoreDeals('${store.id}')" style="background: ${store.color_hex}20; border: 1px solid ${store.color_hex}40;">
                             <div class="store-chip-logo" style="background: ${store.color_hex};">${store.logo}</div>
                             <span>${store.name}</span>
@@ -724,13 +631,6 @@ class SaveMateApp {
                             <div style="color: var(--text-secondary); font-size: 14px;">Did you see the new Woolworths deal?</div>
                         </div>
                     </div>
-                    <div class="conversation" onclick="app.openConversation('JoburgSaver')">
-                        <div class="conversation-avatar">JS</div>
-                        <div>
-                            <div style="font-weight: 500;">JoburgSaver</div>
-                            <div style="color: var(--text-secondary); font-size: 14px;">Great find on that TV deal!</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         `
@@ -765,7 +665,6 @@ class SaveMateApp {
                 <h2 class="section-title">⚙️ Settings</h2>
                 
                 <div class="settings-container">
-                    <!-- Theme Settings -->
                     <div class="settings-section">
                         <h3>🎨 Appearance</h3>
                         <div class="settings-item">
@@ -782,7 +681,6 @@ class SaveMateApp {
                         </div>
                     </div>
 
-                    <!-- Account Settings -->
                     <div class="settings-section">
                         <h3>👤 Account</h3>
                         <div class="settings-item" onclick="app.changeUsername()">
@@ -803,53 +701,8 @@ class SaveMateApp {
                                 <i class="fas fa-chevron-right"></i>
                             </div>
                         </div>
-                        <div class="settings-item" onclick="app.changeEmail()">
-                            <div class="settings-info">
-                                <div class="settings-label">Email</div>
-                                <div class="settings-description">Change your email address</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
                     </div>
 
-                    <!-- Privacy Settings -->
-                    <div class="settings-section">
-                        <h3>🔒 Privacy</h3>
-                        <div class="settings-item">
-                            <div class="settings-info">
-                                <div class="settings-label">Private Account</div>
-                                <div class="settings-description">Make your profile private</div>
-                            </div>
-                            <div class="settings-action">
-                                <label class="toggle-switch">
-                                    <input type="checkbox">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="settings-item" onclick="app.showPrivacyPolicy()">
-                            <div class="settings-info">
-                                <div class="settings-label">Privacy Policy</div>
-                                <div class="settings-description">How we protect your data</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
-                        <div class="settings-item" onclick="app.showDataSettings()">
-                            <div class="settings-info">
-                                <div class="settings-label">Data Usage</div>
-                                <div class="settings-description">Control your data preferences</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- About Section -->
                     <div class="settings-section">
                         <h3>ℹ️ About</h3>
                         <div class="settings-item" onclick="app.showAbout()">
@@ -870,41 +723,8 @@ class SaveMateApp {
                                 <i class="fas fa-chevron-right"></i>
                             </div>
                         </div>
-                        <div class="settings-item" onclick="app.showTerms()">
-                            <div class="settings-info">
-                                <div class="settings-label">Terms & Conditions</div>
-                                <div class="settings-description">App usage terms</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
                     </div>
 
-                    <!-- Support -->
-                    <div class="settings-section">
-                        <h3>🛟 Support</h3>
-                        <div class="settings-item" onclick="app.contactSupport()">
-                            <div class="settings-info">
-                                <div class="settings-label">Contact Support</div>
-                                <div class="settings-description">Get help with the app</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
-                        <div class="settings-item" onclick="app.reportProblem()">
-                            <div class="settings-info">
-                                <div class="settings-label">Report a Problem</div>
-                                <div class="settings-description">Found a bug? Let us know</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- App Info -->
                     <div class="settings-section">
                         <div class="app-info">
                             <div class="app-version">SaveMate v1.0.0</div>
@@ -930,8 +750,6 @@ class SaveMateApp {
                     <button class="job-type-btn active" onclick="app.filterListings('all')">All Listings</button>
                     <button class="job-type-btn" onclick="app.filterListings('job_seeking')">Job Seeking</button>
                     <button class="job-type-btn" onclick="app.filterListings('job_offering')">Job Offering</button>
-                    <button class="job-type-btn" onclick="app.filterListings('services')">Services</button>
-                    <button class="job-type-btn" onclick="app.filterListings('products')">Products</button>
                 </div>
 
                 <div id="blackMarketListings">
@@ -1002,7 +820,7 @@ class SaveMateApp {
         return `
             <div class="deal-card">
                 <div class="deal-image">
-                    <img src="${product.image}" alt="${product.title}" onerror="this.style.display='none'; this.parentNode.style.background='var(--surface-color)'; this.parentNode.innerHTML='<div style=\\'font-size: 2rem; color: var(--text-muted)\\'>${store?.logo || '🛒'}</div>'">
+                    <img src="${product.image}" alt="${product.title}">
                     ${product.badge ? `<div class="deal-badge">${product.badge}</div>` : ''}
                 </div>
                 <div class="deal-content">
@@ -1018,13 +836,11 @@ class SaveMateApp {
                         ${product.original_price ? `<span class="deal-original-price">R${product.original_price}</span>` : ''}
                     </div>
                     <div class="deal-actions">
-                        <button class="deal-btn" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary);" 
-                                onclick="app.toggleSaveDeal('${product.id}')">
+                        <button class="deal-btn" onclick="app.toggleSaveDeal('${product.id}')">
                             <i class="far ${isSaved ? 'fa-bookmark' : 'fa-bookmark'}"></i> 
                             ${isSaved ? 'Saved' : 'Save'}
                         </button>
-                        <button class="deal-btn" style="background: var(--navy-blue); color: white;" 
-                                onclick="app.buyProduct('${product.id}')">
+                        <button class="deal-btn" style="background: var(--navy-blue); color: white;" onclick="app.buyProduct('${product.id}')">
                             <i class="fas fa-shopping-cart"></i> Buy
                         </button>
                     </div>
@@ -1068,35 +884,7 @@ class SaveMateApp {
     renderUserPosts() {
         const userPosts = this.posts.filter(post => post.user === 'You')
         return userPosts.length > 0 ? 
-            userPosts.map(post => `
-                <div class="post-card">
-                    <div class="post-header">
-                        <div class="post-avatar">${post.avatar}</div>
-                        <div>
-                            <div class="post-user">${post.user}</div>
-                            <div class="post-time">${post.time} • ${post.store}</div>
-                        </div>
-                    </div>
-                    <div class="post-content">
-                        ${post.content}
-                    </div>
-                    ${post.image ? `<div class="post-image" style="background-image: url('${post.image}')"></div>` : ''}
-                    <div class="post-actions">
-                        <div class="post-action ${post.liked ? 'active' : ''}" onclick="app.likePost('${post.id}')">
-                            <i class="${post.liked ? 'fas' : 'far'} fa-heart"></i>
-                            <span>${post.likes}</span>
-                        </div>
-                        <div class="post-action" onclick="app.showComments('${post.id}')">
-                            <i class="far fa-comment"></i>
-                            <span>${post.comments}</span>
-                        </div>
-                        <div class="post-action" onclick="app.sharePost('${post.id}')">
-                            <i class="fas fa-share-alt"></i>
-                            <span>${post.shares}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('') :
+            userPosts.map(post => this.renderPosts([post])).join('') :
             '<div class="empty-state">' +
             '<i class="fas fa-feather"></i>' +
             '<p>No posts yet. Share your first deal in the Universe! 🌟</p>' +
@@ -1133,8 +921,7 @@ class SaveMateApp {
                     <div style="font-weight: 500;">${item.title}</div>
                     <div style="color: var(--text-secondary); font-size: 14px;">${item.store} - R${item.price} x ${item.quantity}</div>
                 </div>
-                <button onclick="app.removeFromList('${item.id}')" 
-                        style="background: none; border: none; color: var(--danger-color); cursor: pointer; padding: 8px;">
+                <button onclick="app.removeFromList('${item.id}')" style="background: none; border: none; color: var(--danger-color); cursor: pointer; padding: 8px;">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
@@ -1142,10 +929,10 @@ class SaveMateApp {
     }
 
     loadPageData() {
-        // Data is already loaded in the templates
+        // All data is pre-loaded in the templates
     }
 
-    // Authentication Methods
+    // Authentication
     async handleLogin() {
         const email = document.getElementById('email')?.value
         const password = document.getElementById('password')?.value
@@ -1232,13 +1019,13 @@ class SaveMateApp {
         }
     }
 
-    // Navigation Methods
+    // Navigation
     switchPage(page) {
         this.currentPage = page
         this.renderApp()
     }
 
-    // Functional Methods
+    // Core functionality
     toggleSaveDeal(productId) {
         if (this.savedDeals.has(productId)) {
             this.savedDeals.delete(productId)
@@ -1254,10 +1041,6 @@ class SaveMateApp {
         const product = realProducts.find(p => p.id === productId)
         const store = southAfricanStores.find(s => s.id === product.store_id)
         this.showToast(`🛒 Redirecting to ${store?.name || 'store'} to purchase ${product.title}...`)
-        
-        setTimeout(() => {
-            this.showToast(`✅ ${product.title} added to cart at ${store?.name || 'store'}`)
-        }, 2000)
     }
 
     searchDeals(query) {
@@ -1268,25 +1051,12 @@ class SaveMateApp {
         
         const filtered = realProducts.filter(product => 
             product.title.toLowerCase().includes(query.toLowerCase()) ||
-            product.description.toLowerCase().includes(query.toLowerCase()) ||
-            product.category.toLowerCase().includes(query.toLowerCase())
+            product.description.toLowerCase().includes(query.toLowerCase())
         )
         
         const dealsContainer = document.getElementById('dealsContainer')
-        const specialsContainer = document.getElementById('specialsContainer')
-        
         if (dealsContainer) {
             dealsContainer.innerHTML = this.renderDealsGrid(filtered)
-        }
-        
-        if (specialsContainer) {
-            specialsContainer.innerHTML = ''
-        }
-        
-        if (filtered.length === 0) {
-            if (dealsContainer) {
-                dealsContainer.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 40px; grid-column: 1 / -1;">No deals found for "' + query + '"</p>'
-            }
         }
     }
 
@@ -1296,7 +1066,7 @@ class SaveMateApp {
         if (exploreContainer) {
             exploreContainer.innerHTML = this.renderDealsGrid(filtered)
         }
-        this.showToast(`📂 Showing ${category} deals`)
+        this.showToast(`Showing ${category} deals`)
     }
 
     showStoreDeals(storeId) {
@@ -1308,9 +1078,7 @@ class SaveMateApp {
             if (exploreContainer) {
                 exploreContainer.innerHTML = this.renderDealsGrid(storeProducts)
             }
-            this.showToast(`🏪 Showing products from ${store?.name}`)
-        } else {
-            this.showToast(`No products found for ${store?.name}`)
+            this.showToast(`Showing products from ${store?.name}`)
         }
     }
 
@@ -1348,15 +1116,11 @@ class SaveMateApp {
             post.liked = !post.liked
             post.likes += post.liked ? 1 : -1
             this.renderApp()
-            this.showToast(post.liked ? '❤️ Post liked!' : '💔 Post unliked')
         }
     }
 
     startScanner() {
-        this.showToast('📷 Scanner activated! Point your camera at a barcode.')
-        setTimeout(() => {
-            this.showToast('🔍 Barcode detected! Searching for prices...')
-        }, 2000)
+        this.showToast('Scanner activated! Point your camera at a barcode.')
     }
 
     searchProducts(query) {
@@ -1396,7 +1160,7 @@ class SaveMateApp {
             }
             this.shoppingLists.push(newList)
             this.renderApp()
-            this.showToast(`🛍️ New shopping list "${listName}" created!`)
+            this.showToast(`New shopping list "${listName}" created!`)
         }
     }
 
@@ -1426,7 +1190,7 @@ class SaveMateApp {
         }
         
         this.renderApp()
-        this.showToast(`✅ ${product.title} added to your shopping list!`)
+        this.showToast(`${product.title} added to your shopping list!`)
     }
 
     removeFromList(itemId) {
@@ -1434,57 +1198,30 @@ class SaveMateApp {
             list.items = list.items.filter(item => item.id !== itemId)
         })
         this.renderApp()
-        this.showToast('🗑️ Item removed from shopping list')
+        this.showToast('Item removed from shopping list')
     }
 
     deleteList(listId) {
         this.shoppingLists = this.shoppingLists.filter(list => list.id !== listId)
         this.renderApp()
-        this.showToast('🗑️ Shopping list deleted')
+        this.showToast('Shopping list deleted')
     }
 
-    // Settings Methods
+    // Settings
     changeUsername() {
-        const newUsername = prompt('Enter new username:')
-        if (newUsername) {
-            this.showToast(`Username updated to ${newUsername}`)
-        }
+        this.showToast('Username change feature coming soon!')
     }
 
     changePassword() {
         this.showToast('Password change feature coming soon!')
     }
 
-    changeEmail() {
-        this.showToast('Email change feature coming soon!')
-    }
-
-    showPrivacyPolicy() {
-        this.showToast('Privacy Policy: We protect your data with encryption and never share without permission.')
-    }
-
-    showDataSettings() {
-        this.showToast('Data settings: You can download your data or delete your account anytime.')
-    }
-
     showAbout() {
-        this.showToast('SaveMate: Helping South Africans save money and connect through smart shopping!')
+        this.showToast('SaveMate: Helping South Africans save money through smart shopping!')
     }
 
     showCompanyInfo() {
-        this.showToast('Hunadi Digital: Building innovative solutions for African communities since 2024.')
-    }
-
-    showTerms() {
-        this.showToast('Terms: Use SaveMate responsibly. No spam, fraud, or illegal activities.')
-    }
-
-    contactSupport() {
-        this.showToast('Contact: support@savemate.co.za | Call: 0861 SAVEMATE')
-    }
-
-    reportProblem() {
-        this.showToast('Report issues to: bugs@savemate.co.za')
+        this.showToast('Hunadi Digital: Building innovative solutions for African communities.')
     }
 
     markNotificationRead(notificationId) {
@@ -1503,7 +1240,7 @@ class SaveMateApp {
         this.showToast('Create listing feature coming soon!')
     }
 
-    // Utility Methods
+    // Utility methods
     showToast(message) {
         const existingToasts = document.querySelectorAll('.toast')
         existingToasts.forEach(toast => toast.remove())
@@ -1525,29 +1262,29 @@ class SaveMateApp {
         return this.currentUser?.email?.substring(0, 2).toUpperCase() || 'U'
     }
 
-    // Placeholder Methods
+    // Placeholder methods
     editProfile() {
-        this.showToast('👤 Edit profile feature coming soon!')
+        this.showToast('Edit profile feature coming soon!')
     }
 
     uploadAvatar() {
-        this.showToast('📸 Avatar upload feature coming soon!')
+        this.showToast('Avatar upload feature coming soon!')
     }
 
     openConversation(user) {
-        this.showToast(`💬 Opening conversation with ${user}`)
+        this.showToast(`Opening conversation with ${user}`)
     }
 
     attachMedia() {
-        this.showToast('🖼️ Media attachment feature coming soon!')
+        this.showToast('Media attachment feature coming soon!')
     }
 
     showComments(postId) {
-        this.showToast('💬 Comments feature coming soon!')
+        this.showToast('Comments feature coming soon!')
     }
 
     sharePost(postId) {
-        this.showToast('📤 Share post feature coming soon!')
+        this.showToast('Share post feature coming soon!')
     }
 }
 
