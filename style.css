@@ -22,8 +22,6 @@
   --text-secondary: #cbd5e1;
   --text-muted: #64748b;
   --border-color: #334155;
-  --settings-bg: #1e293b;
-  --settings-border: #334155;
 }
 
 * {
@@ -37,7 +35,6 @@ body {
   background-color: var(--surface-color);
   color: var(--text-primary);
   line-height: 1.6;
-  transition: background-color 0.3s, color 0.3s;
 }
 
 #app {
@@ -45,7 +42,7 @@ body {
   background: var(--background-color);
 }
 
-/* Header Styles */
+/* Header */
 .app-header {
   display: flex;
   justify-content: space-between;
@@ -75,7 +72,6 @@ body {
 .header-actions {
   display: flex;
   gap: 1rem;
-  position: relative;
 }
 
 .header-btn {
@@ -87,7 +83,6 @@ body {
   padding: 0.5rem;
   border-radius: 0.5rem;
   transition: background-color 0.2s;
-  position: relative;
 }
 
 .header-btn:hover {
@@ -277,7 +272,7 @@ body {
   background: var(--surface-color);
 }
 
-/* Search Box */
+/* Search */
 .search-container {
   margin: 1.5rem 0;
 }
@@ -306,7 +301,7 @@ body {
   color: var(--text-primary);
 }
 
-/* Section Titles */
+/* Sections */
 .section-title {
   font-size: 1.5rem;
   font-weight: 700;
@@ -353,7 +348,7 @@ body {
   color: var(--text-primary);
 }
 
-/* Universe Page */
+/* Universe */
 .universe-header {
   text-align: center;
   margin: 2rem 0;
@@ -422,7 +417,7 @@ body {
   color: var(--primary-color);
 }
 
-/* Post Cards */
+/* Posts */
 .post-card {
   background: white;
   border-radius: 0.75rem;
@@ -499,17 +494,7 @@ body {
   border: 1px solid var(--border-color);
 }
 
-.list-category {
-  margin-bottom: 2rem;
-}
-
-.list-category h3 {
-  margin-bottom: 1rem;
-  color: var(--text-primary);
-  font-size: 1.25rem;
-}
-
-/* Auth Styles */
+/* Auth */
 .auth-container {
   min-height: 100vh;
   display: flex;
@@ -647,7 +632,7 @@ body {
   color: var(--text-secondary);
 }
 
-/* Profile Styles */
+/* Profile */
 .profile-container {
   background: white;
   border-radius: 1rem;
@@ -847,7 +832,7 @@ body {
   background: var(--surface-color);
 }
 
-/* Settings Styles */
+/* Settings */
 .settings-container {
   background: white;
   border-radius: 1rem;
@@ -950,69 +935,6 @@ input:checked + .theme-slider {
 
 input:checked + .theme-slider:before {
   transform: translateX(26px);
-}
-
-/* Toggle Switch */
-.toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 44px;
-  height: 24px;
-}
-
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.toggle-slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 24px;
-}
-
-.toggle-slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .toggle-slider {
-  background-color: var(--success-color);
-}
-
-input:checked + .toggle-slider:before {
-  transform: translateX(20px);
-}
-
-/* App Info */
-.app-info {
-  text-align: center;
-  padding: 1rem 0;
-}
-
-.app-version {
-  font-weight: 500;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-}
-
-.app-copyright {
-  font-size: 0.875rem;
-  color: var(--text-muted);
 }
 
 /* Notifications */
@@ -1278,6 +1200,23 @@ input:checked + .toggle-slider:before {
   margin-bottom: 1.5rem;
 }
 
+/* App Info */
+.app-info {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.app-version {
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.app-copyright {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .deals-grid {
@@ -1295,15 +1234,6 @@ input:checked + .toggle-slider:before {
   .app-header {
     padding: 1rem;
   }
-  
-  .profile-avatar-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .header-actions {
-    gap: 0.5rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -1317,20 +1247,5 @@ input:checked + .toggle-slider:before {
   
   .job-type-selector {
     flex-wrap: wrap;
-  }
-  
-  .listing-footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  
-  .listing-meta {
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  
-  .settings-item {
-    padding: 0.75rem 0;
   }
 }
