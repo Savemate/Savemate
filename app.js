@@ -131,9 +131,9 @@ class SaveMateApp {
             <div class="auth-container">
                 <div class="auth-card">
                     <div style="text-align: center; margin-bottom: 2rem;">
-                        <div style="font-size: 3rem; color: #13294b; margin-bottom: 1rem;">🛍️</div>
+                        <div style="font-size: 3rem; color: #1e40af; margin-bottom: 1rem;">🛍️</div>
                         <h2>Welcome to SaveMate</h2>
-                        <p style="color: #64748b; margin-top: 0.5rem;">Your South African shopping companion</p>
+                        <p style="color: #6b7280; margin-top: 0.5rem;">Your South African shopping companion</p>
                     </div>
                     
                     <div class="form-group">
@@ -156,7 +156,6 @@ class SaveMateApp {
     }
 
     bindAuthEvents() {
-        // Add enter key support
         setTimeout(() => {
             const inputs = document.querySelectorAll('input');
             inputs.forEach(input => {
@@ -206,12 +205,15 @@ class SaveMateApp {
                     <span>SaveMate</span>
                 </div>
                 <div class="header-actions">
-                    <button class="header-btn" onclick="app.switchPage('notifications')">
+                    <button class="header-btn" onclick="app.switchPage('notifications')" title="Notifications">
                         <i class="fas fa-bell"></i>
                         ${this.getUnreadNotifications() > 0 ? 
                             `<span class="notification-badge">${this.getUnreadNotifications()}</span>` : ''}
                     </button>
-                    <button class="header-btn" onclick="app.switchPage('profile')">
+                    <button class="header-btn" onclick="app.switchPage('settings')" title="Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button class="header-btn" onclick="app.switchPage('profile')" title="Profile">
                         <i class="fas fa-user"></i>
                     </button>
                 </div>
@@ -258,7 +260,8 @@ class SaveMateApp {
             'scanner': this.renderScannerPage(),
             'shopping-list': this.renderShoppingListPage(),
             'profile': this.renderProfilePage(),
-            'notifications': this.renderNotificationsPage()
+            'notifications': this.renderNotificationsPage(),
+            'settings': this.renderSettingsPage()
         };
 
         return pages[this.currentPage] || this.renderHomePage();
@@ -508,7 +511,7 @@ class SaveMateApp {
                         <i class="fas fa-camera" style="font-size: 4rem; margin-bottom: 1rem;"></i>
                         <div style="font-size: 1.1rem; font-weight: 500;">Point camera at barcode</div>
                     </div>
-                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    <p style="color: #6b7280; margin-bottom: 1.5rem;">
                         Scan barcodes to compare prices across South African stores
                     </p>
                     <button class="btn btn-primary" onclick="app.startScanner()" style="width: auto; padding: 1rem 2rem;">
@@ -534,7 +537,7 @@ class SaveMateApp {
                             <input type="checkbox" style="margin-right: 1rem;">
                             <div style="flex: 1;">
                                 <div style="font-weight: 500;">${item.title}</div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                                <div style="font-size: 0.875rem; color: #6b7280;">
                                     ${item.store} • R${item.price} • Qty: ${item.quantity}
                                 </div>
                             </div>
@@ -614,13 +617,152 @@ class SaveMateApp {
                         <div class="list-item">
                             <div style="flex: 1;">
                                 <div style="font-weight: 500;">${notif.message}</div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                                <div style="font-size: 0.875rem; color: #6b7280;">
                                     ${notif.time}
                                 </div>
                             </div>
-                            ${!notif.read ? '<div style="width: 8px; height: 8px; background: var(--primary-color); border-radius: 50%;"></div>' : ''}
+                            ${!notif.read ? '<div style="width: 8px; height: 8px; background: #2563eb; border-radius: 50%;"></div>' : ''}
                         </div>
                     `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    renderSettingsPage() {
+        return `
+            <div class="page active">
+                <div class="settings-container">
+                    <div class="settings-header">
+                        <h2><i class="fas fa-cog"></i> Settings</h2>
+                        <p>Customize your SaveMate experience</p>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-user"></i> Account</h3>
+                        <div class="settings-item" onclick="app.editProfile()">
+                            <div class="settings-info">
+                                <div class="settings-label">Profile Information</div>
+                                <div class="settings-description">Update your name, email, and preferences</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item" onclick="app.changePassword()">
+                            <div class="settings-info">
+                                <div class="settings-label">Change Password</div>
+                                <div class="settings-description">Update your password for security</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-bell"></i> Notifications</h3>
+                        
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Push Notifications</div>
+                                <div class="settings-description">Receive alerts for new deals and messages</div>
+                            </div>
+                            <div class="settings-action">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked onchange="app.toggleNotifications(this.checked)">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Email Notifications</div>
+                                <div class="settings-description">Get weekly deal summaries via email</div>
+                            </div>
+                            <div class="settings-action">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked onchange="app.toggleEmailNotifications(this.checked)">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-paint-brush"></i> Appearance</h3>
+                        
+                        <div class="settings-item">
+                            <div class="settings-info">
+                                <div class="settings-label">Dark Mode</div>
+                                <div class="settings-description">Switch between light and dark themes</div>
+                            </div>
+                            <div class="settings-action">
+                                <label class="theme-switch">
+                                    <input type="checkbox" ${this.theme === 'dark' ? 'checked' : ''} onchange="app.toggleTheme()">
+                                    <span class="theme-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-shield-alt"></i> Privacy & Security</h3>
+                        
+                        <div class="settings-item" onclick="app.viewPrivacyPolicy()">
+                            <div class="settings-info">
+                                <div class="settings-label">Privacy Policy</div>
+                                <div class="settings-description">How we protect and use your data</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item" onclick="app.viewTerms()">
+                            <div class="settings-info">
+                                <div class="settings-label">Terms of Service</div>
+                                <div class="settings-description">App usage terms and conditions</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-info-circle"></i> About</h3>
+                        
+                        <div class="settings-item" onclick="app.viewAbout()">
+                            <div class="settings-info">
+                                <div class="settings-label">About SaveMate</div>
+                                <div class="settings-description">Learn more about our mission</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-item" onclick="app.contactSupport()">
+                            <div class="settings-info">
+                                <div class="settings-label">Contact Support</div>
+                                <div class="settings-description">Get help with the app</div>
+                            </div>
+                            <div class="settings-action">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="app-info">
+                        <div class="app-version">SaveMate v1.0.0</div>
+                        <div class="app-copyright">© 2024 Hunadi Digital. All rights reserved.</div>
+                        <button class="btn btn-secondary" onclick="app.logout()" style="margin-top: 1rem;">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
@@ -725,6 +867,41 @@ class SaveMateApp {
 
     editProfile() {
         this.showToast('Edit profile feature coming soon!');
+    }
+
+    changePassword() {
+        this.showToast('Change password feature coming soon!');
+    }
+
+    viewPrivacyPolicy() {
+        this.showToast('Privacy policy displayed');
+    }
+
+    viewTerms() {
+        this.showToast('Terms of service displayed');
+    }
+
+    viewAbout() {
+        this.showToast('About SaveMate displayed');
+    }
+
+    contactSupport() {
+        this.showToast('Contact support feature');
+    }
+
+    toggleTheme() {
+        this.theme = this.theme === 'light' ? 'dark' : 'light';
+        this.saveTheme(this.theme);
+        this.showToast(this.theme === 'dark' ? '🌙 Dark mode activated' : '☀️ Light mode activated');
+        this.renderApp();
+    }
+
+    toggleNotifications(enabled) {
+        this.showToast(enabled ? '🔔 Notifications enabled' : '🔕 Notifications disabled');
+    }
+
+    toggleEmailNotifications(enabled) {
+        this.showToast(enabled ? '📧 Email notifications enabled' : '📧 Email notifications disabled');
     }
 
     logout() {
