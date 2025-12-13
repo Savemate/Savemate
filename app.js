@@ -36,6 +36,8 @@ class SaveMateApp {
                 name: "Weekly Groceries",
                 items: [
                     { id: '1', title: "Tastic Rice 5kg", store: "Checkers", price: 105.99, quantity: 1 },
+                    { id: '2', title: "Ouma Rusks Buttermilk 500g", store: "Pick n Pay", price: 52.99, quantity: 1 },
+                    { id: '3', title: "Five Roses Tea 100s", store: "Woolworths", price: 35.50, quantity: 2 },
                     { id: '4', title: "Koo Baked Beans 410g", store: "Shoprite", price: 18.99, quantity: 2 }
                 ]
             }
@@ -53,7 +55,6 @@ class SaveMateApp {
                 user: "DealHunterSA",
                 avatar: "DH",
                 content: "Just found Tastic Rice for R105.99 at Checkers! That's a R24 saving! 🎉 #MzansiDeals",
-                image: "",
                 time: "2 hours ago",
                 likes: 24,
                 comments: 8,
@@ -66,13 +67,24 @@ class SaveMateApp {
                 user: "BudgetShopperCT",
                 avatar: "BS",
                 content: "Woolworths has amazing specials on baby products this week. Pampers nappies at unbeatable prices! 👶",
-                image: "",
                 time: "5 hours ago",
                 likes: 42,
                 comments: 12,
                 shares: 5,
                 liked: true,
                 store: "Woolworths"
+            },
+            {
+                id: '3',
+                user: "GroceryGuruJHB",
+                avatar: "GG",
+                content: "Spar is running a buy-one-get-one-free on frozen veggies. Stock up while it lasts! 🥦 #SmartShopping",
+                time: "1 day ago",
+                likes: 38,
+                comments: 15,
+                shares: 7,
+                liked: false,
+                store: "Spar"
             }
         ];
     }
@@ -85,7 +97,8 @@ class SaveMateApp {
         return JSON.parse(localStorage.getItem('savemate-notifications')) || [
             { id: '1', type: 'deal', message: 'New Checkers specials available!', time: '5 min ago', read: false },
             { id: '2', type: 'social', message: 'DealHunterSA liked your post', time: '1 hour ago', read: false },
-            { id: '3', type: 'system', message: 'Welcome to SaveMate!', time: '2 hours ago', read: true }
+            { id: '3', type: 'system', message: 'Welcome to SaveMate! Start exploring deals', time: '2 hours ago', read: true },
+            { id: '4', type: 'alert', message: 'Price drop on Tastic Rice at Pick n Pay', time: '3 hours ago', read: false }
         ];
     }
 
@@ -110,7 +123,7 @@ class SaveMateApp {
     init() {
         this.applyTheme(this.theme);
         this.renderApp();
-        this.showToast('🚀 SaveMate loaded successfully!');
+        this.showToast('🚀 SaveMate loaded successfully! Welcome!');
     }
 
     renderApp() {
@@ -131,7 +144,7 @@ class SaveMateApp {
             <div class="auth-container">
                 <div class="auth-card">
                     <div style="text-align: center; margin-bottom: 2rem;">
-                        <div style="font-size: 3rem; color: #1e40af; margin-bottom: 1rem;">🛍️</div>
+                        <div style="font-size: 3rem; color: #F4C000; margin-bottom: 1rem;">🛍️</div>
                         <h2>Welcome to SaveMate</h2>
                         <p style="color: #6b7280; margin-top: 0.5rem;">Your South African shopping companion</p>
                     </div>
@@ -172,27 +185,29 @@ class SaveMateApp {
         const email = document.getElementById('email')?.value || 'demo@user.com';
         const password = document.getElementById('password')?.value || 'password';
 
-        // Always succeed for demo
+        // Demo authentication - always succeeds
         this.currentUser = {
             id: '1',
             name: 'SaveMate User',
-            email: email
+            email: email,
+            avatar: 'SU'
         };
         
         this.saveUser(this.currentUser);
-        this.showToast('🎉 Welcome to SaveMate!');
+        this.showToast('🎉 Welcome to SaveMate! Start exploring deals.');
         this.renderApp();
     }
 
     handleSignup() {
         this.currentUser = {
-            id: '1',
+            id: Date.now().toString(),
             name: 'New SaveMate User',
-            email: 'new@user.com'
+            email: 'new@user.com',
+            avatar: 'NU'
         };
         
         this.saveUser(this.currentUser);
-        this.showToast('🛍️ Welcome to SaveMate!');
+        this.showToast('🛍️ Welcome to SaveMate! Your account has been created.');
         this.renderApp();
     }
 
@@ -269,14 +284,6 @@ class SaveMateApp {
 
     // Page Renderers
     renderHomePage() {
-        const stores = [
-            { id: '1', name: "Checkers", color: "#E31B23", logo: "🛒" },
-            { id: '2', name: "Pick n Pay", color: "#0055A4", logo: "🏪" },
-            { id: '3', name: "Woolworths", color: "#000000", logo: "🛍️" },
-            { id: '4', name: "Shoprite", color: "#FF0000", logo: "🛒" },
-            { id: '5', name: "Spar", color: "#008000", logo: "🏬" }
-        ];
-
         const deals = [
             {
                 id: '1',
@@ -286,7 +293,8 @@ class SaveMateApp {
                 store: "Checkers",
                 badge: "SAVE R24",
                 emoji: "🛒",
-                color: "#E31B23"
+                color: "#E31B23",
+                icon: "fas fa-shopping-cart"
             },
             {
                 id: '2',
@@ -296,7 +304,8 @@ class SaveMateApp {
                 store: "Pick n Pay",
                 badge: "POPULAR",
                 emoji: "🍪",
-                color: "#0055A4"
+                color: "#0055A4",
+                icon: "fas fa-cookie-bite"
             },
             {
                 id: '3',
@@ -306,7 +315,8 @@ class SaveMateApp {
                 store: "Woolworths",
                 badge: "15% OFF",
                 emoji: "🍵",
-                color: "#000000"
+                color: "#000000",
+                icon: "fas fa-mug-hot"
             },
             {
                 id: '4',
@@ -316,14 +326,23 @@ class SaveMateApp {
                 store: "Shoprite",
                 badge: "17% OFF",
                 emoji: "🥫",
-                color: "#FF0000"
+                color: "#FF0000",
+                icon: "fas fa-utensils"
             }
+        ];
+
+        const stores = [
+            { id: '1', name: "Checkers", color: "#E31B23", logo: "🛒", icon: "fas fa-shopping-cart" },
+            { id: '2', name: "Pick n Pay", color: "#0055A4", logo: "🏪", icon: "fas fa-store" },
+            { id: '3', name: "Woolworths", color: "#000000", logo: "🛍️", icon: "fas fa-shopping-bag" },
+            { id: '4', name: "Shoprite", color: "#FF0000", logo: "🛒", icon: "fas fa-shopping-cart" },
+            { id: '5', name: "Spar", color: "#008000", logo: "🏬", icon: "fas fa-store-alt" }
         ];
 
         return `
             <div class="page active">
                 <div class="welcome-banner">
-                    <h2>Hello, ${this.currentUser.name}! 👋</h2>
+                    <h2>Hello, ${this.currentUser.name.split(' ')[0]}! 👋</h2>
                     <p>Discover the best deals from South African retailers</p>
                 </div>
 
@@ -340,9 +359,10 @@ class SaveMateApp {
                 </h2>
                 <div class="deals-grid">
                     ${deals.map(deal => `
-                        <div class="deal-card">
-                            <div class="deal-image" style="background: ${deal.color}; color: white; font-size: 3rem;">
-                                ${deal.emoji}
+                        <div class="deal-card" onclick="app.showDealDetail('${deal.id}')">
+                            <div class="deal-image" style="background: ${deal.color}; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <i class="${deal.icon}" style="font-size: 2.5rem;"></i>
+                                <div style="font-size: 1rem; font-weight: 600;">${deal.badge}</div>
                             </div>
                             <div class="deal-content">
                                 <div class="deal-title">${deal.title}</div>
@@ -351,15 +371,15 @@ class SaveMateApp {
                                     <span>${deal.store}</span>
                                 </div>
                                 <div class="deal-price">
-                                    R${deal.current_price}
-                                    <span class="deal-original-price">R${deal.original_price}</span>
+                                    R${deal.current_price.toFixed(2)}
+                                    <span class="deal-original-price">R${deal.original_price.toFixed(2)}</span>
                                 </div>
                                 <div class="deal-actions">
-                                    <button class="deal-btn" onclick="app.toggleSaveDeal('${deal.id}')">
+                                    <button class="deal-btn" onclick="app.toggleSaveDeal('${deal.id}', event)">
                                         <i class="fas ${this.savedDeals.has(deal.id) ? 'fa-heart' : 'fa-heart'}"></i>
                                         ${this.savedDeals.has(deal.id) ? 'Saved' : 'Save'}
                                     </button>
-                                    <button class="deal-btn primary" onclick="app.addToList('${deal.id}')">
+                                    <button class="deal-btn primary" onclick="app.addToList('${deal.id}', event)">
                                         <i class="fas fa-list"></i>
                                         Add to List
                                     </button>
@@ -377,7 +397,7 @@ class SaveMateApp {
                     ${stores.map(store => `
                         <div class="store-chip" onclick="app.showStore('${store.id}')">
                             <div class="store-chip-logo" style="background: ${store.color}">
-                                ${store.logo}
+                                <i class="${store.icon}"></i>
                             </div>
                             <span>${store.name}</span>
                         </div>
@@ -389,10 +409,19 @@ class SaveMateApp {
 
     renderExplorePage() {
         const categories = [
-            { name: 'Groceries', icon: 'fas fa-shopping-basket' },
-            { name: 'Electronics', icon: 'fas fa-laptop' },
-            { name: 'Fashion', icon: 'fas fa-tshirt' },
-            { name: 'Home & Garden', icon: 'fas fa-home' }
+            { name: 'Groceries', icon: 'fas fa-shopping-basket', color: '#10B981' },
+            { name: 'Electronics', icon: 'fas fa-laptop', color: '#3B82F6' },
+            { name: 'Fashion', icon: 'fas fa-tshirt', color: '#8B5CF6' },
+            { name: 'Home & Garden', icon: 'fas fa-home', color: '#F59E0B' },
+            { name: 'Health & Beauty', icon: 'fas fa-heart', color: '#EC4899' },
+            { name: 'Sports & Outdoors', icon: 'fas fa-futbol', color: '#EF4444' }
+        ];
+
+        const featuredStores = [
+            { name: "Checkers", desc: "60-min delivery • Click & Collect", color: "#E31B23" },
+            { name: "Pick n Pay", desc: "Weekly specials • Smart Shopper", color: "#0055A4" },
+            { name: "Woolworths", desc: "Quality foods • WRewards", color: "#000000" },
+            { name: "Shoprite", desc: "Lower prices • Xtra Savings", color: "#FF0000" }
         ];
 
         return `
@@ -404,7 +433,7 @@ class SaveMateApp {
                 <div class="categories">
                     ${categories.map(cat => `
                         <div class="category" onclick="app.showCategory('${cat.name}')">
-                            <i class="${cat.icon}"></i>
+                            <i class="${cat.icon}" style="color: ${cat.color};"></i>
                             <span>${cat.name}</span>
                         </div>
                     `).join('')}
@@ -412,48 +441,38 @@ class SaveMateApp {
 
                 <h2 class="section-title">
                     <i class="fas fa-store"></i>
-                    All Stores
+                    Featured Stores
                 </h2>
                 <div class="deals-grid">
-                    ${this.renderStoreCards()}
+                    ${featuredStores.map(store => `
+                        <div class="deal-card" onclick="app.showStore('${store.name}')">
+                            <div class="deal-image" style="background: ${store.color}; color: white; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-store" style="font-size: 3rem;"></i>
+                            </div>
+                            <div class="deal-content">
+                                <div class="deal-title">${store.name}</div>
+                                <div class="deal-store">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>${store.desc}</span>
+                                </div>
+                                <div class="deal-actions">
+                                    <button class="deal-btn primary">
+                                        <i class="fas fa-store"></i> Browse Store
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
             </div>
         `;
-    }
-
-    renderStoreCards() {
-        const stores = [
-            { name: "Checkers", color: "#E31B23", logo: "🛒", desc: "60-min delivery" },
-            { name: "Pick n Pay", color: "#0055A4", logo: "🏪", desc: "Weekly specials" },
-            { name: "Woolworths", color: "#000000", logo: "🛍️", desc: "Quality foods" },
-            { name: "Shoprite", color: "#FF0000", logo: "🛒", desc: "Lower prices" }
-        ];
-
-        return stores.map(store => `
-            <div class="deal-card" onclick="app.showStore('${store.name}')">
-                <div class="deal-image" style="background: ${store.color}; color: white; font-size: 3rem;">
-                    ${store.logo}
-                </div>
-                <div class="deal-content">
-                    <div class="deal-title">${store.name}</div>
-                    <div class="deal-store">
-                        <span>${store.desc}</span>
-                    </div>
-                    <div class="deal-actions">
-                        <button class="deal-btn primary">
-                            <i class="fas fa-store"></i> Browse Store
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `).join('');
     }
 
     renderUniversePage() {
         return `
             <div class="page active">
                 <div class="universe-header">
-                    <span>SHOPPING UNIVERSE</span>
+                    <i class="fas fa-users"></i> SHOPPING UNIVERSE
                 </div>
                 
                 <div class="post-creator">
@@ -480,11 +499,10 @@ class SaveMateApp {
                     <div class="post-avatar">${post.avatar}</div>
                     <div>
                         <div class="post-user">${post.user}</div>
-                        <div class="post-time">${post.time}</div>
+                        <div class="post-time">${post.time} • ${post.store ? post.store : 'General'}</div>
                     </div>
                 </div>
                 <div class="post-content">${post.content}</div>
-                ${post.image ? `<div class="post-image" style="background-image: url('${post.image}')"></div>` : ''}
                 <div class="post-actions">
                     <div class="post-action ${post.liked ? 'active' : ''}" onclick="app.likePost('${post.id}')">
                         <i class="fas fa-heart"></i>
@@ -506,23 +524,41 @@ class SaveMateApp {
     renderScannerPage() {
         return `
             <div class="page active">
+                <h2 class="section-title">
+                    <i class="fas fa-camera"></i>
+                    Barcode Scanner
+                </h2>
+                
                 <div class="scanner-container">
                     <div class="scanner-placeholder">
-                        <i class="fas fa-camera" style="font-size: 4rem; margin-bottom: 1rem;"></i>
-                        <div style="font-size: 1.1rem; font-weight: 500;">Point camera at barcode</div>
+                        <i class="fas fa-camera" style="font-size: 4rem; margin-bottom: 1rem; color: #F4C000;"></i>
+                        <div style="font-size: 1.1rem; font-weight: 500; color: var(--text-primary);">Point camera at barcode</div>
                     </div>
-                    <p style="color: #6b7280; margin-bottom: 1.5rem;">
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; text-align: center;">
                         Scan barcodes to compare prices across South African stores
                     </p>
                     <button class="btn btn-primary" onclick="app.startScanner()" style="width: auto; padding: 1rem 2rem;">
                         <i class="fas fa-camera"></i> Start Scanning
                     </button>
+                    
+                    <div style="margin-top: 2rem; text-align: left;">
+                        <h3 style="margin-bottom: 1rem; color: var(--text-primary);">How it works:</h3>
+                        <ul style="color: var(--text-secondary); padding-left: 1.5rem; line-height: 1.6;">
+                            <li>Scan any product barcode</li>
+                            <li>Compare prices across Checkers, Pick n Pay, Woolworths, and more</li>
+                            <li>See where you can get the best deal</li>
+                            <li>Save products to your shopping list</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         `;
     }
 
     renderShoppingListPage() {
+        const currentList = this.shoppingLists[0];
+        const total = currentList.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
         return `
             <div class="page active">
                 <h2 class="section-title">
@@ -531,18 +567,24 @@ class SaveMateApp {
                 </h2>
 
                 <div class="list-category">
-                    <h3>Weekly Groceries</h3>
-                    ${this.shoppingLists[0].items.map(item => `
+                    <h3>
+                        <i class="fas fa-shopping-basket"></i>
+                        ${currentList.name}
+                        <span style="margin-left: auto; font-size: 1rem; color: var(--success-color);">
+                            Total: R${total.toFixed(2)}
+                        </span>
+                    </h3>
+                    ${currentList.items.map(item => `
                         <div class="list-item">
-                            <input type="checkbox" style="margin-right: 1rem;">
+                            <input type="checkbox" style="margin-right: 1rem; width: 1.25rem; height: 1.25rem;">
                             <div style="flex: 1;">
-                                <div style="font-weight: 500;">${item.title}</div>
-                                <div style="font-size: 0.875rem; color: #6b7280;">
-                                    ${item.store} • R${item.price} • Qty: ${item.quantity}
+                                <div style="font-weight: 500; color: var(--text-primary);">${item.title}</div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                                    ${item.store} • R${item.price.toFixed(2)} • Qty: ${item.quantity}
                                 </div>
                             </div>
                             <button class="header-btn" onclick="app.removeFromList('${item.id}')">
-                                <i class="fas fa-trash"></i>
+                                <i class="fas fa-trash" style="color: var(--danger-color);"></i>
                             </button>
                         </div>
                     `).join('')}
@@ -579,7 +621,7 @@ class SaveMateApp {
                             </div>
                             <div class="stat">
                                 <div class="stat-value">${this.savedDeals.size}</div>
-                                <div class="stat-label">Saved</div>
+                                <div class="stat-label">Saved Deals</div>
                             </div>
                             <div class="stat">
                                 <div class="stat-value">${this.getTotalListItems()}</div>
@@ -597,7 +639,7 @@ class SaveMateApp {
                     <h3 class="section-title">My Activity</h3>
                     ${userPosts.length > 0 ? 
                         userPosts.map(post => this.renderPost(post)).join('') :
-                        '<div class="empty-state"><i class="fas fa-feather"></i><p>No posts yet</p></div>'
+                        '<div class="empty-state"><i class="fas fa-feather"></i><p>No posts yet. Start sharing deals!</p></div>'
                     }
                 </div>
             </div>
@@ -614,10 +656,10 @@ class SaveMateApp {
                 
                 <div>
                     ${this.notifications.map(notif => `
-                        <div class="list-item">
+                        <div class="list-item" onclick="app.markNotificationRead('${notif.id}')">
                             <div style="flex: 1;">
-                                <div style="font-weight: 500;">${notif.message}</div>
-                                <div style="font-size: 0.875rem; color: #6b7280;">
+                                <div style="font-weight: 500; color: var(--text-primary);">${notif.message}</div>
+                                <div style="font-size: 0.875rem; color: var(--text-secondary);">
                                     ${notif.time}
                                 </div>
                             </div>
@@ -770,7 +812,7 @@ class SaveMateApp {
 
     // Utility Methods
     getUserInitials() {
-        return this.currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+        return this.currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
     }
 
     getTotalListItems() {
@@ -783,7 +825,8 @@ class SaveMateApp {
         this.renderApp();
     }
 
-    toggleSaveDeal(dealId) {
+    toggleSaveDeal(dealId, event) {
+        event.stopPropagation();
         if (this.savedDeals.has(dealId)) {
             this.savedDeals.delete(dealId);
             this.showToast('Removed from saved deals');
@@ -795,16 +838,21 @@ class SaveMateApp {
         this.renderApp();
     }
 
-    addToList(dealId) {
+    addToList(dealId, event) {
+        event.stopPropagation();
         this.showToast('Added to shopping list');
     }
 
+    showDealDetail(dealId) {
+        this.showToast(`Showing details for deal ${dealId}`);
+    }
+
     showStore(storeId) {
-        this.showToast(`Opening ${storeId}`);
+        this.showToast(`Opening ${storeId} deals`);
     }
 
     showCategory(category) {
-        this.showToast(`Browsing ${category}`);
+        this.showToast(`Browsing ${category} category`);
     }
 
     createPost() {
@@ -825,7 +873,8 @@ class SaveMateApp {
             likes: 0,
             comments: 0,
             shares: 0,
-            liked: false
+            liked: false,
+            store: 'General'
         };
 
         this.posts.unshift(newPost);
@@ -854,15 +903,39 @@ class SaveMateApp {
     }
 
     startScanner() {
-        this.showToast('Barcode scanner activated!');
+        this.showToast('Barcode scanner activated! Demo mode.');
     }
 
     createNewList() {
-        this.showToast('New list created');
+        const newList = {
+            id: Date.now().toString(),
+            name: `Shopping List ${this.shoppingLists.length + 1}`,
+            items: []
+        };
+        this.shoppingLists.push(newList);
+        this.saveShoppingLists();
+        this.showToast('New shopping list created!');
+        this.renderApp();
     }
 
     removeFromList(itemId) {
-        this.showToast('Item removed from list');
+        const currentList = this.shoppingLists[0];
+        const itemIndex = currentList.items.findIndex(item => item.id === itemId);
+        if (itemIndex > -1) {
+            currentList.items.splice(itemIndex, 1);
+            this.saveShoppingLists();
+            this.showToast('Item removed from list');
+            this.renderApp();
+        }
+    }
+
+    markNotificationRead(notificationId) {
+        const notification = this.notifications.find(n => n.id === notificationId);
+        if (notification && !notification.read) {
+            notification.read = true;
+            this.saveNotifications();
+            this.renderApp();
+        }
     }
 
     editProfile() {
@@ -886,7 +959,7 @@ class SaveMateApp {
     }
 
     contactSupport() {
-        this.showToast('Contact support feature');
+        this.showToast('Contact support feature coming soon!');
     }
 
     toggleTheme() {
@@ -936,7 +1009,7 @@ class SaveMateApp {
     }
 }
 
-// Initialize the app
+// Initialize the app when DOM is loaded
 let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new SaveMateApp();
