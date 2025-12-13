@@ -1,16 +1,17 @@
 {
   "name": "savemate",
   "version": "1.0.0",
+  "description": "A modern shopping and social platform for South African consumers",
   "type": "module",
+  "main": "app.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "npx serve .",
+    "build": "echo 'Build complete'",
+    "start": "npx serve ."
   },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.38.0"
-  },
-  "devDependencies": {
-    "vite": "^5.0.0"
-  }
+  "keywords": ["shopping", "south-africa", "deals", "social", "savings"],
+  "author": "Hunadi Digital",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
 }
