@@ -1,4 +1,4 @@
-// SaveMate - Complete Shopping & Social App
+// SaveMate - Complete Shopping & Social App with Black Market
 class SaveMateApp {
     constructor() {
         this.currentUser = this.loadUser();
@@ -10,9 +10,13 @@ class SaveMateApp {
         this.theme = this.loadTheme();
         this.users = this.loadUsers();
         this.followers = this.loadFollowers();
-        this.blackMarketItems = this.loadBlackMarketItems();
+        this.blackMarketPosts = this.loadBlackMarketPosts();
         this.currentMedia = null;
         this.currentUniverseMedia = null;
+        this.bmCurrentMedia = null;
+        this.bmCurrentPage = 'take'; // 'take' or 'offer'
+        this.bmCurrentCategory = 'all';
+        this.bmSearchQuery = '';
         this.init();
     }
 
@@ -41,9 +45,7 @@ class SaveMateApp {
                 name: "Weekly Groceries",
                 items: [
                     { id: '1', title: "Tastic Rice 5kg", store: "Checkers", price: 105.99, quantity: 1 },
-                    { id: '2', title: "Ouma Rusks Buttermilk 500g", store: "Pick n Pay", price: 52.99, quantity: 1 },
-                    { id: '3', title: "Five Roses Tea 100s", store: "Woolworths", price: 35.50, quantity: 2 },
-                    { id: '4', title: "Koo Baked Beans 410g", store: "Shoprite", price: 18.99, quantity: 2 }
+                    { id: '2', title: "Ouma Rusks Buttermilk 500g", store: "Pick n Pay", price: 52.99, quantity: 1 }
                 ]
             }
         ];
@@ -68,34 +70,6 @@ class SaveMateApp {
                 liked: false,
                 store: "Checkers",
                 userId: "2"
-            },
-            {
-                id: '2',
-                user: "BudgetShopperCT",
-                avatar: "BS",
-                content: "Woolworths has amazing specials on baby products this week. Pampers nappies at unbeatable prices! 👶",
-                image: "",
-                time: "5 hours ago",
-                likes: 42,
-                comments: 12,
-                shares: 5,
-                liked: true,
-                store: "Woolworths",
-                userId: "3"
-            },
-            {
-                id: '3',
-                user: "GroceryGuruJHB",
-                avatar: "GG",
-                content: "Spar is running a buy-one-get-one-free on frozen veggies. Stock up while it lasts! 🥦 #SmartShopping",
-                image: "",
-                time: "1 day ago",
-                likes: 38,
-                comments: 15,
-                shares: 7,
-                liked: false,
-                store: "Spar",
-                userId: "4"
             }
         ];
     }
@@ -106,10 +80,7 @@ class SaveMateApp {
 
     loadNotifications() {
         return JSON.parse(localStorage.getItem('savemate-notifications')) || [
-            { id: '1', type: 'deal', message: 'New Checkers specials available!', time: '5 min ago', read: false },
-            { id: '2', type: 'social', message: 'DealHunterSA liked your post', time: '1 hour ago', read: false },
-            { id: '3', type: 'system', message: 'Welcome to SaveMate! Start exploring deals', time: '2 hours ago', read: true },
-            { id: '4', type: 'alert', message: 'Price drop on Tastic Rice at Pick n Pay', time: '3 hours ago', read: false }
+            { id: '1', type: 'deal', message: 'New Checkers specials available!', time: '5 min ago', read: false }
         ];
     }
 
@@ -153,28 +124,6 @@ class SaveMateApp {
                 storage: 'occupied',
                 location: 'Cape Town',
                 joined: '2023-11-20'
-            },
-            {
-                id: '3',
-                name: 'BudgetShopperCT',
-                email: 'budget@example.com',
-                avatar: 'BS',
-                bio: 'Mom of 3 • Master of budget shopping • Sharing tips daily 👶🛒',
-                coverPhoto: '',
-                storage: 'occupied',
-                location: 'Durban',
-                joined: '2024-02-10'
-            },
-            {
-                id: '4',
-                name: 'GroceryGuruJHB',
-                email: 'grocery@example.com',
-                avatar: 'GG',
-                bio: 'Food expert • Finding quality deals • Healthy living advocate 🥦',
-                coverPhoto: '',
-                storage: 'empty',
-                location: 'Johannesburg',
-                joined: '2024-01-05'
             }
         ];
     }
@@ -186,20 +135,12 @@ class SaveMateApp {
     loadFollowers() {
         return JSON.parse(localStorage.getItem('savemate-followers')) || {
             '1': {
-                following: ['2', '3'],
-                followers: ['2', '3']
+                following: ['2'],
+                followers: ['2']
             },
             '2': {
-                following: ['1', '3'],
-                followers: ['1', '3', '4']
-            },
-            '3': {
-                following: ['1', '2'],
-                followers: ['1', '2']
-            },
-            '4': {
-                following: ['2'],
-                followers: []
+                following: ['1'],
+                followers: ['1']
             }
         };
     }
@@ -208,51 +149,75 @@ class SaveMateApp {
         localStorage.setItem('savemate-followers', JSON.stringify(this.followers));
     }
 
-    loadBlackMarketItems() {
-        return JSON.parse(localStorage.getItem('savemate-blackmarket')) || [
+    loadBlackMarketPosts() {
+        return JSON.parse(localStorage.getItem('savemate-blackmarket-posts')) || [
             {
                 id: '1',
                 userId: '2',
+                user: 'DealHunterSA',
+                avatar: 'DH',
+                type: 'item',
                 title: 'Gaming Console PS5',
                 price: 6500,
                 category: 'Electronics',
-                image: '',
-                description: 'Hardly used, comes with 2 controllers and 3 games. Perfect condition.',
-                date: '2024-01-20',
-                location: 'Cape Town'
+                description: 'Hardly used, comes with 2 controllers and 3 games. Perfect condition. No issues.',
+                location: 'Cape Town',
+                contact: 'deals@example.com',
+                time: '2 days ago',
+                likes: 8,
+                comments: 3,
+                shares: 1,
+                liked: false,
+                image: ''
             },
             {
                 id: '2',
-                userId: '3',
-                title: 'Baby Stroller',
-                price: 1200,
-                category: 'Baby & Kids',
-                image: '',
-                description: 'Excellent condition, all accessories included. Lightweight and foldable.',
-                date: '2024-01-18',
-                location: 'Durban'
+                userId: '1',
+                user: 'SaveMate User',
+                avatar: 'SU',
+                type: 'service',
+                title: 'Web Development Services',
+                price: 150,
+                category: 'Services',
+                description: 'Professional web development services. Frontend, backend, and full-stack development. HTML, CSS, JavaScript, React, Node.js.',
+                location: 'Johannesburg',
+                contact: 'demo@user.com',
+                time: '1 day ago',
+                likes: 12,
+                comments: 5,
+                shares: 2,
+                liked: true,
+                image: ''
             },
             {
                 id: '3',
-                userId: '1',
-                title: 'Vintage Camera',
-                price: 850,
-                category: 'Electronics',
-                image: '',
-                description: 'Classic film camera, fully functional. Great for photography enthusiasts.',
-                date: '2024-01-15',
-                location: 'Johannesburg'
+                userId: '2',
+                user: 'DealHunterSA',
+                avatar: 'DH',
+                type: 'job',
+                title: 'Part-time Delivery Driver',
+                price: 25,
+                category: 'Jobs',
+                description: 'Looking for reliable delivery drivers for evening shifts. Own vehicle required. Flexible hours, good pay.',
+                location: 'Cape Town',
+                contact: 'deals@example.com',
+                time: '3 hours ago',
+                likes: 5,
+                comments: 2,
+                shares: 0,
+                liked: false,
+                image: ''
             }
         ];
     }
 
-    saveBlackMarketItems() {
-        localStorage.setItem('savemate-blackmarket', JSON.stringify(this.blackMarketItems));
+    saveBlackMarketPosts() {
+        localStorage.setItem('savemate-blackmarket-posts', JSON.stringify(this.blackMarketPosts));
     }
 
     // Utility Methods
     getUserStorageStatus(userId) {
-        const userItems = this.blackMarketItems.filter(item => item.userId === userId);
+        const userItems = this.blackMarketPosts.filter(post => post.userId === userId && post.type === 'item');
         return userItems.length > 0 ? 'occupied' : 'empty';
     }
 
@@ -266,10 +231,6 @@ class SaveMateApp {
 
     getUserInitials() {
         return this.currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-    }
-
-    getTotalListItems() {
-        return this.shoppingLists.reduce((total, list) => total + list.items.length, 0);
     }
 
     getUnreadNotifications() {
@@ -292,7 +253,14 @@ class SaveMateApp {
             return;
         }
 
-        app.innerHTML = this.renderMainApp();
+        // Check if we're in Black Market mode
+        if (this.currentPage === 'black-market') {
+            document.body.classList.add('black-market-mode');
+            app.innerHTML = this.renderBlackMarketPage();
+        } else {
+            document.body.classList.remove('black-market-mode');
+            app.innerHTML = this.renderMainApp();
+        }
     }
 
     // Authentication
@@ -429,7 +397,8 @@ class SaveMateApp {
             'shopping-list': this.renderShoppingListPage(),
             'profile': this.renderProfilePage(),
             'notifications': this.renderNotificationsPage(),
-            'settings': this.renderSettingsPage()
+            'settings': this.renderSettingsPage(),
+            'black-market': this.renderBlackMarketPage()
         };
 
         return pages[this.currentPage] || this.renderHomePage();
@@ -445,7 +414,6 @@ class SaveMateApp {
                 original_price: 129.99,
                 store: "Checkers",
                 badge: "SAVE R24",
-                emoji: "🛒",
                 color: "#E31B23",
                 icon: "fas fa-shopping-cart"
             },
@@ -456,27 +424,9 @@ class SaveMateApp {
                 original_price: 59.99,
                 store: "Pick n Pay",
                 badge: "POPULAR",
-                emoji: "🍪",
                 color: "#0055A4",
                 icon: "fas fa-cookie-bite"
-            },
-            {
-                id: '3',
-                title: "Five Roses Tea 100s",
-                current_price: 35.50,
-                original_price: 42.00,
-                store: "Woolworths",
-                badge: "15% OFF",
-                emoji: "🍵",
-                color: "#000000",
-                icon: "fas fa-mug-hot"
             }
-        ];
-
-        const stores = [
-            { id: '1', name: "Checkers", color: "#E31B23", logo: "🛒", icon: "fas fa-shopping-cart" },
-            { id: '2', name: "Pick n Pay", color: "#0055A4", logo: "🏪", icon: "fas fa-store" },
-            { id: '3', name: "Woolworths", color: "#000000", logo: "🛍️", icon: "fas fa-shopping-bag" }
         ];
 
         return `
@@ -528,33 +478,11 @@ class SaveMateApp {
                         </div>
                     `).join('')}
                 </div>
-
-                <h2 class="section-title">
-                    <i class="fas fa-store"></i>
-                    Popular Stores
-                </h2>
-                <div class="stores-scroll">
-                    ${stores.map(store => `
-                        <div class="store-chip" onclick="app.showStore('${store.id}')">
-                            <div class="store-chip-logo" style="background: ${store.color}">
-                                <i class="${store.icon}"></i>
-                            </div>
-                            <span>${store.name}</span>
-                        </div>
-                    `).join('')}
-                </div>
             </div>
         `;
     }
 
     renderExplorePage() {
-        const categories = [
-            { name: 'Groceries', icon: 'fas fa-shopping-basket', color: '#10B981' },
-            { name: 'Electronics', icon: 'fas fa-laptop', color: '#3B82F6' },
-            { name: 'Fashion', icon: 'fas fa-tshirt', color: '#8B5CF6' },
-            { name: 'Home & Garden', icon: 'fas fa-home', color: '#F59E0B' }
-        ];
-
         return `
             <div class="page active">
                 <h2 class="section-title">
@@ -562,90 +490,36 @@ class SaveMateApp {
                     Explore Categories
                 </h2>
                 <div class="categories">
-                    ${categories.map(cat => `
-                        <div class="category" onclick="app.showCategory('${cat.name}')">
-                            <i class="${cat.icon}" style="color: ${cat.color};"></i>
-                            <span>${cat.name}</span>
+                    ${['Groceries', 'Electronics', 'Fashion', 'Home & Garden'].map(cat => `
+                        <div class="category" onclick="app.showCategory('${cat}')">
+                            <i class="fas fa-${cat === 'Groceries' ? 'shopping-basket' : cat === 'Electronics' ? 'laptop' : cat === 'Fashion' ? 'tshirt' : 'home'}"></i>
+                            <span>${cat}</span>
                         </div>
                     `).join('')}
-                </div>
-
-                <h2 class="section-title">
-                    <i class="fas fa-store"></i>
-                    Featured Stores
-                </h2>
-                <div class="deals-grid">
-                    ${this.renderStoreCards()}
                 </div>
             </div>
         `;
     }
 
-    renderStoreCards() {
-        const stores = [
-            { name: "Checkers", color: "#E31B23", logo: "🛒", desc: "60-min delivery" },
-            { name: "Pick n Pay", color: "#0055A4", logo: "🏪", desc: "Weekly specials" },
-            { name: "Woolworths", color: "#000000", logo: "🛍️", desc: "Quality foods" },
-            { name: "Shoprite", color: "#FF0000", logo: "🛒", desc: "Lower prices" }
-        ];
-
-        return stores.map(store => `
-            <div class="deal-card" onclick="app.showStore('${store.name}')">
-                <div class="deal-image" style="background: ${store.color}; color: white; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-store" style="font-size: 3rem;"></i>
-                </div>
-                <div class="deal-content">
-                    <div class="deal-title">${store.name}</div>
-                    <div class="deal-store">
-                        <i class="fas fa-info-circle"></i>
-                        <span>${store.desc}</span>
-                    </div>
-                    <div class="deal-actions">
-                        <button class="deal-btn primary">
-                            <i class="fas fa-store"></i> Browse Store
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-
     renderUniversePage() {
-        // Get all posts sorted by time
-        const allPosts = [...this.posts].sort((a, b) => {
-            const timeA = this.getTimeValue(a.time);
-            const timeB = this.getTimeValue(b.time);
-            return timeB - timeA;
-        });
-        
         return `
             <div class="page active">
                 <div class="universe-header">
                     <i class="fas fa-users"></i> SHOPPING UNIVERSE
                 </div>
                 
-                <!-- Post Creator -->
                 <div class="post-creator">
                     <div class="post-input-container">
                         <div class="post-avatar">${this.getUserInitials()}</div>
                         <input type="text" class="post-input" id="universePostInput" placeholder="Share a deal or shopping tip...">
-                        <button class="header-btn" onclick="app.toggleUniverseMediaUpload()" title="Add media">
-                            <i class="fas fa-image"></i>
-                        </button>
                         <button class="header-btn" onclick="app.createUniversePost()">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
-                    <div id="universeMediaPreview" style="display: none; margin-top: 1rem;"></div>
-                    <input type="file" id="universeMediaUpload" accept="image/*" style="display: none;" onchange="app.handleUniverseMediaUpload(event)">
                 </div>
 
-                <!-- All posts -->
                 <div id="universePostsContainer">
-                    ${allPosts.length > 0 ? 
-                        allPosts.map(post => this.renderPost(post)).join('') :
-                        '<div class="empty-state"><i class="fas fa-users"></i><p>No posts yet. Be the first to share!</p></div>'
-                    }
+                    ${this.posts.map(post => this.renderPost(post)).join('')}
                 </div>
             </div>
         `;
@@ -664,9 +538,6 @@ class SaveMateApp {
                         <i class="fas fa-camera" style="font-size: 4rem; margin-bottom: 1rem; color: #F4C000;"></i>
                         <div style="font-size: 1.1rem; font-weight: 500; color: var(--text-primary);">Point camera at barcode</div>
                     </div>
-                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; text-align: center;">
-                        Scan barcodes to compare prices across South African stores
-                    </p>
                     <button class="btn btn-primary" onclick="app.startScanner()" style="width: auto; padding: 1rem 2rem;">
                         <i class="fas fa-camera"></i> Start Scanning
                     </button>
@@ -676,9 +547,6 @@ class SaveMateApp {
     }
 
     renderShoppingListPage() {
-        const currentList = this.shoppingLists[0];
-        const total = currentList.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
         return `
             <div class="page active">
                 <h2 class="section-title">
@@ -689,12 +557,9 @@ class SaveMateApp {
                 <div class="list-category">
                     <h3>
                         <i class="fas fa-shopping-basket"></i>
-                        ${currentList.name}
-                        <span style="margin-left: auto; font-size: 1rem; color: var(--success-color);">
-                            Total: R${total.toFixed(2)}
-                        </span>
+                        Weekly Groceries
                     </h3>
-                    ${currentList.items.map(item => `
+                    ${this.shoppingLists[0].items.map(item => `
                         <div class="list-item">
                             <input type="checkbox" style="margin-right: 1rem; width: 1.25rem; height: 1.25rem;">
                             <div style="flex: 1;">
@@ -709,70 +574,43 @@ class SaveMateApp {
                         </div>
                     `).join('')}
                 </div>
-
-                <button class="btn btn-primary" onclick="app.createNewList()" style="margin-top: 2rem;">
-                    <i class="fas fa-plus"></i> Create New List
-                </button>
             </div>
         `;
     }
 
-    renderProfilePage(userId = null) {
-        const profileUserId = userId || this.currentUser.id;
-        const isCurrentUser = profileUserId === this.currentUser.id;
-        const user = this.users.find(u => u.id === profileUserId) || this.currentUser;
-        const userFollowers = this.followers[profileUserId] || { following: [], followers: [] };
-        const userPosts = this.posts.filter(post => post.userId === profileUserId);
-        const storageStatus = this.getUserStorageStatus(profileUserId);
+    renderProfilePage() {
+        const user = this.users.find(u => u.id === this.currentUser.id);
+        const userFollowers = this.followers[this.currentUser.id] || { following: [], followers: [] };
+        const userPosts = this.posts.filter(post => post.userId === this.currentUser.id);
+        const storageStatus = this.getUserStorageStatus(this.currentUser.id);
 
         return `
             <div class="page active">
                 <div class="profile-container">
                     <div class="profile-header">
-                        <div class="cover-photo" id="coverPhoto" style="background: linear-gradient(135deg, var(--primary-navy) 0%, var(--dark-navy) 100%); ${user.coverPhoto ? `background-image: url('${user.coverPhoto}'); background-size: cover; background-position: center;` : ''}">
-                            ${isCurrentUser ? `
-                                <button class="cover-edit-btn" onclick="app.editCoverPhoto()">
-                                    <i class="fas fa-camera"></i> Edit Cover
-                                </button>
-                            ` : ''}
+                        <div class="cover-photo" id="coverPhoto" style="background: linear-gradient(135deg, var(--primary-navy) 0%, var(--dark-navy) 100%);">
+                            <button class="cover-edit-btn" onclick="app.editCoverPhoto()">
+                                <i class="fas fa-camera"></i> Edit Cover
+                            </button>
                         </div>
                         <div class="profile-avatar-container">
                             <div class="profile-avatar" id="profileAvatar">
-                                ${user.avatar && user.avatar.length > 2 ? 
-                                    `<img src="${user.avatar}" alt="${user.name}">` : 
-                                    user.avatar
-                                }
+                                ${user.avatar}
                             </div>
-                            ${isCurrentUser ? `
-                                <button class="avatar-edit-btn" onclick="app.editProfilePicture()">
-                                    <i class="fas fa-camera"></i>
-                                </button>
-                            ` : ''}
+                            <button class="avatar-edit-btn" onclick="app.editProfilePicture()">
+                                <i class="fas fa-camera"></i>
+                            </button>
                         </div>
                     </div>
                     
                     <div class="profile-info">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                            <div>
-                                <h2>${user.name}</h2>
-                                <p style="color: var(--text-secondary); margin-top: 0.25rem;">
-                                    <i class="fas fa-map-marker-alt"></i> ${user.location}
-                                </p>
-                            </div>
-                            ${!isCurrentUser ? `
-                                <button class="btn ${userFollowers.followers.includes(this.currentUser.id) ? 'btn-secondary' : 'btn-primary'}" onclick="app.toggleFollow('${profileUserId}')">
-                                    <i class="fas ${userFollowers.followers.includes(this.currentUser.id) ? 'fa-user-check' : 'fa-user-plus'}"></i>
-                                    ${userFollowers.followers.includes(this.currentUser.id) ? 'Following' : 'Follow'}
-                                </button>
-                            ` : ''}
-                        </div>
-                        
-                        <p style="color: var(--text-primary); margin-bottom: 1.5rem; line-height: 1.6;">
+                        <h2>${user.name}</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.5;">
                             ${user.bio}
                         </p>
                         
                         <!-- Storage Indicator -->
-                        <div class="storage-indicator" onclick="${isCurrentUser ? "app.showBlackMarket()" : ''}" style="cursor: ${isCurrentUser ? 'pointer' : 'default'};">
+                        <div class="storage-indicator" onclick="app.openBlackMarket()">
                             <div style="display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: var(--surface-color); border-radius: 0.75rem; border: 1px solid var(--border-color);">
                                 <div style="width: 40px; height: 40px; border-radius: 50%; background: ${storageStatus === 'occupied' ? 'var(--success-color)' : 'var(--text-muted)'}; display: flex; align-items: center; justify-content: center; color: white;">
                                     <i class="fas ${storageStatus === 'occupied' ? 'fa-box-open' : 'fa-box'}"></i>
@@ -781,7 +619,7 @@ class SaveMateApp {
                                     <div style="font-weight: 500; color: var(--text-primary);">Storage</div>
                                     <div style="font-size: 0.875rem; color: var(--text-secondary);">
                                         ${storageStatus === 'occupied' ? 'Items listed in Black Market' : 'No items in Black Market'}
-                                        ${isCurrentUser ? ' • Tap to manage' : ''}
+                                        <span style="color: var(--accent-color);"> • Tap to open Black Market</span>
                                     </div>
                                 </div>
                                 <div style="color: ${storageStatus === 'occupied' ? 'var(--success-color)' : 'var(--text-muted)'}; font-weight: 600;">
@@ -792,61 +630,23 @@ class SaveMateApp {
                         
                         <!-- Stats -->
                         <div class="profile-stats">
-                            <div class="stat" onclick="app.showFollowers('${profileUserId}')">
+                            <div class="stat">
                                 <div class="stat-value">${userPosts.length}</div>
                                 <div class="stat-label">Posts</div>
                             </div>
-                            <div class="stat" onclick="app.showFollowers('${profileUserId}')">
+                            <div class="stat">
                                 <div class="stat-value">${userFollowers.followers.length}</div>
                                 <div class="stat-label">Followers</div>
                             </div>
-                            <div class="stat" onclick="app.showFollowing('${profileUserId}')">
+                            <div class="stat">
                                 <div class="stat-value">${userFollowers.following.length}</div>
                                 <div class="stat-label">Following</div>
                             </div>
                         </div>
                         
-                        ${isCurrentUser ? `
-                            <button class="btn btn-primary" onclick="app.editProfile()">
-                                <i class="fas fa-edit"></i> Edit Profile
-                            </button>
-                        ` : ''}
-                    </div>
-                </div>
-
-                <!-- Post Creator (Only for current user) -->
-                ${isCurrentUser ? `
-                    <div class="post-creator" style="margin-top: 2rem;">
-                        <div class="post-input-container">
-                            <div class="post-avatar">${this.getUserInitials()}</div>
-                            <input type="text" class="post-input" id="profilePostInput" placeholder="What's on your mind? Share a deal or tip...">
-                            <button class="header-btn" onclick="app.toggleMediaUpload()" title="Add media">
-                                <i class="fas fa-image"></i>
-                            </button>
-                            <button class="header-btn" onclick="app.createProfilePost()">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
-                        <div id="mediaPreview" style="display: none; margin-top: 1rem;"></div>
-                        <input type="file" id="mediaUpload" accept="image/*" style="display: none;" onchange="app.handleMediaUpload(event)">
-                    </div>
-                ` : ''}
-
-                <!-- Profile Wall -->
-                <div style="margin-top: 2rem;">
-                    <h3 class="section-title">
-                        <i class="fas fa-stream"></i>
-                        ${isCurrentUser ? 'Your Activity' : `${user.name.split(' ')[0]}'s Posts`}
-                    </h3>
-                    <div id="profilePostsContainer">
-                        ${userPosts.length > 0 ? 
-                            userPosts.map(post => this.renderPost(post)).join('') :
-                            `<div class="empty-state">
-                                <i class="fas fa-newspaper"></i>
-                                <p>${isCurrentUser ? 'You haven\'t posted anything yet' : 'No posts yet'}</p>
-                                ${isCurrentUser ? '<button class="btn btn-primary" onclick="app.switchPage(\'universe\')">Start Sharing</button>' : ''}
-                            </div>`
-                        }
+                        <button class="btn btn-primary" onclick="app.editProfile()">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
                     </div>
                 </div>
             </div>
@@ -879,7 +679,7 @@ class SaveMateApp {
     }
 
     renderSettingsPage() {
-        const userItems = this.blackMarketItems.filter(item => item.userId === this.currentUser.id);
+        const userItems = this.blackMarketPosts.filter(post => post.userId === this.currentUser.id && post.type === 'item');
         const storageStatus = this.getUserStorageStatus(this.currentUser.id);
         
         return `
@@ -901,84 +701,24 @@ class SaveMateApp {
                                 <i class="fas fa-chevron-right"></i>
                             </div>
                         </div>
-                        
-                        <div class="settings-item" onclick="app.changePassword()">
-                            <div class="settings-info">
-                                <div class="settings-label">Change Password</div>
-                                <div class="settings-description">Update your password for security</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Black Market Section in Settings -->
                     <div class="settings-section">
                         <h3><i class="fas fa-store-alt"></i> Black Market</h3>
                         
-                        <div class="settings-item" onclick="app.showBlackMarket()">
+                        <div class="settings-item" onclick="app.openBlackMarket()">
                             <div class="settings-info">
-                                <div class="settings-label">My Storage</div>
+                                <div class="settings-label">Open Black Market</div>
                                 <div class="settings-description">
-                                    ${userItems.length} item${userItems.length !== 1 ? 's' : ''} listed
+                                    Buy, sell, offer services • Independent marketplace
                                     <span style="color: ${storageStatus === 'occupied' ? 'var(--success-color)' : 'var(--text-muted)'};">
                                         ${storageStatus === 'occupied' ? '● Occupied' : '○ Empty'}
                                     </span>
                                 </div>
                             </div>
                             <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="settings-item" onclick="app.createBlackMarketItem()">
-                            <div class="settings-info">
-                                <div class="settings-label">Sell an Item</div>
-                                <div class="settings-description">List items for sale in Black Market</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-plus-circle" style="color: var(--success-color);"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="settings-item" onclick="app.browseBlackMarket()">
-                            <div class="settings-info">
-                                <div class="settings-label">Browse Marketplace</div>
-                                <div class="settings-description">Find items from other users</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-compass" style="color: var(--accent-gold);"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="settings-section">
-                        <h3><i class="fas fa-bell"></i> Notifications</h3>
-                        
-                        <div class="settings-item">
-                            <div class="settings-info">
-                                <div class="settings-label">Push Notifications</div>
-                                <div class="settings-description">Receive alerts for new deals and messages</div>
-                            </div>
-                            <div class="settings-action">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked onchange="app.toggleNotifications(this.checked)">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="settings-item">
-                            <div class="settings-info">
-                                <div class="settings-label">Email Notifications</div>
-                                <div class="settings-description">Get weekly deal summaries via email</div>
-                            </div>
-                            <div class="settings-action">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked onchange="app.toggleEmailNotifications(this.checked)">
-                                    <span class="toggle-slider"></span>
-                                </label>
+                                <i class="fas fa-external-link-alt" style="color: var(--bm-orange);"></i>
                             </div>
                         </div>
                     </div>
@@ -1000,54 +740,6 @@ class SaveMateApp {
                         </div>
                     </div>
 
-                    <div class="settings-section">
-                        <h3><i class="fas fa-shield-alt"></i> Privacy & Security</h3>
-                        
-                        <div class="settings-item" onclick="app.viewPrivacyPolicy()">
-                            <div class="settings-info">
-                                <div class="settings-label">Privacy Policy</div>
-                                <div class="settings-description">How we protect and use your data</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="settings-item" onclick="app.viewTerms()">
-                            <div class="settings-info">
-                                <div class="settings-label">Terms of Service</div>
-                                <div class="settings-description">App usage terms and conditions</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="settings-section">
-                        <h3><i class="fas fa-info-circle"></i> About</h3>
-                        
-                        <div class="settings-item" onclick="app.viewAbout()">
-                            <div class="settings-info">
-                                <div class="settings-label">About SaveMate</div>
-                                <div class="settings-description">Learn more about our mission</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
-                        
-                        <div class="settings-item" onclick="app.contactSupport()">
-                            <div class="settings-info">
-                                <div class="settings-label">Contact Support</div>
-                                <div class="settings-description">Get help with the app</div>
-                            </div>
-                            <div class="settings-action">
-                                <i class="fas fa-chevron-right"></i>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="app-info">
                         <div class="app-version">SaveMate v1.0.0</div>
                         <div class="app-copyright">© 2024 Hunadi Digital. All rights reserved.</div>
@@ -1060,33 +752,538 @@ class SaveMateApp {
         `;
     }
 
-    // Post Renderer (Used in both Universe and Profile)
+    // ===========================================
+    // BLACK MARKET PAGE
+    // ===========================================
+    
+    renderBlackMarketPage() {
+        // Apply Black Market theme
+        this.applyTheme('black-market');
+        
+        // Filter posts based on category and search
+        let filteredPosts = [...this.blackMarketPosts];
+        
+        if (this.bmCurrentCategory !== 'all') {
+            filteredPosts = filteredPosts.filter(post => post.category === this.bmCurrentCategory);
+        }
+        
+        if (this.bmSearchQuery) {
+            const query = this.bmSearchQuery.toLowerCase();
+            filteredPosts = filteredPosts.filter(post => 
+                post.title.toLowerCase().includes(query) ||
+                post.description.toLowerCase().includes(query) ||
+                post.category.toLowerCase().includes(query) ||
+                post.location.toLowerCase().includes(query)
+            );
+        }
+        
+        // Sort by time (newest first)
+        filteredPosts.sort((a, b) => this.getTimeValue(b.time) - this.getTimeValue(a.time));
+        
+        return `
+            <div class="black-market-page page active">
+                <!-- Black Market Header -->
+                <div class="black-market-header">
+                    <div class="logo" onclick="app.exitBlackMarket()">
+                        <i class="fas fa-store-alt"></i>
+                        <span>BLACK MARKET</span>
+                    </div>
+                    <button class="header-btn" onclick="app.exitBlackMarket()" title="Exit Black Market">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Black Market Nav -->
+                <div class="black-market-nav">
+                    <button class="black-market-nav-btn ${this.bmCurrentPage === 'take' ? 'active' : ''}" onclick="app.setBMPage('take')">
+                        <i class="fas fa-hand-holding"></i> TAKE
+                    </button>
+                    <button class="black-market-nav-btn ${this.bmCurrentPage === 'offer' ? 'active' : ''}" onclick="app.setBMPage('offer')">
+                        <i class="fas fa-hand-holding-heart"></i> OFFER
+                    </button>
+                </div>
+
+                <!-- Search Box -->
+                <div class="bm-search-container">
+                    <div class="bm-search-box">
+                        <input type="text" placeholder="Search Black Market..." value="${this.bmSearchQuery}" oninput="app.bmSearch(this.value)">
+                        <button class="bm-search-btn" onclick="app.bmSearch(document.querySelector('.bm-search-box input').value)">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                ${this.bmCurrentPage === 'take' ? this.renderBMTakePage(filteredPosts) : this.renderBMOfferPage()}
+
+                <!-- Disclaimer -->
+                <div class="black-market-disclaimer">
+                    <h4><i class="fas fa-exclamation-triangle"></i> IMPORTANT NOTICE</h4>
+                    <p>Black Market operates independently from SaveMate. All transactions are between users. SaveMate is not responsible for any issues that may arise. Exercise caution and use good judgment when engaging with other users.</p>
+                </div>
+
+                <!-- Footer -->
+                <div class="black-market-footer">
+                    <p>© 2024 Black Market • Independent Marketplace</p>
+                </div>
+            </div>
+        `;
+    }
+
+    renderBMTakePage(posts) {
+        const categories = ['all', 'Electronics', 'Furniture', 'Clothing', 'Services', 'Jobs', 'Vehicles', 'Other'];
+        
+        return `
+            <!-- Categories -->
+            <div class="bm-categories">
+                ${categories.map(cat => `
+                    <div class="bm-category ${this.bmCurrentCategory === cat ? 'active' : ''}" onclick="app.setBMCategory('${cat}')">
+                        ${cat === 'all' ? 'All Items' : cat}
+                    </div>
+                `).join('')}
+            </div>
+
+            <!-- Posts Grid -->
+            <div style="padding: 0 1rem;">
+                ${posts.length > 0 ? 
+                    posts.map(post => this.renderBMPost(post)).join('') :
+                    '<div class="empty-state"><i class="fas fa-search"></i><p>No listings found. Try a different search or category.</p></div>'
+                }
+            </div>
+        `;
+    }
+
+    renderBMOfferPage() {
+        return `
+            <!-- Offer Form -->
+            <div class="bm-post-creator">
+                <h3 style="color: var(--bm-orange); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-plus-circle"></i> Create Listing
+                </h3>
+
+                <!-- Type Selector -->
+                <div class="bm-post-type-selector" id="bmTypeSelector">
+                    <button class="bm-type-btn" onclick="app.setBMType('item')" id="bmTypeItem">
+                        <i class="fas fa-box"></i> Sell Item
+                    </button>
+                    <button class="bm-type-btn" onclick="app.setBMType('service')" id="bmTypeService">
+                        <i class="fas fa-tools"></i> Offer Service
+                    </button>
+                    <button class="bm-type-btn" onclick="app.setBMType('job')" id="bmTypeJob">
+                        <i class="fas fa-briefcase"></i> Post Job
+                    </button>
+                </div>
+
+                <!-- Form -->
+                <div class="bm-form-group">
+                    <label for="bmTitle">Title *</label>
+                    <input type="text" id="bmTitle" class="bm-form-control" placeholder="What are you offering?">
+                </div>
+
+                <div class="bm-form-group">
+                    <label for="bmPrice">${this.bmCurrentType === 'job' ? 'Hourly Rate (R)' : 'Price (R)'} *</label>
+                    <input type="number" id="bmPrice" class="bm-form-control" placeholder="0.00" step="0.01">
+                </div>
+
+                <div class="bm-form-group">
+                    <label for="bmCategory">Category *</label>
+                    <select id="bmCategory" class="bm-form-control">
+                        ${this.getBMCategories().map(cat => `
+                            <option value="${cat}">${cat}</option>
+                        `).join('')}
+                    </select>
+                </div>
+
+                <div class="bm-form-group">
+                    <label for="bmDescription">Description *</label>
+                    <textarea id="bmDescription" class="bm-form-control" rows="4" placeholder="Describe what you're offering in detail..."></textarea>
+                </div>
+
+                <div class="bm-form-group">
+                    <label for="bmLocation">Location *</label>
+                    <input type="text" id="bmLocation" class="bm-form-control" placeholder="City or area">
+                </div>
+
+                <div class="bm-form-group">
+                    <label for="bmContact">Contact Info *</label>
+                    <input type="text" id="bmContact" class="bm-form-control" placeholder="Email or phone number" value="${this.currentUser.email}">
+                </div>
+
+                <!-- Image Upload -->
+                <div class="bm-form-group">
+                    <label>Image (Optional)</label>
+                    <input type="file" id="bmImageUpload" accept="image/*" style="display: none;" onchange="app.handleBMImageUpload(event)">
+                    <button class="btn btn-secondary" onclick="document.getElementById('bmImageUpload').click()" style="width: 100%;">
+                        <i class="fas fa-image"></i> Upload Image
+                    </button>
+                    <div id="bmImagePreview" style="margin-top: 1rem;"></div>
+                </div>
+
+                <!-- Submit Button -->
+                <button class="btn btn-primary" onclick="app.createBMListing()" style="width: 100%;">
+                    <i class="fas fa-rocket"></i> POST TO BLACK MARKET
+                </button>
+            </div>
+
+            <!-- My Listings -->
+            <div style="padding: 1rem;">
+                <h3 style="color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-list"></i> My Listings
+                </h3>
+                
+                ${this.renderBMUserListings()}
+            </div>
+        `;
+    }
+
+    getBMCategories() {
+        switch(this.bmCurrentType) {
+            case 'item':
+                return ['Electronics', 'Furniture', 'Clothing', 'Home & Garden', 'Vehicles', 'Sports', 'Other'];
+            case 'service':
+                return ['Services', 'Consulting', 'Repair', 'Creative', 'Transport', 'Other'];
+            case 'job':
+                return ['Jobs', 'Full-time', 'Part-time', 'Freelance', 'Internship', 'Other'];
+            default:
+                return ['Electronics', 'Furniture', 'Clothing', 'Services', 'Jobs', 'Other'];
+        }
+    }
+
+    renderBMPost(post) {
+        const typeIcon = {
+            'item': 'fas fa-box',
+            'service': 'fas fa-tools',
+            'job': 'fas fa-briefcase'
+        }[post.type] || 'fas fa-question';
+        
+        const typeColor = {
+            'item': '#FF6B00',
+            'service': '#00B894',
+            'job': '#0984E3'
+        }[post.type] || '#6C5CE7';
+
+        return `
+            <div class="bm-post-card">
+                <div class="bm-post-type" style="background: ${typeColor}">
+                    <i class="${typeIcon}"></i> ${post.type.toUpperCase()}
+                </div>
+                
+                <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">${post.title}</h3>
+                
+                <div class="bm-post-price">
+                    R${post.price} ${post.type === 'job' ? '/hour' : ''}
+                </div>
+                
+                <div class="bm-post-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>${post.location}</span>
+                    <span style="margin-left: auto; color: var(--text-muted); font-size: 0.75rem;">
+                        ${post.time}
+                    </span>
+                </div>
+                
+                <div class="bm-post-location">
+                    <i class="fas fa-tag"></i>
+                    <span>${post.category}</span>
+                </div>
+                
+                <div class="bm-post-description">
+                    ${post.description}
+                </div>
+                
+                ${post.image ? `
+                    <div class="bm-image-preview">
+                        <img src="${post.image}" alt="${post.title}">
+                    </div>
+                ` : ''}
+                
+                <!-- Seller Info -->
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--bm-medium-gray);">
+                    <div class="post-avatar">${post.avatar}</div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500; color: var(--text-primary);">${post.user}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-secondary);">Contact: ${post.contact}</div>
+                    </div>
+                </div>
+                
+                <!-- Actions -->
+                <div class="bm-post-actions">
+                    <div class="bm-post-action ${post.liked ? 'active' : ''}" onclick="app.bmLikePost('${post.id}')">
+                        <i class="fas fa-heart"></i>
+                        <span>${post.likes}</span>
+                    </div>
+                    <div class="bm-post-action" onclick="app.bmCommentOnPost('${post.id}')">
+                        <i class="fas fa-comment"></i>
+                        <span>${post.comments}</span>
+                    </div>
+                    <div class="bm-post-action" onclick="app.bmSharePost('${post.id}')">
+                        <i class="fas fa-share"></i>
+                        <span>${post.shares}</span>
+                    </div>
+                    <button class="btn btn-primary" onclick="app.bmContactSeller('${post.id}')" style="margin-left: auto; padding: 0.25rem 1rem; font-size: 0.875rem;">
+                        <i class="fas fa-envelope"></i> Contact
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    renderBMUserListings() {
+        const userListings = this.blackMarketPosts.filter(post => post.userId === this.currentUser.id);
+        
+        if (userListings.length === 0) {
+            return '<div class="empty-state"><i class="fas fa-box-open"></i><p>You haven\'t posted anything yet</p></div>';
+        }
+        
+        return userListings.map(post => `
+            <div class="list-item" style="margin-bottom: 0.5rem;">
+                <div style="flex: 1;">
+                    <div style="font-weight: 500; color: var(--text-primary);">${post.title}</div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                        R${post.price} • ${post.category} • ${post.time}
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.25rem;">
+                    <button class="header-btn" onclick="app.editBMListing('${post.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="header-btn" onclick="app.deleteBMListing('${post.id}')">
+                        <i class="fas fa-trash" style="color: var(--danger-color);"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Black Market Methods
+    openBlackMarket() {
+        this.bmCurrentPage = 'take';
+        this.bmCurrentCategory = 'all';
+        this.bmSearchQuery = '';
+        this.bmCurrentType = 'item'; // Default type
+        this.switchPage('black-market');
+    }
+
+    exitBlackMarket() {
+        this.applyTheme(this.theme); // Restore original theme
+        this.switchPage('home');
+    }
+
+    setBMPage(page) {
+        this.bmCurrentPage = page;
+        this.bmCurrentType = 'item'; // Reset to default type
+        this.renderApp();
+    }
+
+    setBMCategory(category) {
+        this.bmCurrentCategory = category;
+        this.renderApp();
+    }
+
+    setBMType(type) {
+        this.bmCurrentType = type;
+        
+        // Update button states
+        const buttons = ['item', 'service', 'job'];
+        buttons.forEach(btnType => {
+            const btn = document.getElementById(`bmType${btnType.charAt(0).toUpperCase() + btnType.slice(1)}`);
+            if (btn) {
+                btn.classList.toggle('active', btnType === type);
+            }
+        });
+        
+        // Update category dropdown
+        const categorySelect = document.getElementById('bmCategory');
+        if (categorySelect) {
+            const currentValue = categorySelect.value;
+            categorySelect.innerHTML = this.getBMCategories().map(cat => `
+                <option value="${cat}" ${cat === currentValue ? 'selected' : ''}>${cat}</option>
+            `).join('');
+        }
+    }
+
+    bmSearch(query) {
+        this.bmSearchQuery = query;
+        this.renderApp();
+    }
+
+    handleBMImageUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.bmCurrentMedia = e.target.result;
+                const preview = document.getElementById('bmImagePreview');
+                preview.innerHTML = `
+                    <div class="bm-image-preview">
+                        <img src="${e.target.result}" alt="Preview">
+                        <button class="bm-remove-image" onclick="app.removeBMImagePreview()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    removeBMImagePreview() {
+        this.bmCurrentMedia = null;
+        const preview = document.getElementById('bmImagePreview');
+        preview.innerHTML = '';
+        document.getElementById('bmImageUpload').value = '';
+    }
+
+    createBMListing() {
+        const title = document.getElementById('bmTitle')?.value.trim();
+        const price = parseFloat(document.getElementById('bmPrice')?.value);
+        const category = document.getElementById('bmCategory')?.value;
+        const description = document.getElementById('bmDescription')?.value.trim();
+        const location = document.getElementById('bmLocation')?.value.trim();
+        const contact = document.getElementById('bmContact')?.value.trim();
+        
+        if (!title || isNaN(price) || !category || !description || !location || !contact) {
+            this.showToast('Please fill in all required fields');
+            return;
+        }
+        
+        const newPost = {
+            id: Date.now().toString(),
+            userId: this.currentUser.id,
+            user: this.currentUser.name,
+            avatar: this.getUserInitials(),
+            type: this.bmCurrentType || 'item',
+            title: title,
+            price: price,
+            category: category,
+            description: description,
+            location: location,
+            contact: contact,
+            time: 'Just now',
+            likes: 0,
+            comments: 0,
+            shares: 0,
+            liked: false,
+            image: this.bmCurrentMedia || ''
+        };
+        
+        this.blackMarketPosts.unshift(newPost);
+        this.saveBlackMarketPosts();
+        
+        // Update storage status if it's an item
+        if (this.bmCurrentType === 'item') {
+            this.updateUserStorageStatus(this.currentUser.id);
+        }
+        
+        // Clear form
+        document.getElementById('bmTitle').value = '';
+        document.getElementById('bmPrice').value = '';
+        document.getElementById('bmDescription').value = '';
+        document.getElementById('bmLocation').value = '';
+        document.getElementById('bmContact').value = this.currentUser.email;
+        this.removeBMImagePreview();
+        
+        // Switch to Take page to see the new listing
+        this.bmCurrentPage = 'take';
+        this.bmCurrentCategory = 'all';
+        
+        this.showToast('Listing posted to Black Market!', 3000);
+        this.renderApp();
+    }
+
+    editBMListing(postId) {
+        const post = this.blackMarketPosts.find(p => p.id === postId);
+        if (!post) return;
+        
+        // For now, just show a simple edit modal
+        const newTitle = prompt('Edit title:', post.title);
+        if (newTitle) {
+            const newPrice = prompt('Edit price:', post.price);
+            if (newPrice && !isNaN(parseFloat(newPrice))) {
+                post.title = newTitle;
+                post.price = parseFloat(newPrice);
+                this.saveBlackMarketPosts();
+                this.showToast('Listing updated!');
+                this.renderApp();
+            }
+        }
+    }
+
+    deleteBMListing(postId) {
+        if (confirm('Are you sure you want to delete this listing?')) {
+            const postIndex = this.blackMarketPosts.findIndex(p => p.id === postId);
+            if (postIndex > -1) {
+                this.blackMarketPosts.splice(postIndex, 1);
+                this.saveBlackMarketPosts();
+                
+                // Update storage status if it was an item
+                if (this.blackMarketPosts[postIndex]?.type === 'item') {
+                    this.updateUserStorageStatus(this.currentUser.id);
+                }
+                
+                this.showToast('Listing deleted');
+                this.renderApp();
+            }
+        }
+    }
+
+    bmLikePost(postId) {
+        const post = this.blackMarketPosts.find(p => p.id === postId);
+        if (post) {
+            post.liked = !post.liked;
+            post.likes += post.liked ? 1 : -1;
+            this.saveBlackMarketPosts();
+            this.renderApp();
+        }
+    }
+
+    bmCommentOnPost(postId) {
+        this.showToast('Comment feature coming soon!');
+    }
+
+    bmSharePost(postId) {
+        this.showToast('Share feature coming soon!');
+    }
+
+    bmContactSeller(postId) {
+        const post = this.blackMarketPosts.find(p => p.id === postId);
+        if (post) {
+            this.showToast(`Contacting ${post.user}...`);
+            // In a real app, this would open a chat or email
+        }
+    }
+
+    saveBlackMarketPosts() {
+        localStorage.setItem('savemate-blackmarket-posts', JSON.stringify(this.blackMarketPosts));
+    }
+
+    // Utility Methods for Black Market
+    getTimeValue(timeString) {
+        if (timeString.includes('Just now')) return Date.now();
+        if (timeString.includes('min')) return Date.now() - parseInt(timeString) * 60 * 1000;
+        if (timeString.includes('hour')) return Date.now() - parseInt(timeString) * 60 * 60 * 1000;
+        if (timeString.includes('day')) return Date.now() - parseInt(timeString) * 24 * 60 * 60 * 1000;
+        return Date.now();
+    }
+
+    // Core Functionality
+    switchPage(page) {
+        this.currentPage = page;
+        this.renderApp();
+    }
+
+    // Other Methods (existing SaveMate functionality)
     renderPost(post) {
         const user = this.users.find(u => u.id === post.userId) || { name: post.user, avatar: post.avatar };
-        const isCurrentUser = post.userId === this.currentUser.id;
-        
         return `
             <div class="post-card">
                 <div class="post-header">
-                    <div class="post-avatar" onclick="${!isCurrentUser ? `app.switchToProfile('${post.userId}')` : ''}" style="cursor: ${!isCurrentUser ? 'pointer' : 'default'}">
-                        ${user.avatar && user.avatar.length > 2 ? 
-                            `<img src="${user.avatar}" alt="${user.name}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">` : 
-                            user.avatar || post.avatar
-                        }
-                    </div>
+                    <div class="post-avatar">${user.avatar}</div>
                     <div>
-                        <div class="post-user" onclick="${!isCurrentUser ? `app.switchToProfile('${post.userId}')` : ''}" style="cursor: ${!isCurrentUser ? 'pointer' : 'default'}">
-                            ${user.name}
-                        </div>
-                        <div class="post-time">${post.time} ${post.store ? '• ' + post.store : ''}</div>
+                        <div class="post-user">${user.name}</div>
+                        <div class="post-time">${post.time} • ${post.store}</div>
                     </div>
                 </div>
                 <div class="post-content">${post.content}</div>
-                ${post.image ? `
-                    <div class="post-image">
-                        <img src="${post.image}" alt="Post image">
-                    </div>
-                ` : ''}
                 <div class="post-actions">
                     <div class="post-action ${post.liked ? 'active' : ''}" onclick="app.likePost('${post.id}')">
                         <i class="fas fa-heart"></i>
@@ -1105,307 +1302,6 @@ class SaveMateApp {
         `;
     }
 
-    // Core Functionality
-    switchPage(page, userId = null) {
-        this.currentPage = page;
-        this.renderApp();
-        
-        // If switching to profile with a specific user ID
-        if (page === 'profile' && userId) {
-            setTimeout(() => this.renderProfilePage(userId), 0);
-        }
-    }
-
-    switchToProfile(userId) {
-        this.switchPage('profile', userId);
-    }
-
-    // Profile Features
-    editProfilePicture() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.onchange = (e) => this.handleProfilePictureUpload(e);
-        input.click();
-    }
-
-    handleProfilePictureUpload(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const userIndex = this.users.findIndex(u => u.id === this.currentUser.id);
-                if (userIndex > -1) {
-                    this.users[userIndex].avatar = e.target.result;
-                    this.saveUsers();
-                    this.showToast('Profile picture updated!');
-                    this.renderApp();
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    editCoverPhoto() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.onchange = (e) => this.handleCoverPhotoUpload(e);
-        input.click();
-    }
-
-    handleCoverPhotoUpload(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const userIndex = this.users.findIndex(u => u.id === this.currentUser.id);
-                if (userIndex > -1) {
-                    this.users[userIndex].coverPhoto = e.target.result;
-                    this.saveUsers();
-                    this.showToast('Cover photo updated!');
-                    this.renderApp();
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    editProfile() {
-        const user = this.users.find(u => u.id === this.currentUser.id);
-        const newName = prompt('Enter your name:', user.name);
-        if (newName && newName.trim()) {
-            const newBio = prompt('Enter your bio:', user.bio);
-            const newLocation = prompt('Enter your location:', user.location);
-            
-            user.name = newName.trim();
-            user.bio = newBio || user.bio;
-            user.location = newLocation || user.location;
-            user.avatar = this.getUserInitials();
-            
-            this.saveUsers();
-            this.showToast('Profile updated successfully!');
-            this.renderApp();
-        }
-    }
-
-    toggleFollow(userId, event = null) {
-        if (event) event.stopPropagation();
-        
-        const currentUserId = this.currentUser.id;
-        
-        if (!this.followers[currentUserId]) {
-            this.followers[currentUserId] = { following: [], followers: [] };
-        }
-        if (!this.followers[userId]) {
-            this.followers[userId] = { following: [], followers: [] };
-        }
-
-        const isFollowing = this.followers[currentUserId].following.includes(userId);
-        const userToFollow = this.users.find(u => u.id === userId);
-        
-        if (isFollowing) {
-            // Unfollow
-            this.followers[currentUserId].following = this.followers[currentUserId].following.filter(id => id !== userId);
-            this.followers[userId].followers = this.followers[userId].followers.filter(id => id !== currentUserId);
-            this.showToast(`Unfollowed ${userToFollow.name}`);
-        } else {
-            // Follow
-            this.followers[currentUserId].following.push(userId);
-            this.followers[userId].followers.push(currentUserId);
-            this.showToast(`Following ${userToFollow.name}`);
-            
-            // Add notification
-            this.addNotification(userId, 'follow', `${this.currentUser.name} started following you`);
-        }
-        
-        this.saveFollowers();
-        this.renderApp();
-    }
-
-    showFollowers(userId) {
-        const user = this.users.find(u => u.id === userId);
-        const followers = this.followers[userId] || { followers: [] };
-        
-        const modalContent = `
-            <div class="modal-content">
-                <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">
-                    <i class="fas fa-users"></i> ${user.name}'s Followers
-                </h3>
-                <div style="max-height: 400px; overflow-y: auto;">
-                    ${followers.followers.length > 0 ? 
-                        followers.followers.map(followerId => {
-                            const follower = this.users.find(u => u.id === followerId);
-                            return follower ? `
-                                <div class="user-list-item" onclick="app.switchToProfile('${followerId}'); app.closeModal();">
-                                    <div class="post-avatar">${follower.avatar}</div>
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 500; color: var(--text-primary);">${follower.name}</div>
-                                        <div style="font-size: 0.875rem; color: var(--text-secondary);">${follower.bio.substring(0, 50)}...</div>
-                                    </div>
-                                    ${this.currentUser.id !== followerId ? `
-                                        <button class="btn ${this.followers[this.currentUser.id]?.following.includes(followerId) ? 'btn-secondary' : 'btn-primary'}" onclick="app.toggleFollow('${followerId}', event)">
-                                            ${this.followers[this.currentUser.id]?.following.includes(followerId) ? 'Following' : 'Follow'}
-                                        </button>
-                                    ` : ''}
-                                </div>
-                            ` : '';
-                        }).join('') :
-                        `<div class="empty-state" style="padding: 2rem; border: none;">
-                            <i class="fas fa-user-friends"></i>
-                            <p>No followers yet</p>
-                        </div>`
-                    }
-                </div>
-            </div>
-        `;
-        
-        this.showModal('Followers', modalContent);
-    }
-
-    showFollowing(userId) {
-        const user = this.users.find(u => u.id === userId);
-        const following = this.followers[userId] || { following: [] };
-        
-        const modalContent = `
-            <div class="modal-content">
-                <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">
-                    <i class="fas fa-user-check"></i> ${user.name} is Following
-                </h3>
-                <div style="max-height: 400px; overflow-y: auto;">
-                    ${following.following.length > 0 ? 
-                        following.following.map(followingId => {
-                            const followingUser = this.users.find(u => u.id === followingId);
-                            return followingUser ? `
-                                <div class="user-list-item" onclick="app.switchToProfile('${followingId}'); app.closeModal();">
-                                    <div class="post-avatar">${followingUser.avatar}</div>
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 500; color: var(--text-primary);">${followingUser.name}</div>
-                                        <div style="font-size: 0.875rem; color: var(--text-secondary);">${followingUser.bio.substring(0, 50)}...</div>
-                                    </div>
-                                    ${this.currentUser.id !== followingId ? `
-                                        <button class="btn ${this.followers[this.currentUser.id]?.following.includes(followingId) ? 'btn-secondary' : 'btn-primary'}" onclick="app.toggleFollow('${followingId}', event)">
-                                            ${this.followers[this.currentUser.id]?.following.includes(followingId) ? 'Following' : 'Follow'}
-                                        </button>
-                                    ` : ''}
-                                </div>
-                            ` : '';
-                        }).join('') :
-                        `<div class="empty-state" style="padding: 2rem; border: none;">
-                            <i class="fas fa-user-plus"></i>
-                            <p>Not following anyone yet</p>
-                        </div>`
-                    }
-                </div>
-            </div>
-        `;
-        
-        this.showModal('Following', modalContent);
-    }
-
-    // Post Creation
-    toggleMediaUpload() {
-        document.getElementById('mediaUpload').click();
-    }
-
-    handleMediaUpload(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const preview = document.getElementById('mediaPreview');
-                preview.innerHTML = `
-                    <div style="position: relative;">
-                        <img src="${e.target.result}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 0.5rem;">
-                        <button class="header-btn" onclick="app.removeMediaPreview()" style="position: absolute; top: 0.5rem; right: 0.5rem; background: var(--danger-color);">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `;
-                preview.style.display = 'block';
-                this.currentMedia = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    removeMediaPreview() {
-        const preview = document.getElementById('mediaPreview');
-        preview.innerHTML = '';
-        preview.style.display = 'none';
-        this.currentMedia = null;
-        document.getElementById('mediaUpload').value = '';
-    }
-
-    createProfilePost() {
-        const input = document.getElementById('profilePostInput');
-        const content = input?.value.trim();
-        
-        if (!content) {
-            this.showToast('Please enter some content');
-            return;
-        }
-
-        const newPost = {
-            id: Date.now().toString(),
-            user: this.currentUser.name,
-            avatar: this.currentUser.avatar,
-            content: content,
-            image: this.currentMedia || '',
-            time: 'Just now',
-            likes: 0,
-            comments: 0,
-            shares: 0,
-            liked: false,
-            store: 'General',
-            userId: this.currentUser.id
-        };
-
-        this.posts.unshift(newPost);
-        this.savePosts();
-        
-        // Clear inputs
-        input.value = '';
-        this.removeMediaPreview();
-        
-        this.showToast('Post created successfully!');
-        this.renderApp();
-    }
-
-    // Universe Posts
-    toggleUniverseMediaUpload() {
-        document.getElementById('universeMediaUpload').click();
-    }
-
-    handleUniverseMediaUpload(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = newFileReader();
-            reader.onload = (e) => {
-                const preview = document.getElementById('universeMediaPreview');
-                preview.innerHTML = `
-                    <div style="position: relative;">
-                        <img src="${e.target.result}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 0.5rem;">
-                        <button class="header-btn" onclick="app.removeUniverseMediaPreview()" style="position: absolute; top: 0.5rem; right: 0.5rem; background: var(--danger-color);">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `;
-                preview.style.display = 'block';
-                this.currentUniverseMedia = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    removeUniverseMediaPreview() {
-        const preview = document.getElementById('universeMediaPreview');
-        preview.innerHTML = '';
-        preview.style.display = 'none';
-        this.currentUniverseMedia = null;
-        document.getElementById('universeMediaUpload').value = '';
-    }
-
     createUniversePost() {
         const input = document.getElementById('universePostInput');
         const content = input?.value.trim();
@@ -1418,9 +1314,9 @@ class SaveMateApp {
         const newPost = {
             id: Date.now().toString(),
             user: this.currentUser.name,
-            avatar: this.currentUser.avatar,
+            avatar: this.getUserInitials(),
             content: content,
-            image: this.currentUniverseMedia || '',
+            image: '',
             time: 'Just now',
             likes: 0,
             comments: 0,
@@ -1433,14 +1329,7 @@ class SaveMateApp {
         this.posts.unshift(newPost);
         this.savePosts();
         
-        // Clear inputs
         input.value = '';
-        this.currentUniverseMedia = null;
-        const preview = document.getElementById('universeMediaPreview');
-        preview.innerHTML = '';
-        preview.style.display = 'none';
-        document.getElementById('universeMediaUpload').value = '';
-        
         this.showToast('Post shared to Universe!');
         this.renderApp();
     }
@@ -1450,531 +1339,31 @@ class SaveMateApp {
         if (post) {
             post.liked = !post.liked;
             post.likes += post.liked ? 1 : -1;
-            
-            // Add notification if not current user's post
-            if (post.userId !== this.currentUser.id && post.liked) {
-                this.addNotification(post.userId, 'like', `${this.currentUser.name} liked your post`);
-            }
-            
             this.savePosts();
             this.renderApp();
         }
     }
 
-    // Black Market Features
-    showBlackMarket() {
-        const userItems = this.blackMarketItems.filter(item => item.userId === this.currentUser.id);
-        const storageStatus = this.getUserStorageStatus(this.currentUser.id);
-        
-        const modalContent = `
-            <div class="modal-content">
-                <div style="margin-bottom: 2rem;">
-                    <h3 style="color: var(--text-primary); margin-bottom: 0.5rem;">
-                        <i class="fas fa-store-alt"></i> My Black Market Storage
-                    </h3>
-                    <div style="display: flex; align-items: center; justify-content: space-between; background: var(--surface-color); padding: 1rem; border-radius: 0.75rem; border: 1px solid var(--border-color);">
-                        <div>
-                            <div style="font-weight: 500; color: var(--text-primary);">Storage Status</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                                ${userItems.length} item${userItems.length !== 1 ? 's' : ''} listed
-                            </div>
-                        </div>
-                        <div style="color: ${storageStatus === 'occupied' ? 'var(--success-color)' : 'var(--text-muted)'}; font-weight: 600;">
-                            ${storageStatus === 'occupied' ? '● Occupied' : '○ Empty'}
-                        </div>
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
-                    <button class="btn btn-primary" onclick="app.createBlackMarketItem();" style="flex: 1;">
-                        <i class="fas fa-plus"></i> Sell Item
-                    </button>
-                    <button class="btn btn-secondary" onclick="app.browseBlackMarket();" style="flex: 1;">
-                        <i class="fas fa-compass"></i> Browse
-                    </button>
-                </div>
-
-                <h4 style="margin-bottom: 1rem; color: var(--text-primary);">My Listed Items</h4>
-                
-                <div style="max-height: 300px; overflow-y: auto;">
-                    ${userItems.length > 0 ? 
-                        userItems.map(item => `
-                            <div class="black-market-item">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 500; color: var(--text-primary);">${item.title}</div>
-                                        <div style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
-                                            R${item.price} • ${item.category} • ${item.location}
-                                        </div>
-                                        <div style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-secondary);">
-                                            ${item.description}
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; gap: 0.25rem; margin-left: 1rem;">
-                                        <button class="header-btn" onclick="app.editBlackMarketItem('${item.id}')">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="header-btn" onclick="app.deleteBlackMarketItem('${item.id}')">
-                                            <i class="fas fa-trash" style="color: var(--danger-color);"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('') :
-                        '<div class="empty-state" style="padding: 2rem; border: none;"><i class="fas fa-box-open"></i><p>No items listed yet</p></div>'
-                    }
-                </div>
-            </div>
-        `;
-        
-        this.showModal('Black Market', modalContent);
+    editProfilePicture() {
+        this.showToast('Profile picture edit coming soon!');
     }
 
-    browseBlackMarket() {
-        this.closeModal();
-        const allItems = this.blackMarketItems;
-        
-        const modalContent = `
-            <div class="modal-content">
-                <div style="margin-bottom: 1.5rem;">
-                    <h3 style="color: var(--text-primary); margin-bottom: 1rem;">
-                        <i class="fas fa-compass"></i> Browse Black Market
-                    </h3>
-                    <div class="search-box" style="margin-bottom: 1rem;">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search items..." onkeyup="app.searchBlackMarketItems(this.value)">
-                    </div>
-                </div>
-
-                <div id="blackMarketItems" style="max-height: 400px; overflow-y: auto;">
-                    ${allItems.length > 0 ? 
-                        allItems.map(item => {
-                            const seller = this.users.find(u => u.id === item.userId);
-                            return `
-                                <div class="black-market-listing">
-                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                                        <div style="font-weight: 500; color: var(--text-primary); font-size: 1.1rem;">
-                                            ${item.title}
-                                        </div>
-                                        <div style="font-weight: 600; color: var(--success-color);">
-                                            R${item.price}
-                                        </div>
-                                    </div>
-                                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
-                                        <i class="fas fa-tag"></i> ${item.category} 
-                                        <i class="fas fa-map-marker-alt" style="margin-left: 1rem;"></i> ${item.location}
-                                    </div>
-                                    <div style="font-size: 0.875rem; color: var(--text-primary); margin-bottom: 0.75rem;">
-                                        ${item.description}
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <div onclick="app.switchToProfile('${item.userId}'); app.closeModal();" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                            <div class="post-avatar" style="width: 24px; height: 24px; font-size: 0.75rem;">
-                                                ${seller?.avatar || '?'}
-                                            </div>
-                                            <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                                                ${seller?.name || 'Unknown Seller'}
-                                            </div>
-                                        </div>
-                                        <button class="btn btn-primary" onclick="app.contactSeller('${item.id}')" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">
-                                            <i class="fas fa-envelope"></i> Contact
-                                        </button>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('') :
-                        '<div class="empty-state" style="padding: 2rem; border: none;"><i class="fas fa-store-slash"></i><p>No items available in Black Market</p></div>'
-                    }
-                </div>
-            </div>
-        `;
-        
-        this.showModal('Black Market Browse', modalContent);
+    editCoverPhoto() {
+        this.showToast('Cover photo edit coming soon!');
     }
 
-    createBlackMarketItem() {
-        this.closeModal();
-        
-        const modalContent = `
-            <div class="modal-content">
-                <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">
-                    <i class="fas fa-plus-circle"></i> Sell an Item
-                </h3>
-                
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
-                        Item Title *
-                    </label>
-                    <input type="text" id="bmTitle" class="form-control" placeholder="What are you selling?" style="margin-bottom: 1rem;">
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                    <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
-                            Price (R) *
-                        </label>
-                        <input type="number" id="bmPrice" class="form-control" placeholder="0.00" step="0.01">
-                    </div>
-                    <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
-                            Category *
-                        </label>
-                        <select id="bmCategory" class="form-control">
-                            <option value="">Select category</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Furniture">Furniture</option>
-                            <option value="Clothing">Clothing</option>
-                            <option value="Baby & Kids">Baby & Kids</option>
-                            <option value="Home & Garden">Home & Garden</option>
-                            <option value="Vehicles">Vehicles</option>
-                            <option value="Sports">Sports</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
-                        Description *
-                    </label>
-                    <textarea id="bmDescription" class="form-control" placeholder="Describe your item..." rows="3" style="resize: vertical;"></textarea>
-                </div>
-                
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
-                        Location
-                    </label>
-                    <input type="text" id="bmLocation" class="form-control" placeholder="Where is the item located?">
-                </div>
-                
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-secondary" onclick="app.closeModal()" style="flex: 1;">
-                        Cancel
-                    </button>
-                    <button class="btn btn-primary" onclick="app.saveBlackMarketItem()" style="flex: 1;">
-                        <i class="fas fa-check"></i> List Item
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        this.showModal('Sell Item', modalContent);
-    }
-
-    saveBlackMarketItem() {
-        const title = document.getElementById('bmTitle')?.value.trim();
-        const price = parseFloat(document.getElementById('bmPrice')?.value);
-        const category = document.getElementById('bmCategory')?.value;
-        const description = document.getElementById('bmDescription')?.value.trim();
-        const location = document.getElementById('bmLocation')?.value.trim();
-        
-        if (!title || isNaN(price) || !category || !description) {
-            this.showToast('Please fill in all required fields');
-            return;
-        }
-        
-        const newItem = {
-            id: Date.now().toString(),
-            userId: this.currentUser.id,
-            title: title,
-            price: price,
-            category: category,
-            description: description,
-            location: location || 'Unknown',
-            date: new Date().toISOString().split('T')[0],
-            image: ''
-        };
-        
-        this.blackMarketItems.push(newItem);
-        this.saveBlackMarketItems();
-        this.updateUserStorageStatus(this.currentUser.id);
-        
-        this.closeModal();
-        this.showToast('Item listed successfully in Black Market!');
-        
-        // Update the app
-        this.renderApp();
-    }
-
-    editBlackMarketItem(itemId) {
-        const item = this.blackMarketItems.find(item => item.id === itemId);
-        if (!item) return;
-        
-        this.closeModal();
-        
-        const modalContent = `
-            <div class="modal-content">
-                <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);">
-                    <i class="fas fa-edit"></i> Edit Item
-                </h3>
-                
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
-                        Item Title *
-                    </label>
-                    <input type="text" id="bmEditTitle" class="form-control" value="${item.title}" style="margin-bottom: 1rem;">
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                    <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
-                            Price (R) *
-                        </label>
-                        <input type="number" id="bmEditPrice" class="form-control" value="${item.price}" step="0.01">
-                    </div>
-                    <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
-                            Category *
-                        </label>
-                        <select id="bmEditCategory" class="form-control">
-                            <option value="Electronics" ${item.category === 'Electronics' ? 'selected' : ''}>Electronics</option>
-                            <option value="Furniture" ${item.category === 'Furniture' ? 'selected' : ''}>Furniture</option>
-                            <option value="Clothing" ${item.category === 'Clothing' ? 'selected' : ''}>Clothing</option>
-                            <option value="Baby & Kids" ${item.category === 'Baby & Kids' ? 'selected' : ''}>Baby & Kids</option>
-                            <option value="Home & Garden" ${item.category === 'Home & Garden' ? 'selected' : ''}>Home & Garden</option>
-                            <option value="Vehicles" ${item.category === 'Vehicles' ? 'selected' : ''}>Vehicles</option>
-                            <option value="Sports" ${item.category === 'Sports' ? 'selected' : ''}>Sports</option>
-                            <option value="Other" ${item.category === 'Other' ? 'selected' : ''}>Other</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
-                        Description *
-                    </label>
-                    <textarea id="bmEditDescription" class="form-control" rows="3" style="resize: vertical;">${item.description}</textarea>
-                </div>
-                
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">
-                        Location
-                    </label>
-                    <input type="text" id="bmEditLocation" class="form-control" value="${item.location}">
-                </div>
-                
-                <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-secondary" onclick="app.closeModal()" style="flex: 1;">
-                        Cancel
-                    </button>
-                    <button class="btn btn-primary" onclick="app.updateBlackMarketItem('${itemId}')" style="flex: 1;">
-                        <i class="fas fa-save"></i> Save Changes
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        this.showModal('Edit Item', modalContent);
-    }
-
-    updateBlackMarketItem(itemId) {
-        const title = document.getElementById('bmEditTitle')?.value.trim();
-        const price = parseFloat(document.getElementById('bmEditPrice')?.value);
-        const category = document.getElementById('bmEditCategory')?.value;
-        const description = document.getElementById('bmEditDescription')?.value.trim();
-        const location = document.getElementById('bmEditLocation')?.value.trim();
-        
-        if (!title || isNaN(price) || !category || !description) {
-            this.showToast('Please fill in all required fields');
-            return;
-        }
-        
-        const itemIndex = this.blackMarketItems.findIndex(item => item.id === itemId);
-        if (itemIndex > -1) {
-            this.blackMarketItems[itemIndex] = {
-                ...this.blackMarketItems[itemIndex],
-                title: title,
-                price: price,
-                category: category,
-                description: description,
-                location: location || 'Unknown'
-            };
-            
-            this.saveBlackMarketItems();
-            this.closeModal();
-            this.showToast('Item updated successfully!');
-            this.showBlackMarket();
-        }
-    }
-
-    deleteBlackMarketItem(itemId) {
-        if (confirm('Are you sure you want to delete this item?')) {
-            const itemIndex = this.blackMarketItems.findIndex(item => item.id === itemId);
-            if (itemIndex > -1) {
-                this.blackMarketItems.splice(itemIndex, 1);
-                this.saveBlackMarketItems();
-                this.updateUserStorageStatus(this.currentUser.id);
-                this.showToast('Item deleted from Black Market');
-                
-                // Refresh the display
-                this.showBlackMarket();
-            }
-        }
-    }
-
-    searchBlackMarketItems(query) {
-        const itemsContainer = document.getElementById('blackMarketItems');
-        const allItems = this.blackMarketItems;
-        
-        if (!query.trim()) {
-            // Show all items
-            const html = allItems.map(item => {
-                const seller = this.users.find(u => u.id === item.userId);
-                return `
-                    <div class="black-market-listing">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                            <div style="font-weight: 500; color: var(--text-primary); font-size: 1.1rem;">
-                                ${item.title}
-                            </div>
-                            <div style="font-weight: 600; color: var(--success-color);">
-                                R${item.price}
-                            </div>
-                        </div>
-                        <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
-                            <i class="fas fa-tag"></i> ${item.category} 
-                            <i class="fas fa-map-marker-alt" style="margin-left: 1rem;"></i> ${item.location}
-                        </div>
-                        <div style="font-size: 0.875rem; color: var(--text-primary); margin-bottom: 0.75rem;">
-                            ${item.description}
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div onclick="app.switchToProfile('${item.userId}'); app.closeModal();" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                <div class="post-avatar" style="width: 24px; height: 24px; font-size: 0.75rem;">
-                                    ${seller?.avatar || '?'}
-                                </div>
-                                <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                                    ${seller?.name || 'Unknown Seller'}
-                                </div>
-                            </div>
-                            <button class="btn btn-primary" onclick="app.contactSeller('${item.id}')" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">
-                                <i class="fas fa-envelope"></i> Contact
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            
-            itemsContainer.innerHTML = html || '<div class="empty-state" style="padding: 2rem; border: none;"><i class="fas fa-store-slash"></i><p>No items available in Black Market</p></div>';
-            return;
-        }
-        
-        // Filter items
-        const filteredItems = allItems.filter(item => 
-            item.title.toLowerCase().includes(query.toLowerCase()) ||
-            item.description.toLowerCase().includes(query.toLowerCase()) ||
-            item.category.toLowerCase().includes(query.toLowerCase()) ||
-            item.location.toLowerCase().includes(query.toLowerCase())
-        );
-        
-        const html = filteredItems.map(item => {
-            const seller = this.users.find(u => u.id === item.userId);
-            return `
-                <div class="black-market-listing">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                        <div style="font-weight: 500; color: var(--text-primary); font-size: 1.1rem;">
-                            ${item.title}
-                        </div>
-                        <div style="font-weight: 600; color: var(--success-color);">
-                            R${item.price}
-                        </div>
-                    </div>
-                    <div style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
-                        <i class="fas fa-tag"></i> ${item.category} 
-                        <i class="fas fa-map-marker-alt" style="margin-left: 1rem;"></i> ${item.location}
-                    </div>
-                    <div style="font-size: 0.875rem; color: var(--text-primary); margin-bottom: 0.75rem;">
-                        ${item.description}
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div onclick="app.switchToProfile('${item.userId}'); app.closeModal();" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                            <div class="post-avatar" style="width: 24px; height: 24px; font-size: 0.75rem;">
-                                ${seller?.avatar || '?'}
-                            </div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                                ${seller?.name || 'Unknown Seller'}
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" onclick="app.contactSeller('${item.id}')" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">
-                            <i class="fas fa-envelope"></i> Contact
-                        </button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-        
-        itemsContainer.innerHTML = html || '<div class="empty-state" style="padding: 2rem; border: none;"><i class="fas fa-search"></i><p>No items found matching "${query}"</p></div>';
-    }
-
-    contactSeller(itemId) {
-        const item = this.blackMarketItems.find(item => item.id === itemId);
-        const seller = item ? this.users.find(u => u.id === item.userId) : null;
-        
-        if (seller) {
-            this.showToast(`Opening chat with ${seller.name}`);
-            // In a real app, this would open a chat window
-        }
-    }
-
-    // Utility Methods
-    getTimeValue(timeString) {
-        if (timeString.includes('Just now')) return Date.now();
-        if (timeString.includes('min')) return Date.now() - parseInt(timeString) * 60 * 1000;
-        if (timeString.includes('hour')) return Date.now() - parseInt(timeString) * 60 * 60 * 1000;
-        if (timeString.includes('day')) return Date.now() - parseInt(timeString) * 24 * 60 * 60 * 1000;
-        return Date.now();
-    }
-
-    addNotification(userId, type, message) {
-        const notification = {
-            id: Date.now().toString(),
-            type,
-            message,
-            time: 'Just now',
-            read: false
-        };
-        
-        this.notifications.unshift(notification);
-        this.saveNotifications();
-    }
-
-    markNotificationRead(notificationId) {
-        const notification = this.notifications.find(n => n.id === notificationId);
-        if (notification && !notification.read) {
-            notification.read = true;
-            this.saveNotifications();
+    editProfile() {
+        const user = this.users.find(u => u.id === this.currentUser.id);
+        const newName = prompt('Enter your name:', user.name);
+        if (newName && newName.trim()) {
+            user.name = newName.trim();
+            user.avatar = this.getUserInitials();
+            this.saveUsers();
+            this.showToast('Profile updated!');
             this.renderApp();
         }
     }
 
-    // Modal System
-    showModal(title, content) {
-        const modal = document.createElement('div');
-        modal.className = 'modal';
-        modal.innerHTML = `
-            <div class="modal-overlay" onclick="app.closeModal()"></div>
-            <div class="modal-dialog">
-                <div class="modal-header">
-                    <h3>${title}</h3>
-                    <button class="modal-close" onclick="app.closeModal()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                ${content}
-            </div>
-        `;
-        document.body.appendChild(modal);
-        document.body.style.overflow = 'hidden';
-    }
-
-    closeModal() {
-        const modal = document.querySelector('.modal');
-        if (modal) {
-            modal.remove();
-            document.body.style.overflow = 'auto';
-        }
-    }
-
-    // Other Methods
     toggleSaveDeal(dealId, event) {
         event.stopPropagation();
         if (this.savedDeals.has(dealId)) {
@@ -1997,10 +1386,6 @@ class SaveMateApp {
         this.showToast(`Showing details for deal ${dealId}`);
     }
 
-    showStore(storeId) {
-        this.showToast(`Opening ${storeId} deals`);
-    }
-
     showCategory(category) {
         this.showToast(`Browsing ${category} category`);
     }
@@ -2017,47 +1402,17 @@ class SaveMateApp {
         this.showToast('Barcode scanner activated! Demo mode.');
     }
 
-    createNewList() {
-        const newList = {
-            id: Date.now().toString(),
-            name: `Shopping List ${this.shoppingLists.length + 1}`,
-            items: []
-        };
-        this.shoppingLists.push(newList);
-        this.saveShoppingLists();
-        this.showToast('New shopping list created!');
-        this.renderApp();
+    removeFromList(itemId) {
+        this.showToast('Item removed from list');
     }
 
-    removeFromList(itemId) {
-        const currentList = this.shoppingLists[0];
-        const itemIndex = currentList.items.findIndex(item => item.id === itemId);
-        if (itemIndex > -1) {
-            currentList.items.splice(itemIndex, 1);
-            this.saveShoppingLists();
-            this.showToast('Item removed from list');
+    markNotificationRead(notificationId) {
+        const notification = this.notifications.find(n => n.id === notificationId);
+        if (notification && !notification.read) {
+            notification.read = true;
+            this.saveNotifications();
             this.renderApp();
         }
-    }
-
-    changePassword() {
-        this.showToast('Change password feature coming soon!');
-    }
-
-    viewPrivacyPolicy() {
-        this.showToast('Privacy policy displayed');
-    }
-
-    viewTerms() {
-        this.showToast('Terms of service displayed');
-    }
-
-    viewAbout() {
-        this.showToast('About SaveMate displayed');
-    }
-
-    contactSupport() {
-        this.showToast('Contact support feature coming soon!');
     }
 
     toggleTheme() {
@@ -2065,14 +1420,6 @@ class SaveMateApp {
         this.saveTheme(this.theme);
         this.showToast(this.theme === 'dark' ? '🌙 Dark mode activated' : '☀️ Light mode activated');
         this.renderApp();
-    }
-
-    toggleNotifications(enabled) {
-        this.showToast(enabled ? '🔔 Notifications enabled' : '🔕 Notifications disabled');
-    }
-
-    toggleEmailNotifications(enabled) {
-        this.showToast(enabled ? '📧 Email notifications enabled' : '📧 Email notifications disabled');
     }
 
     logout() {
@@ -2107,7 +1454,7 @@ class SaveMateApp {
     }
 }
 
-// Initialize the app when DOM is loaded
+// Initialize the app
 let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new SaveMateApp();
